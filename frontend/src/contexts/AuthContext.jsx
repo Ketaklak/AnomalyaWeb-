@@ -121,7 +121,14 @@ export const AuthProvider = ({ children }) => {
     logout,
     refreshToken,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin' || user?.role === 'moderator'
+    isAdmin: user?.role === 'admin' || user?.role === 'moderator',
+    isClient: user?.role?.startsWith('client') || user?.role === 'prospect',
+    isPremiumClient: user?.role === 'client_premium',
+    isStandardClient: user?.role === 'client_standard',
+    isProspect: user?.role === 'prospect',
+    loyaltyTier: user?.loyalty_tier || 'bronze',
+    totalPoints: user?.total_points || 0,
+    availablePoints: user?.available_points || 0
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
