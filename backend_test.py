@@ -38,6 +38,7 @@ class ComprehensiveAPITester:
             "authentication": {},
             "admin_apis": {},
             "client_apis": {},
+            "analytics_apis": {},
             "errors": []
         }
     
