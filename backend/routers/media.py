@@ -214,8 +214,11 @@ async def upload_base64_image(
         # Décoder l'image base64
         if image_data.startswith('data:'):
             # Extraire le type et les données
-            header, data = image_data.split(',', 1)
-            content_type = header.split(';')[0].split(':')[1]
+            try:
+                header, data = image_data.split(',', 1)
+                content_type = header.split(';')[0].split(':')[1]
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Format base64 invalide")
         else:
             data = image_data
             content_type = "image/png"
