@@ -35,6 +35,8 @@ const AdminArticles = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingArticle, setEditingArticle] = useState(null);
+  const [showMediaManager, setShowMediaManager] = useState(false);
+  const [activeTab, setActiveTab] = useState('editor');
   const [formData, setFormData] = useState({
     title: '',
     category: '',
