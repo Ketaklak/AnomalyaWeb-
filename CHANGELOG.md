@@ -110,7 +110,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.1] - 2024-12-28 🎨
+## [0.5.1] - 2025-07-31 🎨
 
 ### 🚀 Ajouté
 - **Interface Shadcn/UI** : Composants modernes et accessibles
