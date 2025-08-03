@@ -306,6 +306,7 @@ const AnalyticsDashboard = () => {
         </Card>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 
