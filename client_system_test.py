@@ -11,7 +11,7 @@ from datetime import datetime
 import uuid
 
 # Configuration
-BACKEND_URL = "https://15f34278-4593-4bdd-a009-33c2ba03da47.preview.emergentagent.com/api"
+BACKEND_URL = "https://181b3f8a-6fc0-477f-b4ba-0f63f1eafc7b.preview.emergentagent.com/api"
 
 class ClientSystemTester:
     def __init__(self):
