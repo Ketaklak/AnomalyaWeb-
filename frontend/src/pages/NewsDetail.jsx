@@ -24,12 +24,12 @@ const NewsDetail = () => {
         setArticle(response.data);
 
         // Fetch related articles
-        if (response.category) {
+        if (response.data.category) {
           const relatedResponse = await newsAPI.getAll({
-            category: response.category,
+            category: response.data.category,
             limit: 4
           });
-          const filtered = relatedResponse.articles.filter(a => a.id !== response.id).slice(0, 2);
+          const filtered = relatedResponse.data.articles.filter(a => a.id !== response.data.id).slice(0, 2);
           setRelatedArticles(filtered);
         }
       } catch (err) {
