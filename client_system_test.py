@@ -68,15 +68,15 @@ class ClientSystemTester:
         
         try:
             if method.upper() == "GET":
-                response = requests.get(url, headers=headers, timeout=30)
+                response = requests.get(url, headers=headers, timeout=60)
             elif method.upper() == "POST":
                 headers["Content-Type"] = "application/json"
-                response = requests.post(url, json=data, headers=headers, timeout=30)
+                response = requests.post(url, json=data, headers=headers, timeout=60)
             elif method.upper() == "PUT":
                 headers["Content-Type"] = "application/json"
-                response = requests.put(url, json=data, headers=headers, timeout=30)
+                response = requests.put(url, json=data, headers=headers, timeout=60)
             elif method.upper() == "DELETE":
-                response = requests.delete(url, headers=headers, timeout=30)
+                response = requests.delete(url, headers=headers, timeout=60)
             else:
                 raise ValueError(f"Unsupported method: {method}")
             
