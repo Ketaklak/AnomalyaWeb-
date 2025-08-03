@@ -22,10 +22,13 @@ class ComprehensiveAPITester:
             "username": "admin",
             "password": "admin123"
         }
+        # Generate unique client for testing
+        import time
+        unique_id = str(int(time.time()))[-6:]
         self.test_client = {
-            "username": "testclient2025",
-            "email": "testclient2025@example.com",
-            "full_name": "Test Client 2025",
+            "username": f"testclient{unique_id}",
+            "email": f"testclient{unique_id}@example.com",
+            "full_name": f"Test Client {unique_id}",
             "password": "TestClient123!",
             "role": "client_standard"
         }
