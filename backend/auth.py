@@ -153,6 +153,50 @@ async def get_current_admin(current_user: UserInDB = Depends(get_current_active_
         )
     return current_user
 
+async def get_current_client(current_user: UserInDB = Depends(get_current_active_user)):
+    """Get current client user (any client role)"""
+    if not current_user.role.startswith("client") and current_user.role != "prospect":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Client access required"
+        )
+    return current_user
+
+async def get_current_premium_client(current_user: UserInDB = Depends(get_current_active_user)):
+    """Get current premium client user"""
+    if current_user.role != "client_premium":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Premium client access required"
+        )
+    return current_user
+
+def get_loyalty_tier(points: int) -> str:
+    """Calculate loyalty tier based on points"""
+    if points >= 5000:
+        return "platinum"
+    elif points >= 2000:
+        return "gold"
+    elif points >= 500:
+        return "silver"
+    else:
+        return "bronze"
+
+def get_next_tier_points(current_tier: str, current_points: int) -> int:
+    """Get points needed for next tier"""
+    tiers = {
+        "bronze": 500,
+        "silver": 2000,
+        "gold": 5000,
+        "platinum": float('inf')
+    }
+    
+    for tier, required_points in tiers.items():
+        if required_points > current_points:
+            return required_points - current_points
+    
+    return 0  # Already at highest tier
+
 async def create_user(user: UserCreate):
     """Create a new user"""
     # Check if user already exists
