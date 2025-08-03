@@ -1152,6 +1152,9 @@ class ComprehensiveAPITester:
             ("Client APIs", self.test_client_apis),
             ("Analytics APIs", self.test_analytics_apis),
             ("Analytics Authentication", self.test_analytics_authentication),
+            ("Media APIs", self.test_media_apis),
+            ("Media Authentication", self.test_media_authentication),
+            ("Media Error Handling", self.test_media_error_handling),
             ("Role-Based Access Control", self.test_role_based_access_control)
         ]
         
