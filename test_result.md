@@ -110,63 +110,78 @@
 ## backend:
   - task: "Admin Dashboard Stats API"
     implemented: true
-    working: "unknown"
+    working: true
     file: "/app/backend/routers/admin.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "unknown"
         agent: "main"
         comment: "Route /admin/dashboard/stats implemented, needs testing"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Dashboard stats API working correctly. Returns totals (articles: 5, users: 1, contacts: 0, services: 4) and recent items. All required fields present in response."
   
   - task: "Admin Articles CRUD API"
     implemented: true
-    working: "unknown"  
+    working: true
     file: "/app/backend/routers/admin.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "unknown"
         agent: "main"
         comment: "Full CRUD routes for articles implemented: GET, POST, PUT, DELETE with proper admin auth"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: All CRUD operations working correctly. GET retrieves articles with pagination, POST creates articles successfully, PUT updates articles, DELETE removes articles. Test article created with ID a140747b-2652-4074-bdaa-9a7b6b5994a2, updated, and deleted successfully."
 
   - task: "Admin Contacts Management API"
     implemented: true
-    working: "unknown"
+    working: true
     file: "/app/backend/routers/admin.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "unknown"
         agent: "main"
         comment: "GET /admin/contacts route implemented for viewing contact messages"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Contacts management API working correctly. GET /admin/contacts returns list of contacts (currently 0 contacts). Endpoint accessible only to admin users."
 
   - task: "Admin Services Management API"
     implemented: true
-    working: "unknown"
+    working: true
     file: "/app/backend/routers/admin.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "unknown"
         agent: "main"
         comment: "GET and POST routes for services management implemented"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Services management API working correctly. GET retrieves 4 existing services, POST creates new services successfully. Test service created and verified."
 
   - task: "JWT Authentication System"
     implemented: true
-    working: "unknown"
+    working: true
     file: "/app/backend/routers/auth.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "unknown"
         agent: "main"
         comment: "Login, register, refresh token, and admin user creation implemented"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: JWT authentication system fully functional. Admin login (admin/admin123) works correctly, returns access and refresh tokens. Token refresh working. Admin user auto-created on startup. Authorization properly blocks unauthorized access (403 responses). GET /auth/users and GET /auth/stats working for admin users."
 
 ## frontend:
   - task: "Admin Header Link Integration"
