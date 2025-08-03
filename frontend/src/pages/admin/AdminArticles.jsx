@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import RichTextEditor from '../../components/admin/RichTextEditor';
+import MediaManager from '../../components/admin/MediaManager';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
@@ -7,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { adminAPI } from '../../services/api';
 import { useToast } from '../../hooks/use-toast';
 import { 
@@ -18,7 +21,10 @@ import {
   User,
   Pin,
   Loader2,
-  Eye
+  Eye,
+  Image,
+  FileText,
+  Settings
 } from 'lucide-react';
 
 const AdminArticles = () => {
