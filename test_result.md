@@ -113,6 +113,18 @@
   - Amélioration générale du site
 
 ## backend:
+  - task: "Enhanced Content Management Backend APIs"
+    implemented: true
+    working: "unknown"
+    file: "/app/backend/routers/media.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "unknown"
+        agent: "main"
+        comment: "Complete media management APIs implemented: file upload (multipart), base64 image upload for rich editor, file deletion, folder creation, thumbnail generation with Pillow, static file serving configured in server.py. All endpoints secured with admin authentication."
+  
   - task: "Admin Dashboard Stats API"
     implemented: true
     working: true
