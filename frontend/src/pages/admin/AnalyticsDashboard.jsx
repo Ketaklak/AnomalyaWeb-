@@ -17,7 +17,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
-import api from '../../services/api';
+import { analyticsAPI } from '../../services/api';
 
 const AnalyticsDashboard = () => {
   const { toast } = useToast();
