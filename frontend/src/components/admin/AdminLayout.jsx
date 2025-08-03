@@ -29,6 +29,7 @@ const AdminLayout = ({ children }) => {
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
     { name: 'Articles', href: '/admin/articles', icon: FileText },
     { name: 'Contacts', href: '/admin/contacts', icon: MessageSquare },
     { name: 'Utilisateurs', href: '/admin/users', icon: Users },
