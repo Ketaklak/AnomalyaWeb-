@@ -11,7 +11,8 @@ from auth import get_current_admin, User
 from models import (
     Article, ArticleCreate, ArticleUpdate, ArticleListResponse,
     Contact, Service, ServiceCreate, Testimonial, TestimonialCreate,
-    Competence, CompetenceCreate, FAQ, FAQCreate, ApiResponse
+    Competence, CompetenceCreate, FAQ, FAQCreate, ApiResponse,
+    QuoteRequestUpdate
 )
 from database import (
     get_documents, get_document, create_document, 
