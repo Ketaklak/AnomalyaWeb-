@@ -25,6 +25,7 @@ class ComprehensiveAPITester:
         self.test_client = {
             "username": "testclient2025",
             "email": "testclient2025@example.com",
+            "full_name": "Test Client 2025",
             "password": "TestClient123!",
             "role": "client_standard"
         }
