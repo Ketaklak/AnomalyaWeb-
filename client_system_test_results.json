@@ -3,58 +3,58 @@
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T19:59:12.534742"
+      "timestamp": "2025-08-03T19:59:39.449679"
     },
     "client_register": {
       "success": true,
-      "details": "Client registered successfully with ID: c871bd7a-607d-4080-90e8-eab66a2dfdcf",
-      "timestamp": "2025-08-03T19:59:12.864417"
+      "details": "Client registered successfully with ID: d32992f7-d0a6-4e26-80a4-1bd88132a2d7",
+      "timestamp": "2025-08-03T19:59:39.711929"
     },
     "client_login": {
       "success": true,
       "details": "Successfully logged in as client",
-      "timestamp": "2025-08-03T19:59:13.121915"
+      "timestamp": "2025-08-03T19:59:39.962664"
     },
     "auth_me": {
       "success": true,
       "details": "User data retrieved - Role: client_standard, Points: 0, Tier: bronze",
-      "timestamp": "2025-08-03T19:59:13.140882"
+      "timestamp": "2025-08-03T19:59:39.981210"
     }
   },
   "client_apis": {
     "dashboard": {
       "success": true,
       "details": "Dashboard stats - Points: 0, Tier: bronze, Quotes: 0",
-      "timestamp": "2025-08-03T19:59:13.210864"
+      "timestamp": "2025-08-03T19:59:40.055665"
     },
     "points_history": {
       "success": true,
       "details": "Retrieved 0 point transactions",
-      "timestamp": "2025-08-03T19:59:13.354948"
+      "timestamp": "2025-08-03T19:59:40.171828"
     }
   },
   "admin_client_apis": {
     "quotes": {
       "success": true,
-      "details": "Retrieved 2 quotes",
-      "timestamp": "2025-08-03T19:59:13.507338"
+      "details": "Retrieved 3 quotes",
+      "timestamp": "2025-08-03T19:59:40.247613"
     },
     "tickets": {
       "success": true,
-      "details": "Retrieved 2 tickets",
-      "timestamp": "2025-08-03T19:59:13.532099"
+      "details": "Retrieved 3 tickets",
+      "timestamp": "2025-08-03T19:59:40.311168"
     },
     "client_stats": {
       "success": true,
-      "details": "Stats retrieved - Total clients: 4, Points distributed: 200",
-      "timestamp": "2025-08-03T19:59:13.557365"
+      "details": "Stats retrieved - Total clients: 5, Points distributed: 300",
+      "timestamp": "2025-08-03T19:59:40.345991"
     }
   },
   "loyalty_system": {
     "tier_calculation": {
       "success": true,
       "details": "Correct tier 'bronze' for 100 points",
-      "timestamp": "2025-08-03T19:59:13.618707"
+      "timestamp": "2025-08-03T19:59:40.364558"
     }
   },
   "errors": []
