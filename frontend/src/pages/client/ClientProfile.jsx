@@ -186,7 +186,26 @@ const ClientProfile = () => {
             <h1 className="text-3xl font-bold text-white mb-2">
               Mon <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Profil</span>
             </h1>
-            <p className="text-gray-400">Gérez vos informations personnelles et préférences</p>
+            <p className="text-gray-400">
+              {user?.role === 'admin' ? 
+                'Interface profil client - Mode administrateur' : 
+                'Gérez vos informations personnelles et préférences'
+              }
+            </p>
+            
+            {/* Admin Notice */}
+            {user?.role === 'admin' && (
+              <div className="mt-4 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                  <span className="text-orange-300 text-sm font-medium">Profil Administrateur</span>
+                </div>
+                <p className="text-orange-200 text-sm mt-2">
+                  Ce profil contient des données par défaut pour les administrateurs. 
+                  Les modifications seront sauvegardées dans votre profil admin.
+                </p>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
