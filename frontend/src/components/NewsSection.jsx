@@ -16,7 +16,7 @@ const NewsSection = () => {
       try {
         setLoading(true);
         const response = await newsAPI.getAll({ limit: 3 });
-        setNews(response.articles || []);
+        setNews(response.data.articles || []);
       } catch (err) {
         console.error('Error fetching news:', err);
         setError('Erreur lors du chargement des actualités');
