@@ -11,14 +11,14 @@ sys.path.insert(0, str(backend_dir))
 
 from models import ApiResponse
 from database import get_documents
-from auth import get_current_admin_or_moderator
+from auth import get_current_admin
 
 router = APIRouter(prefix="/api/admin/analytics", tags=["analytics"])
 
 @router.get("/overview")
 async def get_analytics_overview(
     time_range: str = Query("7d", regex="^(7d|30d|90d)$"),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Get analytics overview with growth metrics"""
     try:
@@ -64,7 +64,7 @@ async def get_analytics_overview(
 @router.get("/user-activity")
 async def get_user_activity(
     time_range: str = Query("7d", regex="^(7d|30d|90d)$"),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Get user activity data over time"""
     try:
@@ -97,7 +97,7 @@ async def get_user_activity(
 @router.get("/content-performance")
 async def get_content_performance(
     limit: int = Query(10, ge=1, le=50),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Get content performance metrics"""
     try:
@@ -131,7 +131,7 @@ async def get_content_performance(
 @router.get("/traffic-sources")
 async def get_traffic_sources(
     time_range: str = Query("7d", regex="^(7d|30d|90d)$"),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Get traffic sources distribution"""
     try:
@@ -157,7 +157,7 @@ async def get_traffic_sources(
 @router.get("/popular-pages")
 async def get_popular_pages(
     limit: int = Query(10, ge=1, le=20),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Get most popular pages"""
     try:
@@ -188,7 +188,7 @@ async def get_popular_pages(
 async def export_analytics(
     time_range: str = Query("30d", regex="^(7d|30d|90d)$"),
     format: str = Query("json", regex="^(json|csv)$"),
-    current_user=Depends(get_current_admin_or_moderator)
+    current_user=Depends(get_current_admin)
 ):
     """Export analytics data"""
     try:
