@@ -1,4 +1,6 @@
 #!/bin/bash
+chmod +x /app/scripts/install-linux.sh
+chmod +x /app/scripts/install-windows.ps1
 # Script d'installation automatique pour Linux (Ubuntu/Debian/CentOS/Fedora)
 # Usage: bash install-linux.sh
 
