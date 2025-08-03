@@ -113,9 +113,21 @@ class ComprehensiveAPITester:
         response = self.make_request("GET", "/news", token_type=None)
         if response and response.status_code == 200:
             data = response.json()
-            self.test_results["news_apis"]["get_news"] = self.log_test(
-                "Get News (Public)", True, f"Retrieved {len(data)} news articles"
-            )
+            if isinstance(data, dict) and "articles" in data:
+                articles_count = len(data["articles"])
+                self.test_results["news_apis"]["get_news"] = self.log_test(
+                    "Get News (Public)", True, f"Retrieved {articles_count} news articles"
+                )
+            elif isinstance(data, list):
+                articles_count = len(data)
+                self.test_results["news_apis"]["get_news"] = self.log_test(
+                    "Get News (Public)", True, f"Retrieved {articles_count} news articles"
+                )
+            else:
+                self.test_results["news_apis"]["get_news"] = self.log_test(
+                    "Get News (Public)", False, f"Unexpected response format: {type(data)}"
+                )
+                return False
         else:
             self.test_results["news_apis"]["get_news"] = self.log_test(
                 "Get News (Public)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
