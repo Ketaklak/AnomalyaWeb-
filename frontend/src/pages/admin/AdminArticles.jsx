@@ -344,166 +344,247 @@ const AdminArticles = () => {
 
         {/* Create/Edit Modal */}
         <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-          <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-slate-900 border-slate-700 max-w-6xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-white">
                 {editingArticle ? 'Modifier l\'article' : 'Nouvel article'}
               </DialogTitle>
             </DialogHeader>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Titre *
-                  </label>
-                  <Input
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-slate-800 border-slate-600 text-white"
-                  />
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-slate-800">
+                <TabsTrigger value="editor" className="data-[state=active]:bg-slate-700">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Éditeur
+                </TabsTrigger>
+                <TabsTrigger value="media" className="data-[state=active]:bg-slate-700">
+                  <Image className="h-4 w-4 mr-2" />
+                  Médias
+                </TabsTrigger>
+                <TabsTrigger value="settings" className="data-[state=active]:bg-slate-700">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Paramètres
+                </TabsTrigger>
+              </TabsList>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <TabsContent value="editor" className="space-y-6">
+                  {/* Informations de base */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Titre *
+                      </label>
+                      <Input
+                        name="title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        required
+                        className="bg-slate-800 border-slate-600 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Catégorie *
+                      </label>
+                      <Select value={formData.category} onValueChange={handleSelectChange}>
+                        <SelectTrigger className="bg-slate-800 border-slate-600 text-white">
+                          <SelectValue placeholder="Choisir une catégorie" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-800 border-slate-600">
+                          <SelectItem value="Actualités" className="text-white hover:bg-slate-700">Actualités</SelectItem>
+                          <SelectItem value="Technology" className="text-white hover:bg-slate-700">Technology</SelectItem>
+                          <SelectItem value="Sécurité" className="text-white hover:bg-slate-700">Sécurité</SelectItem>
+                          <SelectItem value="Formation" className="text-white hover:bg-slate-700">Formation</SelectItem>
+                          <SelectItem value="Partenariat" className="text-white hover:bg-slate-700">Partenariat</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Extrait *
+                    </label>
+                    <Textarea
+                      name="excerpt"
+                      value={formData.excerpt}
+                      onChange={handleInputChange}
+                      required
+                      rows={3}
+                      placeholder="Résumé court de l'article qui apparaîtra dans les listes..."
+                      className="bg-slate-800 border-slate-600 text-white resize-none"
+                    />
+                  </div>
+
+                  {/* Éditeur de contenu riche */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Contenu de l'article *
+                    </label>
+                    <RichTextEditor
+                      content={formData.content}
+                      onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+                      placeholder="Commencez à écrire votre article..."
+                      height="500px"
+                      enableImageUpload={true}
+                      enableVideoEmbed={true}
+                      enableCodeHighlight={true}
+                    />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="media" className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Image principale de l'article
+                    </label>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div>
+                        <Input
+                          name="image"
+                          value={formData.image}
+                          onChange={handleInputChange}
+                          placeholder="URL de l'image ou sélectionnez depuis le gestionnaire"
+                          className="bg-slate-800 border-slate-600 text-white mb-4"
+                        />
+                        {formData.image && (
+                          <div className="mt-2">
+                            <img 
+                              src={formData.image} 
+                              alt="Aperçu" 
+                              className="w-full h-32 object-cover rounded-lg border border-slate-600"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <MediaManager
+                          onSelectMedia={(media) => {
+                            if (media.type === 'image') {
+                              setFormData(prev => ({ ...prev, image: media.url }));
+                            }
+                          }}
+                          allowedTypes={['image']}
+                          className="h-80"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="settings" className="space-y-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Auteur *
+                      </label>
+                      <Input
+                        name="author"
+                        value={formData.author}
+                        onChange={handleInputChange}
+                        required
+                        className="bg-slate-800 border-slate-600 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Temps de lecture
+                      </label>
+                      <Input
+                        name="readTime"
+                        value={formData.readTime}
+                        onChange={handleInputChange}
+                        placeholder="ex: 5 min"
+                        className="bg-slate-800 border-slate-600 text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Tags (séparés par des virgules)
+                    </label>
+                    <Input
+                      name="tags"
+                      value={formData.tags}
+                      onChange={handleInputChange}
+                      placeholder="ex: IA, Innovation, Tech"
+                      className="bg-slate-800 border-slate-600 text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        name="isPinned"
+                        checked={formData.isPinned}
+                        onChange={handleInputChange}
+                        className="rounded border-slate-600 bg-slate-800"
+                      />
+                      <label className="text-sm text-gray-300">
+                        Épingler cet article (apparaîtra en premier)
+                      </label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        name="isPublished"
+                        checked={formData.isPublished !== false}
+                        onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
+                        className="rounded border-slate-600 bg-slate-800"
+                      />
+                      <label className="text-sm text-gray-300">
+                        Publier immédiatement
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Aperçu des métadonnées */}
+                  <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="text-white font-medium mb-2">Aperçu SEO</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="text-blue-400 truncate">{formData.title || "Titre de l'article"}</div>
+                      <div className="text-gray-400 text-xs truncate">
+                        {formData.excerpt || "Extrait de l'article qui apparaîtra dans les résultats de recherche..."}
+                      </div>
+                      <div className="text-green-400 text-xs">anomalya-corp.com/articles/{formData.title ? formData.title.toLowerCase().replace(/\s+/g, '-') : 'article'}</div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Boutons d'action */}
+                <div className="flex gap-4 pt-4 border-t border-slate-700">
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                        {editingArticle ? 'Modification...' : 'Création...'}
+                      </>
+                    ) : (
+                      editingArticle ? 'Modifier l\'article' : 'Créer l\'article'
+                    )}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setIsCreateModalOpen(false);
+                      setActiveTab('editor');
+                    }}
+                    className="border-slate-600 text-gray-300 hover:bg-slate-800"
+                  >
+                    Annuler
+                  </Button>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Catégorie *
-                  </label>
-                  <Select value={formData.category} onValueChange={handleSelectChange}>
-                    <SelectTrigger className="bg-slate-800 border-slate-600 text-white">
-                      <SelectValue placeholder="Choisir une catégorie" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-slate-800 border-slate-600">
-                      <SelectItem value="Actualités" className="text-white hover:bg-slate-700">Actualités</SelectItem>
-                      <SelectItem value="Technology" className="text-white hover:bg-slate-700">Technology</SelectItem>
-                      <SelectItem value="Sécurité" className="text-white hover:bg-slate-700">Sécurité</SelectItem>
-                      <SelectItem value="Formation" className="text-white hover:bg-slate-700">Formation</SelectItem>
-                      <SelectItem value="Partenariat" className="text-white hover:bg-slate-700">Partenariat</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Auteur *
-                  </label>
-                  <Input
-                    name="author"
-                    value={formData.author}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-slate-800 border-slate-600 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Temps de lecture
-                  </label>
-                  <Input
-                    name="readTime"
-                    value={formData.readTime}
-                    onChange={handleInputChange}
-                    placeholder="ex: 5 min"
-                    className="bg-slate-800 border-slate-600 text-white"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Image URL *
-                </label>
-                <Input
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="https://..."
-                  className="bg-slate-800 border-slate-600 text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Extrait *
-                </label>
-                <Textarea
-                  name="excerpt"
-                  value={formData.excerpt}
-                  onChange={handleInputChange}
-                  required
-                  rows={3}
-                  className="bg-slate-800 border-slate-600 text-white resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Contenu *
-                </label>
-                <Textarea
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  required
-                  rows={8}
-                  className="bg-slate-800 border-slate-600 text-white resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Tags (séparés par des virgules)
-                </label>
-                <Input
-                  name="tags"
-                  value={formData.tags}
-                  onChange={handleInputChange}
-                  placeholder="ex: IA, Innovation, Tech"
-                  className="bg-slate-800 border-slate-600 text-white"
-                />
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  name="isPinned"
-                  checked={formData.isPinned}
-                  onChange={handleInputChange}
-                  className="rounded border-slate-600"
-                />
-                <label className="text-sm text-gray-300">
-                  Épingler cet article
-                </label>
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                      {editingArticle ? 'Modification...' : 'Création...'}
-                    </>
-                  ) : (
-                    editingArticle ? 'Modifier' : 'Créer'
-                  )}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsCreateModalOpen(false)}
-                  className="border-slate-600 text-gray-300 hover:bg-slate-800"
-                >
-                  Annuler
-                </Button>
-              </div>
-            </form>
+              </form>
+            </Tabs>
           </DialogContent>
         </Dialog>
       </div>
