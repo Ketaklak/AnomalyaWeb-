@@ -27,6 +27,26 @@ router = APIRouter(prefix="/api/client", tags=["client"])
 async def get_client_profile(current_user: User = Depends(get_current_client)):
     """Get client profile"""
     try:
+        # For admin users, create a default profile with admin info
+        if current_user.role in ["admin", "moderator"]:
+            return ClientProfile(
+                first_name="Administrateur",
+                last_name="Système",
+                phone="",
+                address="",
+                city="",
+                postal_code="",
+                country="France",
+                company_name="Anomalya Corp",
+                company_industry="Technologie",
+                company_size="PME (10-249 salariés)",
+                job_title="Administrateur Système",
+                preferred_language="fr",
+                newsletter_subscribed=False,
+                sms_notifications=False,
+                email_notifications=True
+            )
+        
         profiles, _ = await get_documents("client_profiles", {"user_id": current_user.id}, limit=1)
         
         if profiles:
