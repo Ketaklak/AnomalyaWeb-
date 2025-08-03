@@ -12,6 +12,7 @@ import CompetencesPage from "./pages/CompetencesPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import AdminArticles from "./pages/admin/AdminArticles";
 import AdminContacts from "./pages/admin/AdminContacts";
 import AdminUsers from "./pages/admin/AdminUsers";
