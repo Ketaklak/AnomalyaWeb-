@@ -1,0 +1,69 @@
+{
+  "authentication": {
+    "admin_login": {
+      "success": true,
+      "details": "Successfully authenticated as admin",
+      "timestamp": "2025-08-03T22:44:47.837676"
+    }
+  },
+  "database_baseline": {
+    "dashboard_stats": {
+      "success": true,
+      "details": "Users: 16, Articles: 5, Contacts: 0, Services: 5",
+      "timestamp": "2025-08-03T22:44:47.873480"
+    },
+    "articles_details": {
+      "success": true,
+      "details": "Total articles: 5, Pinned articles: 1",
+      "timestamp": "2025-08-03T22:44:47.896685"
+    },
+    "clients_count": {
+      "success": true,
+      "details": "Total clients: 15",
+      "timestamp": "2025-08-03T22:44:47.963451"
+    }
+  },
+  "analytics_realism": {
+    "overview_7d": {
+      "success": true,
+      "details": "DB vs Analytics - Users: 16=16 (\u2713), Articles: 5=5 (\u2713), Contacts: 0=0 (\u2713), Growth realistic: \u2713 (Users: 7.3%, Articles: 9.4%)",
+      "timestamp": "2025-08-03T22:44:47.995307"
+    },
+    "overview_30d": {
+      "success": true,
+      "details": "DB vs Analytics - Users: 16=16 (\u2713), Articles: 5=5 (\u2713), Contacts: 0=0 (\u2713), Growth realistic: \u2713 (Users: 10.5%, Articles: 1.8%)",
+      "timestamp": "2025-08-03T22:44:48.064405"
+    },
+    "overview_90d": {
+      "success": true,
+      "details": "DB vs Analytics - Users: 16=16 (\u2713), Articles: 5=5 (\u2713), Contacts: 0=0 (\u2713), Growth realistic: \u2713 (Users: 9.3%, Articles: 9.9%)",
+      "timestamp": "2025-08-03T22:44:48.093474"
+    },
+    "user_activity": {
+      "success": true,
+      "details": "Total DB users: 31, Expected base activity: 6, Avg daily users: 4.0, Avg sessions: 6.6, Activity realistic: \u2713, Sessions realistic: \u2713",
+      "timestamp": "2025-08-03T22:44:48.113554"
+    },
+    "content_performance": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T22:44:48.135496"
+    },
+    "traffic_sources": {
+      "success": true,
+      "details": "Sources complete: \u2713, Total %: 100.0 (\u2713), Distribution realistic: \u2713, Direct traffic: 42.5% (\u2713)",
+      "timestamp": "2025-08-03T22:44:48.158942"
+    },
+    "popular_pages": {
+      "success": true,
+      "details": "Core pages present: \u2713, Homepage highest: \u2713 (1560 views), Services realistic: \u2713 (938 views), News realistic: \u2713 (729 views), Bounce rates realistic: \u2713",
+      "timestamp": "2025-08-03T22:44:48.188821"
+    },
+    "data_consistency": {
+      "success": false,
+      "details": "Users consistent: \u2713, Articles consistent: \u2713, Contacts consistent: \u2713, Growth stable: \u2717 (Users diff: 3.5%, Articles diff: 9.0%)",
+      "timestamp": "2025-08-03T22:44:49.244520"
+    }
+  },
+  "errors": []
+}
