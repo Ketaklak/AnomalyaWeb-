@@ -113,7 +113,24 @@ async def get_content_performance(
         performance_data = []
         for article in articles:
             # Generate more realistic performance metrics based on article properties
-            article_age_days = (datetime.now() - datetime.fromisoformat(article.get("date", datetime.now().isoformat()))).days if article.get("date") else 30
+            try:
+                if article.get("date"):
+                    # Handle different date formats
+                    date_str = article.get("date")
+                    if isinstance(date_str, str):
+                        # Try to parse ISO format first, then fallback
+                        try:
+                            article_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+                        except:
+                            # Fallback for other formats
+                            article_date = datetime.now() - timedelta(days=30)
+                    else:
+                        article_date = datetime.now() - timedelta(days=30)
+                    article_age_days = (datetime.now() - article_date).days
+                else:
+                    article_age_days = 30
+            except:
+                article_age_days = 30
             
             # Newer articles generally have higher engagement
             age_factor = max(0.3, 1 - (article_age_days / 90))
