@@ -49,50 +49,30 @@ const AnalyticsDashboard = () => {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      // Simulating API call - replace with actual endpoint
-      const mockData = {
-        overview: {
-          totalUsers: 247,
-          totalArticles: 45,
-          totalContacts: 89,
-          totalQuotes: 156,
-          growth: {
-            users: 12.5,
-            articles: 8.3,
-            contacts: -5.2,
-            quotes: 15.7
-          }
-        },
-        userActivity: [
-          { date: '2025-01-01', users: 45, sessions: 67 },
-          { date: '2025-01-02', users: 52, sessions: 78 },
-          { date: '2025-01-03', users: 38, sessions: 45 },
-          { date: '2025-01-04', users: 63, sessions: 89 },
-          { date: '2025-01-05', users: 71, sessions: 95 },
-          { date: '2025-01-06', users: 58, sessions: 73 },
-          { date: '2025-01-07', users: 69, sessions: 87 }
-        ],
-        contentPerformance: [
-          { title: 'Les tendances IA en 2025', views: 1234, engagement: 85 },
-          { title: 'Cybersécurité entreprise', views: 987, engagement: 78 },
-          { title: 'Développement web moderne', views: 756, engagement: 92 },
-          { title: 'Guide maintenance PC', views: 654, engagement: 67 },
-        ],
-        trafficSources: [
-          { source: 'Direct', visitors: 45.2, color: '#3b82f6' },
-          { source: 'Google', visitors: 32.1, color: '#10b981' },
-          { source: 'Social Media', visitors: 15.7, color: '#f59e0b' },
-          { source: 'Referral', visitors: 7.0, color: '#8b5cf6' }
-        ],
-        popularPages: [
-          { page: '/services', views: 2847, bounce: 23.4 },
-          { page: '/actualites', views: 2156, bounce: 18.7 },
-          { page: '/contact', views: 1834, bounce: 34.2 },
-          { page: '/competences', views: 1523, bounce: 28.9 }
-        ]
-      };
       
-      setAnalytics(mockData);
+      // Fetch real data from analytics APIs
+      const [
+        overviewResponse,
+        userActivityResponse,
+        contentPerformanceResponse,
+        trafficSourcesResponse,
+        popularPagesResponse
+      ] = await Promise.all([
+        analyticsAPI.getOverview(timeRange),
+        analyticsAPI.getUserActivity(timeRange),
+        analyticsAPI.getContentPerformance(10),
+        analyticsAPI.getTrafficSources(timeRange),
+        analyticsAPI.getPopularPages(5)
+      ]);
+
+      setAnalytics({
+        overview: overviewResponse.data.data.overview,
+        userActivity: userActivityResponse.data.data.userActivity,
+        contentPerformance: contentPerformanceResponse.data.data.contentPerformance,
+        trafficSources: trafficSourcesResponse.data.data.trafficSources,
+        popularPages: popularPagesResponse.data.data.popularPages
+      });
+      
     } catch (error) {
       console.error('Error fetching analytics:', error);
       toast({
