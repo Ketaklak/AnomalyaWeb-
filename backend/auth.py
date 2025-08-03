@@ -36,13 +36,18 @@ class User(BaseModel):
     role: str
     is_active: bool
     created_at: datetime
+    
+    # Extended fields for client system
+    total_points: int = 0
+    available_points: int = 0
+    loyalty_tier: str = "bronze"
 
 class UserCreate(BaseModel):
     username: str
     email: str
     full_name: str
     password: str
-    role: str = "client"
+    role: str = "client_standard"
 
 class UserLogin(BaseModel):
     username: str
@@ -50,6 +55,15 @@ class UserLogin(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    role: Optional[str] = None
+    is_active: Optional[bool] = None
+    total_points: Optional[int] = None
+    available_points: Optional[int] = None
+    loyalty_tier: Optional[str] = None
 
 # Utility functions
 def verify_password(plain_password, hashed_password):
