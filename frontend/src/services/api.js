@@ -373,4 +373,56 @@ export const analyticsAPI = {
   }
 };
 
+// Media API
+export const mediaAPI = {
+  getFiles: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== '') {
+        queryParams.append(key, params[key]);
+      }
+    });
+    return api.get(`/admin/media/files?${queryParams.toString()}`);
+  },
+
+  uploadFiles: (files, folder = '') => {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+    formData.append('folder', folder);
+    
+    return api.post('/admin/media/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+
+  uploadBase64: (imageData, filename = 'image', folder = '') => {
+    const formData = new FormData();
+    formData.append('image_data', imageData);
+    formData.append('filename', filename);
+    formData.append('folder', folder);
+    
+    return api.post('/admin/media/upload-base64', formData);
+  },
+
+  deleteFile: (fileId) => {
+    return api.delete(`/admin/media/files/${fileId}`);
+  },
+
+  createFolder: (name, parent = '') => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('parent', parent);
+    
+    return api.post('/admin/media/folders', formData);
+  },
+
+  getFolders: (parent = '') => {
+    return api.get(`/admin/media/folders?parent=${parent}`);
+  }
+};
+
 export default api;
