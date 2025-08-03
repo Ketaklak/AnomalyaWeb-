@@ -467,10 +467,7 @@ class ClientSystemTester:
         
         # Test ADD points to client
         if self.test_client_id:
-            response = self.make_request("POST", f"/admin/clients/{self.test_client_id}/points", {
-                "points": 100,
-                "description": "Points de bienvenue"
-            })
+            response = self.make_request("POST", f"/admin/clients/{self.test_client_id}/points?points=100&description=Points de bienvenue")
             
             if response and response.status_code == 200:
                 data = response.json()
