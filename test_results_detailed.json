@@ -3,125 +3,135 @@
     "get_news": {
       "success": true,
       "details": "Retrieved 5 news articles",
-      "timestamp": "2025-08-03T21:55:10.484347"
+      "timestamp": "2025-08-03T21:56:00.433095"
     },
     "get_single_news": {
       "success": true,
       "details": "Retrieved article: Les tendances IA en 2025",
-      "timestamp": "2025-08-03T21:55:10.502462"
+      "timestamp": "2025-08-03T21:56:00.457252"
     }
   },
   "services_apis": {
     "get_services": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T21:55:10.534786"
+      "timestamp": "2025-08-03T21:56:00.487943"
     },
     "get_single_service": {
       "success": true,
       "details": "Retrieved service: D\u00e9veloppement Web",
-      "timestamp": "2025-08-03T21:55:10.554337"
+      "timestamp": "2025-08-03T21:56:00.545471"
     }
   },
   "authentication": {
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T21:55:10.805078"
+      "timestamp": "2025-08-03T21:56:00.834364"
     },
     "client_register": {
-      "success": false,
-      "details": "Registration failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:10.824410"
+      "success": true,
+      "details": "Client registered successfully",
+      "timestamp": "2025-08-03T21:56:01.094658"
     },
     "client_login": {
-      "success": false,
-      "details": "Login failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.088350"
+      "success": true,
+      "details": "Successfully logged in as client",
+      "timestamp": "2025-08-03T21:56:01.343822"
+    },
+    "auth_me_admin": {
+      "success": true,
+      "details": "Retrieved admin user info: admin",
+      "timestamp": "2025-08-03T21:56:01.364178"
+    },
+    "auth_me_client": {
+      "success": true,
+      "details": "Retrieved client user info: testclient258160",
+      "timestamp": "2025-08-03T21:56:01.383206"
     },
     "rbac_client_blocked": {
       "success": false,
       "details": "Should have returned 403, got No response",
-      "timestamp": "2025-08-03T21:55:11.498378"
+      "timestamp": "2025-08-03T21:56:01.786504"
     },
     "rbac_admin_client": {
       "success": true,
       "details": "Admin access to client endpoint handled correctly (HTTP 200)",
-      "timestamp": "2025-08-03T21:55:11.516101"
+      "timestamp": "2025-08-03T21:56:01.802435"
     }
   },
   "admin_apis": {
     "dashboard_stats": {
       "success": true,
-      "details": "Articles: 5, Users: 7, Contacts: 0",
-      "timestamp": "2025-08-03T21:55:11.113855"
+      "details": "Articles: 5, Users: 8, Contacts: 0",
+      "timestamp": "2025-08-03T21:56:01.411382"
     },
     "articles_list": {
       "success": true,
       "details": "Retrieved 5 articles",
-      "timestamp": "2025-08-03T21:55:11.136549"
+      "timestamp": "2025-08-03T21:56:01.435411"
     },
     "contacts_list": {
       "success": true,
       "details": "Retrieved 0 contacts",
-      "timestamp": "2025-08-03T21:55:11.154899"
+      "timestamp": "2025-08-03T21:56:01.494138"
     },
     "services_list": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T21:55:11.184781"
+      "timestamp": "2025-08-03T21:56:01.511523"
     },
     "clients_list": {
       "success": true,
-      "details": "Retrieved 6 clients",
-      "timestamp": "2025-08-03T21:55:11.247376"
+      "details": "Retrieved 7 clients",
+      "timestamp": "2025-08-03T21:56:01.553821"
     },
     "quotes_list": {
       "success": true,
       "details": "Retrieved 5 quotes",
-      "timestamp": "2025-08-03T21:55:11.284634"
+      "timestamp": "2025-08-03T21:56:01.583777"
     },
     "tickets_list": {
       "success": true,
       "details": "Retrieved 4 tickets",
-      "timestamp": "2025-08-03T21:55:11.306020"
+      "timestamp": "2025-08-03T21:56:01.604811"
     }
   },
   "client_apis": {
     "dashboard": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.325719"
+      "success": true,
+      "details": "Retrieved dashboard data with 0 points",
+      "timestamp": "2025-08-03T21:56:01.633065"
     },
     "profile_get": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.344736"
+      "success": true,
+      "details": "Retrieved client profile",
+      "timestamp": "2025-08-03T21:56:01.656098"
     },
     "quotes_list": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.360232"
+      "success": true,
+      "details": "Retrieved 0 quotes",
+      "timestamp": "2025-08-03T21:56:01.678656"
     },
     "quote_request": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.392413"
+      "success": true,
+      "details": "Quote created with ID: Unknown",
+      "timestamp": "2025-08-03T21:56:01.701780"
     },
     "tickets_list": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.409484"
+      "success": true,
+      "details": "Retrieved 0 tickets",
+      "timestamp": "2025-08-03T21:56:01.719548"
     },
     "ticket_creation": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.425106"
+      "success": true,
+      "details": "Ticket created with ID: Unknown",
+      "timestamp": "2025-08-03T21:56:01.741363"
     },
     "points_history": {
-      "success": false,
-      "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:55:11.443364"
+      "success": true,
+      "details": "Retrieved 0 point transactions",
+      "timestamp": "2025-08-03T21:56:01.766061"
     }
   },
   "errors": []
