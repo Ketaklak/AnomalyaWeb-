@@ -2,124 +2,127 @@
   "news_apis": {
     "get_news": {
       "success": true,
-      "details": "Retrieved 3 news articles",
-      "timestamp": "2025-08-03T21:54:24.079283"
+      "details": "Retrieved 5 news articles",
+      "timestamp": "2025-08-03T21:55:10.484347"
+    },
+    "get_single_news": {
+      "success": true,
+      "details": "Retrieved article: Les tendances IA en 2025",
+      "timestamp": "2025-08-03T21:55:10.502462"
     }
   },
   "services_apis": {
     "get_services": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T21:54:24.123210"
+      "timestamp": "2025-08-03T21:55:10.534786"
     },
     "get_single_service": {
       "success": true,
       "details": "Retrieved service: D\u00e9veloppement Web",
-      "timestamp": "2025-08-03T21:54:24.144424"
+      "timestamp": "2025-08-03T21:55:10.554337"
     }
   },
   "authentication": {
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T21:54:24.429465"
+      "timestamp": "2025-08-03T21:55:10.805078"
     },
     "client_register": {
       "success": false,
       "details": "Registration failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.447378"
+      "timestamp": "2025-08-03T21:55:10.824410"
     },
     "client_login": {
       "success": false,
       "details": "Login failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.702056"
+      "timestamp": "2025-08-03T21:55:11.088350"
     },
     "rbac_client_blocked": {
       "success": false,
       "details": "Should have returned 403, got No response",
-      "timestamp": "2025-08-03T21:54:25.024346"
+      "timestamp": "2025-08-03T21:55:11.498378"
     },
     "rbac_admin_client": {
       "success": true,
       "details": "Admin access to client endpoint handled correctly (HTTP 200)",
-      "timestamp": "2025-08-03T21:54:25.080134"
+      "timestamp": "2025-08-03T21:55:11.516101"
     }
   },
   "admin_apis": {
     "dashboard_stats": {
       "success": true,
       "details": "Articles: 5, Users: 7, Contacts: 0",
-      "timestamp": "2025-08-03T21:54:24.730651"
+      "timestamp": "2025-08-03T21:55:11.113855"
     },
     "articles_list": {
       "success": true,
       "details": "Retrieved 5 articles",
-      "timestamp": "2025-08-03T21:54:24.750681"
+      "timestamp": "2025-08-03T21:55:11.136549"
     },
     "contacts_list": {
       "success": true,
       "details": "Retrieved 0 contacts",
-      "timestamp": "2025-08-03T21:54:24.773881"
+      "timestamp": "2025-08-03T21:55:11.154899"
     },
     "services_list": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T21:54:24.795570"
+      "timestamp": "2025-08-03T21:55:11.184781"
     },
     "clients_list": {
       "success": true,
       "details": "Retrieved 6 clients",
-      "timestamp": "2025-08-03T21:54:24.840851"
+      "timestamp": "2025-08-03T21:55:11.247376"
     },
     "quotes_list": {
       "success": true,
       "details": "Retrieved 5 quotes",
-      "timestamp": "2025-08-03T21:54:24.866269"
+      "timestamp": "2025-08-03T21:55:11.284634"
     },
     "tickets_list": {
       "success": true,
       "details": "Retrieved 4 tickets",
-      "timestamp": "2025-08-03T21:54:24.889304"
+      "timestamp": "2025-08-03T21:55:11.306020"
     }
   },
   "client_apis": {
     "dashboard": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.905333"
+      "timestamp": "2025-08-03T21:55:11.325719"
     },
     "profile_get": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.920637"
+      "timestamp": "2025-08-03T21:55:11.344736"
     },
     "quotes_list": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.937172"
+      "timestamp": "2025-08-03T21:55:11.360232"
     },
     "quote_request": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.953916"
+      "timestamp": "2025-08-03T21:55:11.392413"
     },
     "tickets_list": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.972326"
+      "timestamp": "2025-08-03T21:55:11.409484"
     },
     "ticket_creation": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:24.988593"
+      "timestamp": "2025-08-03T21:55:11.425106"
     },
     "points_history": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-03T21:54:25.006911"
+      "timestamp": "2025-08-03T21:55:11.443364"
     }
   },
-  "errors": [
-    "News APIs: 0"
-  ]
+  "errors": []
 }
