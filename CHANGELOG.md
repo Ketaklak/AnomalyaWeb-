@@ -89,7 +89,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.2] - 2024-12-30 📝
+## [0.5.2] - 2025-08-01 📝
 
 ### 🚀 Ajouté
 - **Système d'Articles Avancé** : Fonctionnalités éditoriales complètes
