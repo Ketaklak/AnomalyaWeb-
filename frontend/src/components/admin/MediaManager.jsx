@@ -51,53 +51,45 @@ const MediaManager = ({
   const loadMediaFiles = useCallback(async () => {
     setLoading(true);
     try {
-      // TODO: Remplacer par l'API réelle
-      const mockFiles = [
-        {
-          id: '1',
-          name: 'hero-image.jpg',
-          type: 'image',
-          size: 1024 * 500, // 500KB
-          url: '/api/media/hero-image.jpg',
-          thumbnail: '/api/media/thumbnails/hero-image.jpg',
-          folder: '',
-          createdAt: '2025-01-01T10:00:00Z',
-          dimensions: { width: 1920, height: 1080 }
-        },
-        {
-          id: '2', 
-          name: 'presentation.pdf',
-          type: 'document',
-          size: 1024 * 1024 * 2, // 2MB
-          url: '/api/media/presentation.pdf',
-          thumbnail: '/api/media/thumbnails/pdf-icon.png',
-          folder: 'documents',
-          createdAt: '2025-01-02T14:30:00Z',
-        },
-        {
-          id: '3',
-          name: 'demo-video.mp4',
-          type: 'video', 
-          size: 1024 * 1024 * 15, // 15MB
-          url: '/api/media/demo-video.mp4',
-          thumbnail: '/api/media/thumbnails/video-thumb.jpg',
-          folder: 'videos',
-          createdAt: '2025-01-03T09:15:00Z',
-          duration: 120 // 2 minutes
-        }
-      ];
+      const response = await mediaAPI.getFiles({
+        folder: currentFolder,
+        file_type: filterType,
+        search: searchTerm,
+        sort_by: sortBy,
+        sort_order: sortOrder,
+        limit: 100
+      });
       
-      setMediaFiles(mockFiles);
+      if (response.data.success) {
+        setMediaFiles(response.data.data.files || []);
+      }
     } catch (error) {
+      console.error('Error loading media files:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les fichiers média",
         variant: "destructive"
       });
+      
+      // Fallback avec données mockées en cas d'erreur
+      const mockFiles = [
+        {
+          id: '1',
+          name: 'hero-image.jpg',
+          type: 'image',
+          size: 1024 * 500,
+          url: '/api/media/files/hero-image.jpg',
+          thumbnail: '/api/media/thumbnails/hero-image.jpg',
+          folder: '',
+          createdAt: '2025-01-01T10:00:00Z',
+          dimensions: { width: 1920, height: 1080 }
+        }
+      ];
+      setMediaFiles(mockFiles);
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [currentFolder, filterType, searchTerm, sortBy, sortOrder, toast]);
 
   // Filtrer et trier les fichiers
   useEffect(() => {
