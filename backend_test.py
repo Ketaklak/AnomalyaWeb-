@@ -59,7 +59,7 @@ class ComprehensiveAPITester:
         
         return result
     
-    def make_request(self, method, endpoint, data=None, headers=None, token_type="admin"):
+    def make_request(self, method, endpoint, data=None, headers=None, token_type="admin", files=None):
         """Make HTTP request with error handling"""
         url = f"{self.base_url}{endpoint}"
         
@@ -76,8 +76,14 @@ class ComprehensiveAPITester:
             if method.upper() == "GET":
                 response = requests.get(url, headers=headers, timeout=30)
             elif method.upper() == "POST":
-                headers["Content-Type"] = "application/json"
-                response = requests.post(url, json=data, headers=headers, timeout=30)
+                if files:
+                    # For file uploads, don't set Content-Type header (requests will set it)
+                    if "Content-Type" in headers:
+                        del headers["Content-Type"]
+                    response = requests.post(url, data=data, files=files, headers=headers, timeout=30)
+                else:
+                    headers["Content-Type"] = "application/json"
+                    response = requests.post(url, json=data, headers=headers, timeout=30)
             elif method.upper() == "PUT":
                 headers["Content-Type"] = "application/json"
                 response = requests.put(url, json=data, headers=headers, timeout=30)
