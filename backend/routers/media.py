@@ -354,7 +354,7 @@ async def create_folder(
             "path": folder_path,
             "parent": parent,
             "createdAt": datetime.now().isoformat(),
-            "createdBy": current_user.get("id")
+            "createdBy": current_user.id
         }
         
         await create_document("media_folders", folder_data)
