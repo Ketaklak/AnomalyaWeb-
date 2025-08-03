@@ -512,7 +512,7 @@ class ComprehensiveAPITester:
             )
         else:
             self.test_results["authentication"]["rbac_client_blocked"] = self.log_test(
-                "RBAC - Client Blocked from Admin", False, f"Expected 403 or timeout, got {response.status_code if response else 'No response'}"
+                "RBAC - Client Blocked from Admin", False, f"Expected 403 or timeout, got {response.status_code}"
             )
         
         # Test admin trying to access client endpoint (should work)
