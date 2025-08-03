@@ -39,6 +39,7 @@ class ComprehensiveAPITester:
             "admin_apis": {},
             "client_apis": {},
             "analytics_apis": {},
+            "media_apis": {},
             "errors": []
         }
     
