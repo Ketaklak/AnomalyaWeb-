@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue chez {{ company_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header img {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .welcome-message {
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+        .credentials-box {
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .credential-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .credential-label {
+            font-weight: 600;
+            color: #374151;
+        }
+        .credential-value {
+            font-family: 'Courier New', monospace;
+            background-color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            color: #1f2937;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+        }
+        .features {
+            margin: 30px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .feature-icon::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 30px 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            .credential-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .credential-value {
+                margin-top: 5px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <img src="{{ logo_url }}" alt="{{ company_name }}" />
+            <h1>Bienvenue chez {{ company_name }} !</h1>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="content">
+            <div class="welcome-message">
+                Bonjour <strong>{{ user_name }}</strong>,
+                <br><br>
+                Félicitations ! Votre compte a été créé avec succès sur notre plateforme. 
+                Nous sommes ravis de vous accueillir dans la famille {{ company_name }}.
+            </div>
+
+            <!-- Informations de connexion -->
+            <div class="credentials-box">
+                <h3 style="margin-top: 0; color: #1f2937;">Vos informations de connexion :</h3>
+                
+                <div class="credential-item">
+                    <span class="credential-label">Email :</span>
+                    <span class="credential-value">{{ user_email }}</span>
+                </div>
+                
+                {% if temporary_password %}
+                <div class="credential-item">
+                    <span class="credential-label">Mot de passe temporaire :</span>
+                    <span class="credential-value">{{ temporary_password }}</span>
+                </div>
+                
+                <p style="color: #dc2626; font-size: 14px; margin-top: 15px;">
+                    ⚠️ <strong>Important :</strong> Veuillez changer votre mot de passe lors de votre première connexion.
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Bouton CTA -->
+            <div style="text-align: center;">
+                <a href="{{ login_url }}" class="cta-button">
+                    Se connecter maintenant
+                </a>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Fonctionnalités disponibles -->
+            <div class="features">
+                <h3 style="color: #1f2937; margin-bottom: 20px;">Ce que vous pouvez faire :</h3>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <span>Accéder à votre dashboard personnel</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <span>Demander des devis pour vos projets</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <span>Suivre l'avancement de vos demandes</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <span>Gagner des points de fidélité</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <span>Accéder au support technique 24/7</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Informations utiles -->
+            <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h4 style="color: #92400e; margin-top: 0;">💡 Conseil :</h4>
+                <p style="color: #92400e; margin-bottom: 0;">
+                    Explorez votre tableau de bord pour découvrir toutes les fonctionnalités disponibles. 
+                    N'hésitez pas à nous contacter si vous avez des questions !
+                </p>
+            </div>
+
+            <!-- Support -->
+            <p style="color: #6b7280; font-size: 14px;">
+                <strong>Besoin d'aide ?</strong><br>
+                Notre équipe support est disponible 24/7 :<br>
+                📧 <a href="mailto:{{ support_email }}" style="color: #3b82f6;">{{ support_email }}</a><br>
+                📞 {{ support_phone }}<br>
+                💬 Chat en direct sur notre site web
+            </p>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="footer">
+            <div class="social-links">
+                <a href="{{ social_linkedin }}">LinkedIn</a>
+                <a href="{{ social_twitter }}">Twitter</a>
+                <a href="{{ social_facebook }}">Facebook</a>
+            </div>
+            
+            <p>
+                {{ company_name }}<br>
+                {{ company_address }}<br>
+                <a href="{{ website_url }}" style="color: #3b82f6;">{{ website_url }}</a>
+            </p>
+            
+            <p style="font-size: 12px; color: #9ca3af; margin-top: 20px;">
+                Vous recevez cet email car vous avez créé un compte sur {{ company_name }}.<br>
+                <a href="{{ unsubscribe_url }}" style="color: #9ca3af;">Se désabonner</a> | 
+                <a href="{{ privacy_url }}" style="color: #9ca3af;">Politique de confidentialité</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

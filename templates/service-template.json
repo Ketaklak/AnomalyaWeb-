@@ -1,0 +1,149 @@
+{
+  "id": "service-unique-id",
+  "title": "Nom de votre service",
+  "description": "Description détaillée de votre service. Expliquez clairement ce que vous offrez, les bénéfices pour vos clients et pourquoi ils devraient choisir votre service.",
+  "shortDescription": "Résumé court du service en une phrase",
+  "icon": "service-icon.svg",
+  "category": "développement",
+  "status": "active",
+  "featured": true,
+  "order": 1,
+  "features": [
+    "Fonctionnalité 1 - Développement React/Vue.js",
+    "Fonctionnalité 2 - API REST/GraphQL",
+    "Fonctionnalité 3 - Base de données optimisée",
+    "Fonctionnalité 4 - Interface responsive",
+    "Fonctionnalité 5 - Tests automatisés"
+  ],
+  "technologies": [
+    {
+      "name": "React",
+      "icon": "react-icon.svg",
+      "category": "Frontend",
+      "experience": "Expert"
+    },
+    {
+      "name": "Node.js",
+      "icon": "nodejs-icon.svg",
+      "category": "Backend",
+      "experience": "Expert"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "mongodb-icon.svg",
+      "category": "Database",
+      "experience": "Avancé"
+    },
+    {
+      "name": "AWS",
+      "icon": "aws-icon.svg",
+      "category": "Cloud",
+      "experience": "Intermédiaire"
+    }
+  ],
+  "pricing": {
+    "model": "project",
+    "starting": 2500,
+    "currency": "EUR",
+    "unit": "projet",
+    "options": [
+      {
+        "name": "Basique",
+        "price": 2500,
+        "features": ["5 pages", "Design responsive", "Formulaire de contact"],
+        "duration": "2-3 semaines"
+      },
+      {
+        "name": "Standard",
+        "price": 4500,
+        "features": ["10 pages", "CMS intégré", "SEO optimisé", "Analytics"],
+        "duration": "4-6 semaines"
+      },
+      {
+        "name": "Premium",
+        "price": 7500,
+        "features": ["Pages unlimited", "E-commerce", "Intégrations API", "Support 1 an"],
+        "duration": "6-8 semaines"
+      }
+    ]
+  },
+  "process": [
+    {
+      "step": 1,
+      "title": "Analyse des besoins",
+      "description": "Réunion pour comprendre vos objectifs et contraintes",
+      "duration": "1-2 jours"
+    },
+    {
+      "step": 2,
+      "title": "Conception & Design",
+      "description": "Création des maquettes et validation du design",
+      "duration": "3-5 jours"
+    },
+    {
+      "step": 3,
+      "title": "Développement",
+      "description": "Codage de l'application avec tests intégrés",
+      "duration": "2-4 semaines"
+    },
+    {
+      "step": 4,
+      "title": "Tests & Déploiement",
+      "description": "Tests complets et mise en production",
+      "duration": "2-3 jours"
+    }
+  ],
+  "portfolio": [
+    {
+      "title": "Projet Example 1",
+      "description": "Description du projet réalisé",
+      "image": "/assets/portfolio/project1.jpg",
+      "url": "https://client-example.com",
+      "technologies": ["React", "Node.js", "MongoDB"]
+    },
+    {
+      "title": "Projet Example 2",
+      "description": "Description du projet réalisé",
+      "image": "/assets/portfolio/project2.jpg",
+      "url": "https://client-example2.com",
+      "technologies": ["Vue.js", "Python", "PostgreSQL"]
+    }
+  ],
+  "testimonials": [
+    {
+      "client": "Jean Dupont",
+      "company": "Entreprise ABC",
+      "rating": 5,
+      "comment": "Excellent travail, très professionnel et dans les délais. Je recommande vivement !",
+      "date": "2024-12-15"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Combien de temps prend le développement ?",
+      "answer": "Cela dépend de la complexité du projet. Un site basique prend 2-3 semaines, un projet complexe peut prendre 6-8 semaines."
+    },
+    {
+      "question": "Proposez-vous de la maintenance ?",
+      "answer": "Oui, nous offrons des contrats de maintenance avec support technique et mises à jour régulières."
+    }
+  ],
+  "delivery": {
+    "format": ["Code source", "Documentation", "Formation"],
+    "support": "3 mois gratuits",
+    "warranty": "1 an sur les bugs",
+    "revisions": 3
+  },
+  "requirements": [
+    "Cahier des charges détaillé",
+    "Accès aux comptes nécessaires (domaine, hébergement)",
+    "Contenu et images fournis par le client",
+    "Points de contact définis"
+  ],
+  "seo": {
+    "metaTitle": "Service SEO optimisé - Anomalya Corp",
+    "metaDescription": "Description SEO du service",
+    "keywords": ["développement web", "react", "nodejs"],
+    "canonicalUrl": "https://anomalya-corp.com/services/votre-service"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "unique-article-id",
+  "title": "Titre de votre article",
+  "content": "# Titre Principal\n\nContenu de votre article en **Markdown**.\n\n## Sous-titre\n\nVous pouvez utiliser :\n- Des listes\n- Du **gras** et de l'*italique*\n- Des [liens](https://example.com)\n- Des images ![alt text](image-url)\n\n```javascript\n// Du code\nconst example = 'Hello World';\n```\n\n> Citations importantes\n\nEt bien plus encore !",
+  "excerpt": "Résumé court et accrocheur de votre article qui apparaîtra dans les listes et sur les réseaux sociaux.",
+  "category": "Technologie",
+  "tags": ["react", "javascript", "développement", "tutorial"],
+  "author": {
+    "name": "Nom de l'Auteur",
+    "email": "auteur@anomalya-corp.com",
+    "avatar": "/assets/authors/auteur.jpg",
+    "bio": "Biographie courte de l'auteur"
+  },
+  "isPinned": false,
+  "isPublished": true,
+  "date": "2025-01-03T10:00:00Z",
+  "lastModified": "2025-01-03T10:00:00Z",
+  "readingTime": 5,
+  "views": 0,
+  "engagement": 0,
+  "seo": {
+    "metaTitle": "Titre SEO optimisé - Maximum 60 caractères",
+    "metaDescription": "Description SEO optimisée qui apparaîtra dans les résultats de recherche. Maximum 160 caractères.",
+    "keywords": ["mot-clé1", "mot-clé2", "mot-clé3"],
+    "canonicalUrl": "https://anomalya-corp.com/articles/votre-article",
+    "ogImage": "/assets/og-images/votre-article.jpg"
+  },
+  "featured": {
+    "image": "/assets/articles/featured-image.jpg",
+    "imageAlt": "Description de l'image principale",
+    "video": null
+  },
+  "relatedArticles": [],
+  "comments": {
+    "enabled": true,
+    "count": 0
+  },
+  "socialSharing": {
+    "enabled": true,
+    "platforms": ["facebook", "twitter", "linkedin", "email"]
+  }
+}
