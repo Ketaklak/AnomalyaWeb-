@@ -139,79 +139,45 @@ const MediaManager = ({
   const handleFileUpload = useCallback(async (files) => {
     const fileArray = Array.from(files);
     
-    for (const file of fileArray) {
-      // Validation du type
-      const fileType = file.type.startsWith('image/') ? 'image' : 
-                      file.type.startsWith('video/') ? 'video' : 'document';
+    try {
+      setUploadProgress(0);
       
-      if (!allowedTypes.includes(fileType)) {
-        toast({
-          title: "Type non autorisé",
-          description: `Le type ${fileType} n'est pas autorisé`,
-          variant: "destructive"
-        });
-        continue;
-      }
-
-      // Validation de la taille
-      if (file.size > maxFileSize) {
-        toast({
-          title: "Fichier trop volumineux",
-          description: `${file.name} dépasse la limite de ${Math.round(maxFileSize / 1024 / 1024)}MB`,
-          variant: "destructive"
-        });
-        continue;
-      }
-
-      try {
-        setUploadProgress(0);
+      const response = await mediaAPI.uploadFiles(fileArray, currentFolder);
+      
+      if (response.data.success) {
+        const uploadedFiles = response.data.data.uploaded || [];
+        const errors = response.data.data.errors || [];
         
-        // Simuler l'upload avec progression
-        const uploadPromise = new Promise((resolve) => {
-          let progress = 0;
-          const interval = setInterval(() => {
-            progress += Math.random() * 30;
-            if (progress >= 100) {
-              progress = 100;
-              clearInterval(interval);
-              resolve();
-            }
-            setUploadProgress(progress);
-          }, 200);
-        });
-
-        await uploadPromise;
-
-        // Ajouter le fichier à la liste (simulation)
-        const newFile = {
-          id: Date.now().toString(),
-          name: file.name,
-          type: fileType,
-          size: file.size,
-          url: URL.createObjectURL(file),
-          thumbnail: fileType === 'image' ? URL.createObjectURL(file) : '/default-thumbnail.png',
-          folder: currentFolder,
-          createdAt: new Date().toISOString(),
-        };
-
-        setMediaFiles(prev => [newFile, ...prev]);
+        // Ajouter les fichiers uploadés à la liste
+        setMediaFiles(prev => [...uploadedFiles, ...prev]);
         
-        toast({
-          title: "Upload réussi",
-          description: `${file.name} a été uploadé avec succès`
-        });
-
-      } catch (error) {
-        toast({
-          title: "Erreur d'upload",
-          description: `Erreur lors de l'upload de ${file.name}`,
-          variant: "destructive"
-        });
+        // Afficher les résultats
+        if (uploadedFiles.length > 0) {
+          toast({
+            title: "Upload réussi",
+            description: `${uploadedFiles.length} fichier(s) uploadé(s) avec succès`
+          });
+        }
+        
+        if (errors.length > 0) {
+          toast({
+            title: "Erreurs d'upload",
+            description: errors.join(', '),
+            variant: "destructive"
+          });
+        }
       }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Erreur d'upload",
+        description: "Erreur lors de l'upload des fichiers",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadProgress(0);
     }
-    
-    setUploadProgress(0);
-  }, [allowedTypes, maxFileSize, currentFolder, toast]);
+  }, [currentFolder, toast]);
 
   // Sélectionner un fichier
   const handleSelectFile = useCallback((file) => {
