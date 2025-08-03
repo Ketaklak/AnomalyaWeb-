@@ -1,22 +1,125 @@
 {
+  "news_apis": {
+    "get_news": {
+      "success": true,
+      "details": "Retrieved 3 news articles",
+      "timestamp": "2025-08-03T21:54:24.079283"
+    }
+  },
+  "services_apis": {
+    "get_services": {
+      "success": true,
+      "details": "Retrieved 5 services",
+      "timestamp": "2025-08-03T21:54:24.123210"
+    },
+    "get_single_service": {
+      "success": true,
+      "details": "Retrieved service: D\u00e9veloppement Web",
+      "timestamp": "2025-08-03T21:54:24.144424"
+    }
+  },
   "authentication": {
-    "login": {
+    "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T19:29:31.280739"
+      "timestamp": "2025-08-03T21:54:24.429465"
+    },
+    "client_register": {
+      "success": false,
+      "details": "Registration failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.447378"
+    },
+    "client_login": {
+      "success": false,
+      "details": "Login failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.702056"
+    },
+    "rbac_client_blocked": {
+      "success": false,
+      "details": "Should have returned 403, got No response",
+      "timestamp": "2025-08-03T21:54:25.024346"
+    },
+    "rbac_admin_client": {
+      "success": true,
+      "details": "Admin access to client endpoint handled correctly (HTTP 200)",
+      "timestamp": "2025-08-03T21:54:25.080134"
     }
   },
-  "admin_endpoints": {
+  "admin_apis": {
     "dashboard_stats": {
       "success": true,
-      "details": "Stats retrieved - Articles: 5, Users: 1, Contacts: 0",
-      "timestamp": "2025-08-03T19:29:31.309258"
+      "details": "Articles: 5, Users: 7, Contacts: 0",
+      "timestamp": "2025-08-03T21:54:24.730651"
     },
-    "contacts": {
+    "articles_list": {
+      "success": true,
+      "details": "Retrieved 5 articles",
+      "timestamp": "2025-08-03T21:54:24.750681"
+    },
+    "contacts_list": {
       "success": true,
       "details": "Retrieved 0 contacts",
-      "timestamp": "2025-08-03T19:29:31.429068"
+      "timestamp": "2025-08-03T21:54:24.773881"
+    },
+    "services_list": {
+      "success": true,
+      "details": "Retrieved 5 services",
+      "timestamp": "2025-08-03T21:54:24.795570"
+    },
+    "clients_list": {
+      "success": true,
+      "details": "Retrieved 6 clients",
+      "timestamp": "2025-08-03T21:54:24.840851"
+    },
+    "quotes_list": {
+      "success": true,
+      "details": "Retrieved 5 quotes",
+      "timestamp": "2025-08-03T21:54:24.866269"
+    },
+    "tickets_list": {
+      "success": true,
+      "details": "Retrieved 4 tickets",
+      "timestamp": "2025-08-03T21:54:24.889304"
     }
   },
-  "errors": []
+  "client_apis": {
+    "dashboard": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.905333"
+    },
+    "profile_get": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.920637"
+    },
+    "quotes_list": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.937172"
+    },
+    "quote_request": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.953916"
+    },
+    "tickets_list": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.972326"
+    },
+    "ticket_creation": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:24.988593"
+    },
+    "points_history": {
+      "success": false,
+      "details": "Failed - HTTP No response",
+      "timestamp": "2025-08-03T21:54:25.006911"
+    }
+  },
+  "errors": [
+    "News APIs: 0"
+  ]
 }
