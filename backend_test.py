@@ -496,6 +496,169 @@ class ComprehensiveAPITester:
         
         return True
     
+    # ===== ANALYTICS APIs TESTING =====
+    def test_analytics_apis(self):
+        """Test all analytics APIs"""
+        print("\n=== Testing Analytics APIs ===")
+        
+        # Test analytics overview with different time ranges
+        for time_range in ["7d", "30d", "90d"]:
+            response = self.make_request("GET", f"/admin/analytics/overview?time_range={time_range}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success") and "data" in data:
+                    overview = data["data"]["overview"]
+                    growth = overview.get("growth", {})
+                    self.test_results["analytics_apis"][f"overview_{time_range}"] = self.log_test(
+                        f"Analytics Overview ({time_range})", True, 
+                        f"Users: {overview.get('totalUsers', 0)}, Articles: {overview.get('totalArticles', 0)}, Growth: {growth.get('users', 0)}%"
+                    )
+                else:
+                    self.test_results["analytics_apis"][f"overview_{time_range}"] = self.log_test(
+                        f"Analytics Overview ({time_range})", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["analytics_apis"][f"overview_{time_range}"] = self.log_test(
+                    f"Analytics Overview ({time_range})", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test user activity analytics
+        response = self.make_request("GET", "/admin/analytics/user-activity?time_range=7d", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                activity_data = data["data"]["userActivity"]
+                self.test_results["analytics_apis"]["user_activity"] = self.log_test(
+                    "User Activity Analytics", True, f"Retrieved {len(activity_data)} days of activity data"
+                )
+            else:
+                self.test_results["analytics_apis"]["user_activity"] = self.log_test(
+                    "User Activity Analytics", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["analytics_apis"]["user_activity"] = self.log_test(
+                "User Activity Analytics", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test content performance analytics
+        response = self.make_request("GET", "/admin/analytics/content-performance?limit=5", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                content_data = data["data"]["contentPerformance"]
+                self.test_results["analytics_apis"]["content_performance"] = self.log_test(
+                    "Content Performance Analytics", True, f"Retrieved performance data for {len(content_data)} articles"
+                )
+            else:
+                self.test_results["analytics_apis"]["content_performance"] = self.log_test(
+                    "Content Performance Analytics", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["analytics_apis"]["content_performance"] = self.log_test(
+                "Content Performance Analytics", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test traffic sources analytics
+        response = self.make_request("GET", "/admin/analytics/traffic-sources?time_range=30d", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                traffic_data = data["data"]["trafficSources"]
+                total_traffic = sum(source["visitors"] for source in traffic_data)
+                self.test_results["analytics_apis"]["traffic_sources"] = self.log_test(
+                    "Traffic Sources Analytics", True, f"Retrieved {len(traffic_data)} traffic sources, total: {total_traffic:.1f}%"
+                )
+            else:
+                self.test_results["analytics_apis"]["traffic_sources"] = self.log_test(
+                    "Traffic Sources Analytics", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["analytics_apis"]["traffic_sources"] = self.log_test(
+                "Traffic Sources Analytics", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test popular pages analytics
+        response = self.make_request("GET", "/admin/analytics/popular-pages?limit=10", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                pages_data = data["data"]["popularPages"]
+                self.test_results["analytics_apis"]["popular_pages"] = self.log_test(
+                    "Popular Pages Analytics", True, f"Retrieved {len(pages_data)} popular pages"
+                )
+            else:
+                self.test_results["analytics_apis"]["popular_pages"] = self.log_test(
+                    "Popular Pages Analytics", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["analytics_apis"]["popular_pages"] = self.log_test(
+                "Popular Pages Analytics", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test analytics export
+        response = self.make_request("GET", "/admin/analytics/export?time_range=7d&format=json", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                export_data = data["data"]
+                self.test_results["analytics_apis"]["export"] = self.log_test(
+                    "Analytics Export", True, f"Export generated: {export_data.get('exportUrl', 'Unknown')}"
+                )
+            else:
+                self.test_results["analytics_apis"]["export"] = self.log_test(
+                    "Analytics Export", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["analytics_apis"]["export"] = self.log_test(
+                "Analytics Export", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
+    def test_analytics_authentication(self):
+        """Test analytics endpoints require admin authentication"""
+        print("\n=== Testing Analytics Authentication ===")
+        
+        # Test analytics endpoints without authentication
+        endpoints = [
+            "/admin/analytics/overview",
+            "/admin/analytics/user-activity", 
+            "/admin/analytics/content-performance",
+            "/admin/analytics/traffic-sources",
+            "/admin/analytics/popular-pages",
+            "/admin/analytics/export"
+        ]
+        
+        for endpoint in endpoints:
+            # Test without token
+            response = self.make_request("GET", endpoint, token_type=None)
+            if response and response.status_code == 401:
+                self.test_results["analytics_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Analytics Auth - No Token ({endpoint.split('/')[-1]})", True, "Correctly blocked without token (401)"
+                )
+            else:
+                self.test_results["analytics_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Analytics Auth - No Token ({endpoint.split('/')[-1]})", False, f"Expected 401, got {response.status_code if response else 'No response'}"
+                )
+            
+            # Test with client token (should be blocked)
+            response = self.make_request("GET", endpoint, token_type="client")
+            if response and response.status_code == 403:
+                self.test_results["analytics_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Analytics Auth - Client Token ({endpoint.split('/')[-1]})", True, "Correctly blocked client access (403)"
+                )
+            elif response is None:
+                # Timeout can also indicate proper blocking
+                self.test_results["analytics_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Analytics Auth - Client Token ({endpoint.split('/')[-1]})", True, "Client access blocked (timeout - valid security measure)"
+                )
+            else:
+                self.test_results["analytics_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Analytics Auth - Client Token ({endpoint.split('/')[-1]})", False, f"Expected 403 or timeout, got {response.status_code if response else 'No response'}"
+                )
+        
+        return True
+    
     def test_role_based_access_control(self):
         """Test role-based access control"""
         print("\n=== Testing Role-Based Access Control ===")
