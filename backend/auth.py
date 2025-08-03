@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 import os
 from pydantic import BaseModel
-from database import get_document, create_document, get_documents
+from database import get_document, create_document, get_documents, update_document
 
 # Security configuration
 SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-this-in-production")
