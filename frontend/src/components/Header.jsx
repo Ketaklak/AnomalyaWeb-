@@ -9,7 +9,15 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { 
+    user, 
+    logout, 
+    isAuthenticated, 
+    isAdmin, 
+    isClient, 
+    loyaltyTier, 
+    totalPoints 
+  } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
