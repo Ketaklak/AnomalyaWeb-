@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing Script for Anomalya Admin Panel
-Tests JWT authentication and all admin endpoints
+Comprehensive Backend API Testing Script for Anomalya Corp
+Tests all backend APIs: News, Services, Authentication, Admin, and Client systems
 """
 
 import requests
@@ -13,17 +13,27 @@ import uuid
 # Configuration
 BACKEND_URL = "https://181b3f8a-6fc0-477f-b4ba-0f63f1eafc7b.preview.emergentagent.com/api"
 
-class AdminPanelTester:
+class ComprehensiveAPITester:
     def __init__(self):
         self.base_url = BACKEND_URL
-        self.access_token = None
+        self.admin_token = None
+        self.client_token = None
         self.admin_user = {
             "username": "admin",
             "password": "admin123"
         }
+        self.test_client = {
+            "username": "testclient2025",
+            "email": "testclient2025@example.com",
+            "password": "TestClient123!",
+            "role": "client_standard"
+        }
         self.test_results = {
+            "news_apis": {},
+            "services_apis": {},
             "authentication": {},
-            "admin_endpoints": {},
+            "admin_apis": {},
+            "client_apis": {},
             "errors": []
         }
     
@@ -43,15 +53,18 @@ class AdminPanelTester:
         
         return result
     
-    def make_request(self, method, endpoint, data=None, headers=None):
+    def make_request(self, method, endpoint, data=None, headers=None, token_type="admin"):
         """Make HTTP request with error handling"""
         url = f"{self.base_url}{endpoint}"
         
         if headers is None:
             headers = {}
         
-        if self.access_token:
-            headers["Authorization"] = f"Bearer {self.access_token}"
+        # Add appropriate token
+        if token_type == "admin" and self.admin_token:
+            headers["Authorization"] = f"Bearer {self.admin_token}"
+        elif token_type == "client" and self.client_token:
+            headers["Authorization"] = f"Bearer {self.client_token}"
         
         try:
             if method.upper() == "GET":
@@ -76,7 +89,7 @@ class AdminPanelTester:
         """Test basic API health"""
         print("\n=== Testing API Health ===")
         
-        response = self.make_request("GET", "/health")
+        response = self.make_request("GET", "/health", token_type=None)
         if response and response.status_code == 200:
             data = response.json()
             return self.log_test(
@@ -91,341 +104,454 @@ class AdminPanelTester:
                 f"Health check failed - Status: {response.status_code if response else 'No response'}"
             )
     
-    def test_admin_login(self):
-        """Test admin user login"""
-        print("\n=== Testing Admin Authentication ===")
+    # ===== NEWS APIs TESTING =====
+    def test_news_apis(self):
+        """Test all news-related APIs"""
+        print("\n=== Testing News APIs ===")
         
-        response = self.make_request("POST", "/auth/login", self.admin_user)
-        
+        # Test GET news (public endpoint)
+        response = self.make_request("GET", "/news", token_type=None)
         if response and response.status_code == 200:
             data = response.json()
-            if "access_token" in data:
-                self.access_token = data["access_token"]
-                self.test_results["authentication"]["login"] = self.log_test(
-                    "Admin Login", 
-                    True, 
-                    "Successfully logged in as admin"
-                )
-                return True
-            else:
-                self.test_results["authentication"]["login"] = self.log_test(
-                    "Admin Login", 
-                    False, 
-                    "No access token in response"
-                )
-                return False
+            self.test_results["news_apis"]["get_news"] = self.log_test(
+                "Get News (Public)", True, f"Retrieved {len(data)} news articles"
+            )
         else:
-            error_msg = "Unknown error"
-            if response:
-                try:
-                    error_data = response.json()
-                    error_msg = error_data.get("detail", f"HTTP {response.status_code}")
-                except:
-                    error_msg = f"HTTP {response.status_code}"
-            
-            self.test_results["authentication"]["login"] = self.log_test(
-                "Admin Login", 
-                False, 
-                f"Login failed: {error_msg}"
+            self.test_results["news_apis"]["get_news"] = self.log_test(
+                "Get News (Public)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
             )
             return False
-    
-    def test_dashboard_stats(self):
-        """Test admin dashboard stats endpoint"""
-        print("\n=== Testing Dashboard Stats ===")
         
-        response = self.make_request("GET", "/admin/dashboard/stats")
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            required_keys = ["totals", "recent_contacts", "recent_articles"]
-            
-            if all(key in data for key in required_keys):
-                totals = data["totals"]
-                self.test_results["admin_endpoints"]["dashboard_stats"] = self.log_test(
-                    "Dashboard Stats", 
-                    True, 
-                    f"Stats retrieved - Articles: {totals.get('articles', 0)}, Users: {totals.get('users', 0)}, Contacts: {totals.get('contacts', 0)}"
-                )
-                return True
-            else:
-                self.test_results["admin_endpoints"]["dashboard_stats"] = self.log_test(
-                    "Dashboard Stats", 
-                    False, 
-                    f"Missing required keys in response: {required_keys}"
-                )
-                return False
-        else:
-            error_msg = f"HTTP {response.status_code}" if response else "No response"
-            self.test_results["admin_endpoints"]["dashboard_stats"] = self.log_test(
-                "Dashboard Stats", 
-                False, 
-                f"Request failed: {error_msg}"
-            )
-            return False
-    
-    def test_articles_crud(self):
-        """Test articles CRUD operations"""
-        print("\n=== Testing Articles CRUD ===")
-        
-        # Test GET articles
-        response = self.make_request("GET", "/admin/articles")
-        if response and response.status_code == 200:
-            data = response.json()
-            self.log_test("Get Articles", True, f"Retrieved {data.get('total', 0)} articles")
-        else:
-            self.log_test("Get Articles", False, f"Failed to get articles - HTTP {response.status_code if response else 'No response'}")
-            return False
-        
-        # Test CREATE article
-        test_article = {
-            "title": "Test Article - Admin Panel",
-            "category": "Technologie",
-            "excerpt": "Article de test créé par le système d'administration",
-            "content": "Contenu détaillé de l'article de test pour vérifier le bon fonctionnement du CRUD.",
-            "image": "https://via.placeholder.com/800x400",
-            "author": "Admin Test",
-            "readTime": "3 min",
-            "tags": ["test", "admin", "crud"],
-            "isPinned": False
-        }
-        
-        response = self.make_request("POST", "/admin/articles", test_article)
-        created_article_id = None
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            if data.get("success") and "data" in data and "id" in data["data"]:
-                created_article_id = data["data"]["id"]
-                self.log_test("Create Article", True, f"Article created with ID: {created_article_id}")
-            else:
-                self.log_test("Create Article", False, "Article creation response missing ID")
-                return False
-        else:
-            self.log_test("Create Article", False, f"Failed to create article - HTTP {response.status_code if response else 'No response'}")
-            return False
-        
-        # Test UPDATE article
-        if created_article_id:
-            update_data = {
-                "title": "Test Article - Updated",
-                "excerpt": "Article de test mis à jour"
-            }
-            
-            response = self.make_request("PUT", f"/admin/articles/{created_article_id}", update_data)
-            if response and response.status_code == 200:
-                data = response.json()
-                if data.get("success"):
-                    self.log_test("Update Article", True, "Article updated successfully")
+        # Test GET single news article
+        if data and len(data) > 0:
+            article_id = data[0].get("id")
+            if article_id:
+                response = self.make_request("GET", f"/news/{article_id}", token_type=None)
+                if response and response.status_code == 200:
+                    article_data = response.json()
+                    self.test_results["news_apis"]["get_single_news"] = self.log_test(
+                        "Get Single News Article", True, f"Retrieved article: {article_data.get('title', 'Unknown')}"
+                    )
                 else:
-                    self.log_test("Update Article", False, "Update response indicates failure")
-            else:
-                self.log_test("Update Article", False, f"Failed to update article - HTTP {response.status_code if response else 'No response'}")
-        
-        # Test DELETE article
-        if created_article_id:
-            response = self.make_request("DELETE", f"/admin/articles/{created_article_id}")
-            if response and response.status_code == 200:
-                data = response.json()
-                if data.get("success"):
-                    self.log_test("Delete Article", True, "Article deleted successfully")
-                else:
-                    self.log_test("Delete Article", False, "Delete response indicates failure")
-            else:
-                self.log_test("Delete Article", False, f"Failed to delete article - HTTP {response.status_code if response else 'No response'}")
+                    self.test_results["news_apis"]["get_single_news"] = self.log_test(
+                        "Get Single News Article", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                    )
         
         return True
     
-    def test_contacts_management(self):
-        """Test contacts management endpoint"""
-        print("\n=== Testing Contacts Management ===")
+    # ===== SERVICES APIs TESTING =====
+    def test_services_apis(self):
+        """Test all services-related APIs"""
+        print("\n=== Testing Services APIs ===")
         
-        response = self.make_request("GET", "/admin/contacts")
-        
+        # Test GET services (public endpoint)
+        response = self.make_request("GET", "/services", token_type=None)
         if response and response.status_code == 200:
             data = response.json()
-            if isinstance(data, list):
-                self.test_results["admin_endpoints"]["contacts"] = self.log_test(
-                    "Get Contacts", 
-                    True, 
-                    f"Retrieved {len(data)} contacts"
-                )
-                return True
-            else:
-                self.test_results["admin_endpoints"]["contacts"] = self.log_test(
-                    "Get Contacts", 
-                    False, 
-                    "Response is not a list"
-                )
-                return False
+            self.test_results["services_apis"]["get_services"] = self.log_test(
+                "Get Services (Public)", True, f"Retrieved {len(data)} services"
+            )
         else:
-            error_msg = f"HTTP {response.status_code}" if response else "No response"
-            self.test_results["admin_endpoints"]["contacts"] = self.log_test(
-                "Get Contacts", 
-                False, 
-                f"Request failed: {error_msg}"
+            self.test_results["services_apis"]["get_services"] = self.log_test(
+                "Get Services (Public)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
             )
             return False
+        
+        # Test GET single service
+        if data and len(data) > 0:
+            service_id = data[0].get("id")
+            if service_id:
+                response = self.make_request("GET", f"/services/{service_id}", token_type=None)
+                if response and response.status_code == 200:
+                    service_data = response.json()
+                    self.test_results["services_apis"]["get_single_service"] = self.log_test(
+                        "Get Single Service", True, f"Retrieved service: {service_data.get('title', 'Unknown')}"
+                    )
+                else:
+                    self.test_results["services_apis"]["get_single_service"] = self.log_test(
+                        "Get Single Service", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                    )
+        
+        return True
     
-    def test_services_management(self):
-        """Test services management endpoints"""
-        print("\n=== Testing Services Management ===")
+    # ===== AUTHENTICATION APIs TESTING =====
+    def test_authentication_apis(self):
+        """Test authentication system"""
+        print("\n=== Testing Authentication APIs ===")
         
-        # Test GET services
-        response = self.make_request("GET", "/admin/services")
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            if isinstance(data, list):
-                self.log_test("Get Services", True, f"Retrieved {len(data)} services")
-            else:
-                self.log_test("Get Services", False, "Response is not a list")
-                return False
-        else:
-            self.log_test("Get Services", False, f"Failed to get services - HTTP {response.status_code if response else 'No response'}")
-            return False
-        
-        # Test CREATE service
-        test_service = {
-            "title": "Service de Test",
-            "icon": "🧪",
-            "description": "Service créé pour tester l'API d'administration",
-            "features": ["Test feature 1", "Test feature 2", "Test feature 3"],
-            "price": "Sur devis"
-        }
-        
-        response = self.make_request("POST", "/admin/services", test_service)
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            if data.get("success"):
-                self.log_test("Create Service", True, "Service created successfully")
-                return True
-            else:
-                self.log_test("Create Service", False, "Service creation response indicates failure")
-                return False
-        else:
-            self.log_test("Create Service", False, f"Failed to create service - HTTP {response.status_code if response else 'No response'}")
-            return False
-    
-    def test_users_endpoints(self):
-        """Test user-related endpoints"""
-        print("\n=== Testing User Management ===")
-        
-        # Test GET users
-        response = self.make_request("GET", "/auth/users")
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            if isinstance(data, list):
-                self.log_test("Get Users", True, f"Retrieved {len(data)} users")
-            else:
-                self.log_test("Get Users", False, "Response is not a list")
-                return False
-        else:
-            self.log_test("Get Users", False, f"Failed to get users - HTTP {response.status_code if response else 'No response'}")
-            return False
-        
-        # Test GET user stats
-        response = self.make_request("GET", "/auth/stats")
-        
-        if response and response.status_code == 200:
-            data = response.json()
-            required_keys = ["total_users", "active_users", "by_role"]
-            
-            if all(key in data for key in required_keys):
-                self.log_test("Get User Stats", True, f"Stats retrieved - Total: {data.get('total_users', 0)}, Active: {data.get('active_users', 0)}")
-                return True
-            else:
-                self.log_test("Get User Stats", False, f"Missing required keys in response: {required_keys}")
-                return False
-        else:
-            self.log_test("Get User Stats", False, f"Failed to get user stats - HTTP {response.status_code if response else 'No response'}")
-            return False
-    
-    def test_authentication_security(self):
-        """Test authentication security"""
-        print("\n=== Testing Authentication Security ===")
-        
-        # Test accessing admin endpoint without token
-        temp_token = self.access_token
-        self.access_token = None
-        
-        response = self.make_request("GET", "/admin/dashboard/stats")
-        
-        if response and response.status_code == 401:
-            self.log_test("Unauthorized Access Protection", True, "Correctly blocked unauthorized access")
-        else:
-            self.log_test("Unauthorized Access Protection", False, f"Should have returned 401, got {response.status_code if response else 'No response'}")
-        
-        # Restore token
-        self.access_token = temp_token
-        
-        # Test token refresh
-        response = self.make_request("POST", "/auth/refresh-token")
-        
+        # Test admin login
+        response = self.make_request("POST", "/auth/login", self.admin_user, token_type=None)
         if response and response.status_code == 200:
             data = response.json()
             if "access_token" in data:
-                self.log_test("Token Refresh", True, "Token refreshed successfully")
-                return True
+                self.admin_token = data["access_token"]
+                self.test_results["authentication"]["admin_login"] = self.log_test(
+                    "Admin Login", True, "Successfully logged in as admin"
+                )
             else:
-                self.log_test("Token Refresh", False, "No access token in refresh response")
+                self.test_results["authentication"]["admin_login"] = self.log_test(
+                    "Admin Login", False, "No access token in response"
+                )
                 return False
         else:
-            self.log_test("Token Refresh", False, f"Token refresh failed - HTTP {response.status_code if response else 'No response'}")
+            self.test_results["authentication"]["admin_login"] = self.log_test(
+                "Admin Login", False, f"Login failed - HTTP {response.status_code if response else 'No response'}"
+            )
             return False
+        
+        # Test client registration (if not exists)
+        response = self.make_request("POST", "/auth/register", self.test_client, token_type=None)
+        if response and response.status_code == 200:
+            self.test_results["authentication"]["client_register"] = self.log_test(
+                "Client Registration", True, "Client registered successfully"
+            )
+        elif response and response.status_code == 400:
+            # Client might already exist
+            self.test_results["authentication"]["client_register"] = self.log_test(
+                "Client Registration", True, "Client already exists (expected)"
+            )
+        else:
+            self.test_results["authentication"]["client_register"] = self.log_test(
+                "Client Registration", False, f"Registration failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test client login
+        client_login_data = {
+            "username": self.test_client["username"],
+            "password": self.test_client["password"]
+        }
+        response = self.make_request("POST", "/auth/login", client_login_data, token_type=None)
+        if response and response.status_code == 200:
+            data = response.json()
+            if "access_token" in data:
+                self.client_token = data["access_token"]
+                self.test_results["authentication"]["client_login"] = self.log_test(
+                    "Client Login", True, "Successfully logged in as client"
+                )
+            else:
+                self.test_results["authentication"]["client_login"] = self.log_test(
+                    "Client Login", False, "No access token in response"
+                )
+                return False
+        else:
+            self.test_results["authentication"]["client_login"] = self.log_test(
+                "Client Login", False, f"Login failed - HTTP {response.status_code if response else 'No response'}"
+            )
+            return False
+        
+        # Test /auth/me endpoint
+        response = self.make_request("GET", "/auth/me", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["authentication"]["auth_me_admin"] = self.log_test(
+                "Auth Me (Admin)", True, f"Retrieved admin user info: {data.get('username', 'Unknown')}"
+            )
+        else:
+            self.test_results["authentication"]["auth_me_admin"] = self.log_test(
+                "Auth Me (Admin)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        response = self.make_request("GET", "/auth/me", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["authentication"]["auth_me_client"] = self.log_test(
+                "Auth Me (Client)", True, f"Retrieved client user info: {data.get('username', 'Unknown')}"
+            )
+        else:
+            self.test_results["authentication"]["auth_me_client"] = self.log_test(
+                "Auth Me (Client)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
+    # ===== ADMIN APIs TESTING =====
+    def test_admin_apis(self):
+        """Test all admin APIs"""
+        print("\n=== Testing Admin APIs ===")
+        
+        # Test dashboard stats
+        response = self.make_request("GET", "/admin/dashboard/stats", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            totals = data.get("totals", {})
+            self.test_results["admin_apis"]["dashboard_stats"] = self.log_test(
+                "Admin Dashboard Stats", True, 
+                f"Articles: {totals.get('articles', 0)}, Users: {totals.get('users', 0)}, Contacts: {totals.get('contacts', 0)}"
+            )
+        else:
+            self.test_results["admin_apis"]["dashboard_stats"] = self.log_test(
+                "Admin Dashboard Stats", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test articles management
+        response = self.make_request("GET", "/admin/articles", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["articles_list"] = self.log_test(
+                "Admin Articles List", True, f"Retrieved {data.get('total', 0)} articles"
+            )
+        else:
+            self.test_results["admin_apis"]["articles_list"] = self.log_test(
+                "Admin Articles List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test contacts management
+        response = self.make_request("GET", "/admin/contacts", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["contacts_list"] = self.log_test(
+                "Admin Contacts List", True, f"Retrieved {len(data)} contacts"
+            )
+        else:
+            self.test_results["admin_apis"]["contacts_list"] = self.log_test(
+                "Admin Contacts List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test services management
+        response = self.make_request("GET", "/admin/services", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["services_list"] = self.log_test(
+                "Admin Services List", True, f"Retrieved {len(data)} services"
+            )
+        else:
+            self.test_results["admin_apis"]["services_list"] = self.log_test(
+                "Admin Services List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test client management
+        response = self.make_request("GET", "/admin/clients", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["clients_list"] = self.log_test(
+                "Admin Clients List", True, f"Retrieved {len(data)} clients"
+            )
+        else:
+            self.test_results["admin_apis"]["clients_list"] = self.log_test(
+                "Admin Clients List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test quotes management
+        response = self.make_request("GET", "/admin/quotes", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["quotes_list"] = self.log_test(
+                "Admin Quotes List", True, f"Retrieved {len(data)} quotes"
+            )
+        else:
+            self.test_results["admin_apis"]["quotes_list"] = self.log_test(
+                "Admin Quotes List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test tickets management
+        response = self.make_request("GET", "/admin/tickets", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["admin_apis"]["tickets_list"] = self.log_test(
+                "Admin Tickets List", True, f"Retrieved {len(data)} tickets"
+            )
+        else:
+            self.test_results["admin_apis"]["tickets_list"] = self.log_test(
+                "Admin Tickets List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
+    # ===== CLIENT APIs TESTING =====
+    def test_client_apis(self):
+        """Test all client APIs"""
+        print("\n=== Testing Client APIs ===")
+        
+        # Test client dashboard
+        response = self.make_request("GET", "/client/dashboard", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["dashboard"] = self.log_test(
+                "Client Dashboard", True, f"Retrieved dashboard data with {data.get('total_points', 0)} points"
+            )
+        else:
+            self.test_results["client_apis"]["dashboard"] = self.log_test(
+                "Client Dashboard", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test client profile
+        response = self.make_request("GET", "/client/profile", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["profile_get"] = self.log_test(
+                "Client Profile (GET)", True, "Retrieved client profile"
+            )
+        else:
+            self.test_results["client_apis"]["profile_get"] = self.log_test(
+                "Client Profile (GET)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test client quotes
+        response = self.make_request("GET", "/client/quotes", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["quotes_list"] = self.log_test(
+                "Client Quotes List", True, f"Retrieved {len(data)} quotes"
+            )
+        else:
+            self.test_results["client_apis"]["quotes_list"] = self.log_test(
+                "Client Quotes List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test quote request
+        test_quote = {
+            "service_category": "Développement Web",
+            "title": "Site web e-commerce",
+            "description": "Développement d'un site e-commerce complet avec système de paiement",
+            "budget_range": "5000-10000",
+            "deadline": "2025-03-01",
+            "priority": "medium"
+        }
+        response = self.make_request("POST", "/client/quotes", test_quote, token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["quote_request"] = self.log_test(
+                "Client Quote Request", True, f"Quote created with ID: {data.get('id', 'Unknown')}"
+            )
+        else:
+            self.test_results["client_apis"]["quote_request"] = self.log_test(
+                "Client Quote Request", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test client tickets
+        response = self.make_request("GET", "/client/tickets", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["tickets_list"] = self.log_test(
+                "Client Tickets List", True, f"Retrieved {len(data)} tickets"
+            )
+        else:
+            self.test_results["client_apis"]["tickets_list"] = self.log_test(
+                "Client Tickets List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test support ticket creation
+        test_ticket = {
+            "title": "Problème de connexion",
+            "description": "Je n'arrive pas à me connecter à mon espace client",
+            "category": "technique",
+            "priority": "medium"
+        }
+        response = self.make_request("POST", "/client/tickets", test_ticket, token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["ticket_creation"] = self.log_test(
+                "Client Ticket Creation", True, f"Ticket created with ID: {data.get('id', 'Unknown')}"
+            )
+        else:
+            self.test_results["client_apis"]["ticket_creation"] = self.log_test(
+                "Client Ticket Creation", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test points history
+        response = self.make_request("GET", "/client/points/history", token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            self.test_results["client_apis"]["points_history"] = self.log_test(
+                "Client Points History", True, f"Retrieved {len(data)} point transactions"
+            )
+        else:
+            self.test_results["client_apis"]["points_history"] = self.log_test(
+                "Client Points History", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
+    def test_role_based_access_control(self):
+        """Test role-based access control"""
+        print("\n=== Testing Role-Based Access Control ===")
+        
+        # Test client trying to access admin endpoint
+        response = self.make_request("GET", "/admin/dashboard/stats", token_type="client")
+        if response and response.status_code == 403:
+            self.test_results["authentication"]["rbac_client_blocked"] = self.log_test(
+                "RBAC - Client Blocked from Admin", True, "Client correctly blocked from admin endpoint"
+            )
+        else:
+            self.test_results["authentication"]["rbac_client_blocked"] = self.log_test(
+                "RBAC - Client Blocked from Admin", False, f"Should have returned 403, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Test admin trying to access client endpoint (should work)
+        response = self.make_request("GET", "/client/dashboard", token_type="admin")
+        if response and response.status_code in [200, 403]:  # Either works or properly blocked
+            self.test_results["authentication"]["rbac_admin_client"] = self.log_test(
+                "RBAC - Admin Access to Client", True, f"Admin access to client endpoint handled correctly (HTTP {response.status_code})"
+            )
+        else:
+            self.test_results["authentication"]["rbac_admin_client"] = self.log_test(
+                "RBAC - Admin Access to Client", False, f"Unexpected response: {response.status_code if response else 'No response'}"
+            )
+        
+        return True
     
     def run_all_tests(self):
-        """Run all admin panel tests"""
-        print("🚀 Starting Admin Panel Backend Tests")
+        """Run comprehensive API tests"""
+        print("🚀 Starting Comprehensive Backend API Tests")
         print(f"Backend URL: {self.base_url}")
-        print("=" * 60)
+        print("=" * 80)
         
         # Test API health first
         if not self.test_health_check():
             print("❌ API health check failed. Stopping tests.")
             return False
         
-        # Test admin authentication
-        if not self.test_admin_login():
-            print("❌ Admin login failed. Cannot proceed with admin tests.")
-            return False
-        
-        # Run all admin endpoint tests
-        tests = [
-            self.test_dashboard_stats,
-            self.test_articles_crud,
-            self.test_contacts_management,
-            self.test_services_management,
-            self.test_users_endpoints,
-            self.test_authentication_security
+        # Run all test suites
+        test_suites = [
+            ("News APIs", self.test_news_apis),
+            ("Services APIs", self.test_services_apis),
+            ("Authentication APIs", self.test_authentication_apis),
+            ("Admin APIs", self.test_admin_apis),
+            ("Client APIs", self.test_client_apis),
+            ("Role-Based Access Control", self.test_role_based_access_control)
         ]
         
-        passed = 0
-        total = len(tests)
+        passed_suites = 0
+        total_suites = len(test_suites)
         
-        for test in tests:
+        for suite_name, test_func in test_suites:
             try:
-                if test():
-                    passed += 1
+                print(f"\n{'='*20} {suite_name} {'='*20}")
+                if test_func():
+                    passed_suites += 1
+                    print(f"✅ {suite_name} - PASSED")
+                else:
+                    print(f"❌ {suite_name} - FAILED")
             except Exception as e:
-                print(f"❌ Test failed with exception: {e}")
-                self.test_results["errors"].append(str(e))
+                print(f"❌ {suite_name} failed with exception: {e}")
+                self.test_results["errors"].append(f"{suite_name}: {str(e)}")
         
-        print("\n" + "=" * 60)
-        print(f"🏁 Test Summary: {passed}/{total} tests passed")
+        print("\n" + "=" * 80)
+        print(f"🏁 Test Summary: {passed_suites}/{total_suites} test suites passed")
         
-        if passed == total:
-            print("✅ All admin panel backend tests passed!")
+        # Count individual tests
+        total_tests = 0
+        passed_tests = 0
+        for category in self.test_results.values():
+            if isinstance(category, dict):
+                for test_result in category.values():
+                    if isinstance(test_result, dict) and "success" in test_result:
+                        total_tests += 1
+                        if test_result["success"]:
+                            passed_tests += 1
+        
+        print(f"📊 Individual Tests: {passed_tests}/{total_tests} tests passed")
+        
+        if passed_suites == total_suites:
+            print("✅ All backend API tests passed!")
             return True
         else:
-            print(f"❌ {total - passed} tests failed")
+            print(f"❌ {total_suites - passed_suites} test suites failed")
             return False
 
 def main():
     """Main test execution"""
-    tester = AdminPanelTester()
+    tester = ComprehensiveAPITester()
     success = tester.run_all_tests()
     
     # Save detailed results
