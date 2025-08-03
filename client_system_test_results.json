@@ -1,0 +1,18 @@
+{
+  "authentication": {
+    "admin_login": {
+      "success": true,
+      "details": "Successfully logged in as admin",
+      "timestamp": "2025-08-03T19:56:49.668678"
+    },
+    "client_register": {
+      "success": false,
+      "details": "No user ID in response",
+      "timestamp": "2025-08-03T19:56:49.954721"
+    }
+  },
+  "client_apis": {},
+  "admin_client_apis": {},
+  "loyalty_system": {},
+  "errors": []
+}
