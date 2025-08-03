@@ -108,6 +108,11 @@ function App() {
                 <MyTickets />
               </ProtectedRoute>
             } />
+            <Route path="/client/tickets/:ticketId" element={
+              <ProtectedRoute requiredRole="client">
+                <TicketDetail />
+              </ProtectedRoute>
+            } />
             <Route path="/client/profile" element={
               <ProtectedRoute requiredRole="client">
                 <ClientProfile />
