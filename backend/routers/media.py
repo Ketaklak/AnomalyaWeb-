@@ -101,6 +101,7 @@ async def get_media_files(
         
         return ApiResponse(
             success=True,
+            message="Fichiers récupérés avec succès",
             data={
                 "files": files,
                 "total": total,
