@@ -252,9 +252,6 @@
 
 ## test_plan:
   current_focus:
-    - "Admin Dashboard Stats API"
-    - "Admin Articles CRUD API"
-    - "JWT Authentication System"
     - "Admin Dashboard Page"
     - "Admin Articles Management Page"
   stuck_tasks: []
