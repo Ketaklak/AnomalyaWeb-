@@ -273,7 +273,7 @@ async def upload_base64_image(
             "thumbnail": thumbnail_url,
             "dimensions": dimensions,
             "createdAt": datetime.now().isoformat(),
-            "uploadedBy": current_user.get("id")
+            "uploadedBy": current_user.id
         }
         
         # Sauvegarder en base de données
