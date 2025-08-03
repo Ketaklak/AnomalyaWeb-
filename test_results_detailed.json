@@ -3,237 +3,237 @@
     "get_news": {
       "success": true,
       "details": "Retrieved 5 news articles",
-      "timestamp": "2025-08-03T22:36:19.111548"
+      "timestamp": "2025-08-03T22:45:48.967134"
     },
     "get_single_news": {
       "success": true,
       "details": "Retrieved article: Les tendances IA en 2025",
-      "timestamp": "2025-08-03T22:36:19.174291"
+      "timestamp": "2025-08-03T22:45:48.993825"
     }
   },
   "services_apis": {
     "get_services": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T22:36:19.211216"
+      "timestamp": "2025-08-03T22:45:49.028044"
     },
     "get_single_service": {
       "success": true,
       "details": "Retrieved service: D\u00e9veloppement Web",
-      "timestamp": "2025-08-03T22:36:19.229906"
+      "timestamp": "2025-08-03T22:45:49.089358"
     }
   },
   "authentication": {
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T22:36:19.520900"
+      "timestamp": "2025-08-03T22:45:49.341234"
     },
     "client_register": {
       "success": true,
       "details": "Client registered successfully",
-      "timestamp": "2025-08-03T22:36:19.776534"
+      "timestamp": "2025-08-03T22:45:49.596220"
     },
     "client_login": {
       "success": true,
       "details": "Successfully logged in as client",
-      "timestamp": "2025-08-03T22:36:20.028711"
+      "timestamp": "2025-08-03T22:45:49.846112"
     },
     "auth_me_admin": {
       "success": true,
       "details": "Retrieved admin user info: admin",
-      "timestamp": "2025-08-03T22:36:20.046617"
+      "timestamp": "2025-08-03T22:45:49.863166"
     },
     "auth_me_client": {
       "success": true,
-      "details": "Retrieved client user info: testclient260579",
-      "timestamp": "2025-08-03T22:36:20.107678"
+      "details": "Retrieved client user info: testclient261148",
+      "timestamp": "2025-08-03T22:45:49.884852"
     },
     "rbac_client_blocked": {
       "success": false,
       "details": "Expected 403 or timeout, got 403",
-      "timestamp": "2025-08-03T22:36:21.138900"
+      "timestamp": "2025-08-03T22:45:50.867625"
     },
     "rbac_admin_client": {
       "success": true,
       "details": "Admin access to client endpoint handled correctly (HTTP 200)",
-      "timestamp": "2025-08-03T22:36:21.154217"
+      "timestamp": "2025-08-03T22:45:50.932892"
     }
   },
   "admin_apis": {
     "dashboard_stats": {
       "success": true,
-      "details": "Articles: 5, Users: 16, Contacts: 0",
-      "timestamp": "2025-08-03T22:36:20.143171"
+      "details": "Articles: 5, Users: 17, Contacts: 0",
+      "timestamp": "2025-08-03T22:45:49.916207"
     },
     "articles_list": {
       "success": true,
       "details": "Retrieved 5 articles",
-      "timestamp": "2025-08-03T22:36:20.168611"
+      "timestamp": "2025-08-03T22:45:49.940207"
     },
     "contacts_list": {
       "success": true,
       "details": "Retrieved 0 contacts",
-      "timestamp": "2025-08-03T22:36:20.195308"
+      "timestamp": "2025-08-03T22:45:49.961031"
     },
     "services_list": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-03T22:36:20.213872"
+      "timestamp": "2025-08-03T22:45:49.981433"
     },
     "clients_list": {
       "success": true,
-      "details": "Retrieved 15 clients",
-      "timestamp": "2025-08-03T22:36:20.278031"
+      "details": "Retrieved 16 clients",
+      "timestamp": "2025-08-03T22:45:50.053772"
     },
     "quotes_list": {
       "success": true,
-      "details": "Retrieved 13 quotes",
-      "timestamp": "2025-08-03T22:36:20.305394"
+      "details": "Retrieved 14 quotes",
+      "timestamp": "2025-08-03T22:45:50.083438"
     },
     "tickets_list": {
       "success": true,
-      "details": "Retrieved 12 tickets",
-      "timestamp": "2025-08-03T22:36:20.334198"
+      "details": "Retrieved 13 tickets",
+      "timestamp": "2025-08-03T22:45:50.113403"
     }
   },
   "client_apis": {
     "dashboard": {
       "success": true,
       "details": "Retrieved dashboard data with 0 points",
-      "timestamp": "2025-08-03T22:36:20.361328"
+      "timestamp": "2025-08-03T22:45:50.139019"
     },
     "profile_get": {
       "success": true,
       "details": "Retrieved client profile",
-      "timestamp": "2025-08-03T22:36:20.381650"
+      "timestamp": "2025-08-03T22:45:50.157407"
     },
     "quotes_list": {
       "success": true,
       "details": "Retrieved 0 quotes",
-      "timestamp": "2025-08-03T22:36:20.440803"
+      "timestamp": "2025-08-03T22:45:50.216853"
     },
     "quote_request": {
       "success": true,
       "details": "Quote created with ID: Unknown",
-      "timestamp": "2025-08-03T22:36:20.463296"
+      "timestamp": "2025-08-03T22:45:50.239319"
     },
     "tickets_list": {
       "success": true,
       "details": "Retrieved 0 tickets",
-      "timestamp": "2025-08-03T22:36:20.481507"
+      "timestamp": "2025-08-03T22:45:50.299356"
     },
     "ticket_creation": {
       "success": true,
       "details": "Ticket created with ID: Unknown",
-      "timestamp": "2025-08-03T22:36:20.503469"
+      "timestamp": "2025-08-03T22:45:50.320656"
     },
     "points_history": {
       "success": true,
       "details": "Retrieved 0 point transactions",
-      "timestamp": "2025-08-03T22:36:20.523659"
+      "timestamp": "2025-08-03T22:45:50.339089"
     }
   },
   "analytics_apis": {
     "overview_7d": {
       "success": true,
-      "details": "Users: 16, Articles: 5, Growth: 20.7%",
-      "timestamp": "2025-08-03T22:36:20.549651"
+      "details": "Users: 17, Articles: 5, Growth: 13.0%",
+      "timestamp": "2025-08-03T22:45:50.363982"
     },
     "overview_30d": {
       "success": true,
-      "details": "Users: 16, Articles: 5, Growth: -7.2%",
-      "timestamp": "2025-08-03T22:36:20.581594"
+      "details": "Users: 17, Articles: 5, Growth: 14.8%",
+      "timestamp": "2025-08-03T22:45:50.386363"
     },
     "overview_90d": {
       "success": true,
-      "details": "Users: 16, Articles: 5, Growth: 2.0%",
-      "timestamp": "2025-08-03T22:36:20.603710"
+      "details": "Users: 17, Articles: 5, Growth: 10.5%",
+      "timestamp": "2025-08-03T22:45:50.415688"
     },
     "user_activity": {
       "success": true,
       "details": "Retrieved 7 days of activity data",
-      "timestamp": "2025-08-03T22:36:20.661096"
+      "timestamp": "2025-08-03T22:45:50.435422"
     },
     "content_performance": {
       "success": true,
       "details": "Retrieved performance data for 5 articles",
-      "timestamp": "2025-08-03T22:36:20.680744"
+      "timestamp": "2025-08-03T22:45:50.460383"
     },
     "traffic_sources": {
       "success": true,
       "details": "Retrieved 4 traffic sources, total: 100.0%",
-      "timestamp": "2025-08-03T22:36:20.702762"
+      "timestamp": "2025-08-03T22:45:50.485134"
     },
     "popular_pages": {
       "success": true,
       "details": "Retrieved 5 popular pages",
-      "timestamp": "2025-08-03T22:36:20.720880"
+      "timestamp": "2025-08-03T22:45:50.507742"
     },
     "export": {
       "success": true,
       "details": "Export generated: /exports/analytics_7d_20250803.json",
-      "timestamp": "2025-08-03T22:36:20.739114"
+      "timestamp": "2025-08-03T22:45:50.528321"
     },
     "auth_no_token_overview": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:20.756130"
+      "timestamp": "2025-08-03T22:45:50.546251"
     },
     "auth_client_token_overview": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:20.775469"
+      "timestamp": "2025-08-03T22:45:50.562451"
     },
     "auth_no_token_user-activity": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:20.791297"
+      "timestamp": "2025-08-03T22:45:50.584891"
     },
     "auth_client_token_user-activity": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:20.852599"
+      "timestamp": "2025-08-03T22:45:50.623252"
     },
     "auth_no_token_content-performance": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:20.874414"
+      "timestamp": "2025-08-03T22:45:50.638082"
     },
     "auth_client_token_content-performance": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:20.890184"
+      "timestamp": "2025-08-03T22:45:50.654505"
     },
     "auth_no_token_traffic-sources": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:20.948096"
+      "timestamp": "2025-08-03T22:45:50.672364"
     },
     "auth_client_token_traffic-sources": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:21.008664"
+      "timestamp": "2025-08-03T22:45:50.689020"
     },
     "auth_no_token_popular-pages": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:21.026564"
+      "timestamp": "2025-08-03T22:45:50.748111"
     },
     "auth_client_token_popular-pages": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:21.087178"
+      "timestamp": "2025-08-03T22:45:50.767549"
     },
     "auth_no_token_export": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-03T22:36:21.102448"
+      "timestamp": "2025-08-03T22:45:50.786789"
     },
     "auth_client_token_export": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-03T22:36:21.120346"
+      "timestamp": "2025-08-03T22:45:50.809026"
     }
   },
   "errors": []
