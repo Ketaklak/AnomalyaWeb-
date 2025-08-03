@@ -15,6 +15,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminArticles from "./pages/admin/AdminArticles";
 import AdminContacts from "./pages/admin/AdminContacts";
 import AdminUsers from "./pages/admin/AdminUsers";
+import ClientDashboard from "./pages/client/ClientDashboard";
+import RequestQuote from "./pages/client/RequestQuote";
+import ClientProfile from "./pages/client/ClientProfile";
 import Unauthorized from "./pages/Unauthorized";
 import { Toaster } from "./components/ui/toaster";
 
