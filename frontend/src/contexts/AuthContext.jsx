@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     refreshToken,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin' || user?.role === 'moderator',
-    isClient: user?.role?.startsWith('client') || user?.role === 'prospect',
+    isClient: user?.role?.startsWith('client') || user?.role === 'prospect' || user?.role === 'admin' || user?.role === 'moderator',
     isPremiumClient: user?.role === 'client_premium',
     isStandardClient: user?.role === 'client_standard',
     isProspect: user?.role === 'prospect',
