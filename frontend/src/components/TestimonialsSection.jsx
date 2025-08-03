@@ -16,7 +16,7 @@ const TestimonialsSection = () => {
       try {
         setLoading(true);
         const response = await testimonialsAPI.getAll();
-        setTestimonials(response || []);
+        setTestimonials(response.data || []);
       } catch (err) {
         console.error('Error fetching testimonials:', err);
         setError('Erreur lors du chargement des témoignages');
