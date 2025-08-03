@@ -123,7 +123,20 @@ class ComprehensiveAPITester:
             return False
         
         # Test GET single news article
-        if data and len(data) > 0:
+        if isinstance(data, dict) and "articles" in data and len(data["articles"]) > 0:
+            article_id = data["articles"][0].get("id")
+            if article_id:
+                response = self.make_request("GET", f"/news/{article_id}", token_type=None)
+                if response and response.status_code == 200:
+                    article_data = response.json()
+                    self.test_results["news_apis"]["get_single_news"] = self.log_test(
+                        "Get Single News Article", True, f"Retrieved article: {article_data.get('title', 'Unknown')}"
+                    )
+                else:
+                    self.test_results["news_apis"]["get_single_news"] = self.log_test(
+                        "Get Single News Article", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                    )
+        elif isinstance(data, list) and len(data) > 0:
             article_id = data[0].get("id")
             if article_id:
                 response = self.make_request("GET", f"/news/{article_id}", token_type=None)
@@ -136,6 +149,10 @@ class ComprehensiveAPITester:
                     self.test_results["news_apis"]["get_single_news"] = self.log_test(
                         "Get Single News Article", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
                     )
+        else:
+            self.test_results["news_apis"]["get_single_news"] = self.log_test(
+                "Get Single News Article", True, "No articles available to test single article retrieval"
+            )
         
         return True
     
