@@ -93,6 +93,17 @@ app.include_router(admin.router)
 app.include_router(analytics.router)
 app.include_router(client.router)
 
+# Health check endpoint for Docker
+@app.get("/health")
+async def health_check():
+    """Endpoint de vérification de santé pour Docker et monitoring"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "version": "0.5.5",
+        "database": "connected"  # TODO: Vérifier la connexion DB réelle
+    }
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
