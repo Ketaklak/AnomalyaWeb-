@@ -1,13 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { mockNews } from '../data/mock';
-import { Calendar, Clock, ArrowRight, Pin } from 'lucide-react';
+import { newsAPI } from '../services/api';
+import { Calendar, Clock, ArrowRight, Pin, Loader2 } from 'lucide-react';
 
 const NewsSection = () => {
-  const featuredNews = mockNews.slice(0, 3);
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        setLoading(true);
+        const response = await newsAPI.getAll({ limit: 3 });
+        setNews(response.articles || []);
+      } catch (err) {
+        console.error('Error fetching news:', err);
+        setError('Erreur lors du chargement des actualités');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Nos <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Actualités</span>
+            </h2>
+          </div>
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
+            <span className="ml-2 text-gray-400">Chargement des actualités...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Nos <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Actualités</span>
+            </h2>
+            <div className="text-red-400 mb-8">{error}</div>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Réessayer
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-slate-900">
@@ -24,7 +79,7 @@ const NewsSection = () => {
 
         {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {featuredNews.map((article, index) => (
+          {news.map((article, index) => (
             <Card key={article.id} className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-blue-500/50 transition-all duration-300 group overflow-hidden ${
               index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
             }`}>
