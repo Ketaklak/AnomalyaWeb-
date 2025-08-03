@@ -183,7 +183,7 @@ async def upload_media_files(
                 "thumbnail": thumbnail_url,
                 "dimensions": dimensions,
                 "createdAt": datetime.now().isoformat(),
-                "uploadedBy": current_user.get("id")
+                "uploadedBy": current_user.id
             }
             
             # Sauvegarder en base de données
