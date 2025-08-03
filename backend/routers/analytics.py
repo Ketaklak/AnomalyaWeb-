@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 import random
+from collections import defaultdict
 
 # Add backend directory to path
 backend_dir = Path(__file__).parent.parent
