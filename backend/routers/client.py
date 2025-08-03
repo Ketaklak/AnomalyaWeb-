@@ -116,7 +116,20 @@ async def update_client_profile(
 async def get_client_dashboard(current_user: User = Depends(get_current_client)):
     """Get client dashboard statistics"""
     try:
-        # Get recent point transactions
+        # For admin users accessing client interface, provide default values
+        if current_user.role in ["admin", "moderator"]:
+            return ClientDashboardStats(
+                total_points=current_user.total_points,
+                available_points=current_user.available_points,
+                loyalty_tier=current_user.loyalty_tier,
+                next_tier_points=500 - current_user.total_points if current_user.total_points < 500 else 0,
+                active_quotes=0,
+                completed_projects=0,
+                open_tickets=0,
+                recent_transactions=[]
+            )
+        
+        # Get recent point transactions for regular clients
         transactions, _ = await get_documents(
             "point_transactions", 
             {"user_id": current_user.id}, 
