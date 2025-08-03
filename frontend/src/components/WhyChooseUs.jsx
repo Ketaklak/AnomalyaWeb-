@@ -48,9 +48,10 @@ const WhyChooseUs = () => {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div 
+              <Link 
                 key={index}
-                className="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-slate-600 transition-all duration-300 hover:transform hover:scale-105"
+                to="/services"
+                className="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-slate-600 transition-all duration-300 hover:transform hover:scale-105 cursor-pointer"
               >
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300`}></div>
