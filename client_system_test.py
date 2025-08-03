@@ -172,8 +172,13 @@ class ClientSystemTester:
                 try:
                     error_data = response.json()
                     error_msg = error_data.get("detail", f"HTTP {response.status_code}")
+                    print(f"DEBUG: Registration response: {error_data}")
                 except:
                     error_msg = f"HTTP {response.status_code}"
+                    print(f"DEBUG: Registration status code: {response.status_code}")
+                    print(f"DEBUG: Registration response text: {response.text}")
+            else:
+                print("DEBUG: No response from registration endpoint")
             
             self.test_results["authentication"]["client_register"] = self.log_test(
                 "Client Registration", 
