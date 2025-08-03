@@ -200,15 +200,19 @@ const MediaManager = ({
   const handleDeleteFile = useCallback(async (fileId) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
       try {
-        // TODO: API call to delete file
-        setMediaFiles(prev => prev.filter(f => f.id !== fileId));
-        setSelectedFiles(prev => prev.filter(f => f.id !== fileId));
+        const response = await mediaAPI.deleteFile(fileId);
         
-        toast({
-          title: "Fichier supprimé",
-          description: "Le fichier a été supprimé avec succès"
-        });
+        if (response.data.success) {
+          setMediaFiles(prev => prev.filter(f => f.id !== fileId));
+          setSelectedFiles(prev => prev.filter(f => f.id !== fileId));
+          
+          toast({
+            title: "Fichier supprimé",
+            description: "Le fichier a été supprimé avec succès"
+          });
+        }
       } catch (error) {
+        console.error('Delete error:', error);
         toast({
           title: "Erreur",
           description: "Impossible de supprimer le fichier",
