@@ -93,6 +93,50 @@ const Header = () => {
                       <DropdownMenuSeparator className="bg-slate-600" />
                     </>
                   )}
+                  
+                  {isClient && (
+                    <>
+                      <DropdownMenuItem asChild className="text-white hover:bg-slate-700">
+                        <Link to="/client/dashboard">
+                          <User className="h-4 w-4 mr-2" />
+                          Mon espace client
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="text-white hover:bg-slate-700">
+                        <Link to="/client/profile">
+                          <Settings className="h-4 w-4 mr-2" />
+                          Mon profil
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="text-white hover:bg-slate-700">
+                        <Link to="/client/quotes/new">
+                          <FileText className="h-4 w-4 mr-2" />
+                          Demander un devis
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      {/* Loyalty Status */}
+                      <DropdownMenuSeparator className="bg-slate-600" />
+                      <div className="px-2 py-2">
+                        <div className="text-xs text-gray-400 mb-1">Statut fidélité</div>
+                        <div className="flex items-center space-x-2">
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${
+                            loyaltyTier === 'bronze' ? 'bg-amber-600/20 text-amber-300' :
+                            loyaltyTier === 'silver' ? 'bg-gray-400/20 text-gray-300' :
+                            loyaltyTier === 'gold' ? 'bg-yellow-400/20 text-yellow-300' :
+                            'bg-purple-400/20 text-purple-300'
+                          }`}>
+                            {loyaltyTier ? loyaltyTier.charAt(0).toUpperCase() + loyaltyTier.slice(1) : 'Bronze'}
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            {totalPoints || 0} pts
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <DropdownMenuSeparator className="bg-slate-600" />
+                    </>
+                  )}
                   <DropdownMenuItem 
                     onClick={handleLogout}
                     className="text-white hover:bg-slate-700"
