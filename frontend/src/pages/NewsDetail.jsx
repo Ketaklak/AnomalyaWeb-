@@ -21,7 +21,7 @@ const NewsDetail = () => {
       try {
         setLoading(true);
         const response = await newsAPI.getById(id);
-        setArticle(response);
+        setArticle(response.data);
 
         // Fetch related articles
         if (response.category) {
