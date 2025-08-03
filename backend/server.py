@@ -10,7 +10,7 @@ from pathlib import Path
 from database import connect_to_mongo, close_mongo_connection
 
 # Import routers
-from routers import news, contact, services, testimonials, competences, faq, newsletter, auth, admin
+from routers import news, contact, services, testimonials, competences, faq, newsletter, auth, admin, client
 
 # Import auth functions
 from auth import init_admin_user
