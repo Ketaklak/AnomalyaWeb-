@@ -1172,4 +1172,4 @@ copies or substantial portions of the Software.
 
 ---
 
-*Dernière mise à jour : 3 janvier 2025*
+*Dernière mise à jour : 4 août 2025*
