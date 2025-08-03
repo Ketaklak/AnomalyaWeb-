@@ -18,6 +18,9 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import RequestQuote from "./pages/client/RequestQuote";
 import ClientProfile from "./pages/client/ClientProfile";
+import MyQuotes from "./pages/client/MyQuotes";
+import CreateTicket from "./pages/client/CreateTicket";
+import MyTickets from "./pages/client/MyTickets";
 import Unauthorized from "./pages/Unauthorized";
 import { Toaster } from "./components/ui/toaster";
 
