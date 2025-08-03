@@ -16,7 +16,7 @@ backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
 
 from models import ApiResponse
-from database import get_documents, insert_document, update_document, delete_document
+from database import get_documents, create_document, update_document, delete_document
 from auth import get_current_admin
 
 router = APIRouter(prefix="/api/admin/media", tags=["media"])
@@ -186,7 +186,7 @@ async def upload_media_files(
             }
             
             # Sauvegarder en base de données
-            await insert_document("media_files", file_data)
+            await create_document("media_files", file_data)
             uploaded_files.append(file_data)
             
         except Exception as e:
@@ -276,7 +276,7 @@ async def upload_base64_image(
         }
         
         # Sauvegarder en base de données
-        await insert_document("media_files", file_data)
+        await create_document("media_files", file_data)
         
         return ApiResponse(
             success=True,
@@ -356,7 +356,7 @@ async def create_folder(
             "createdBy": current_user.get("id")
         }
         
-        await insert_document("media_folders", folder_data)
+        await create_document("media_folders", folder_data)
         
         return ApiResponse(
             success=True,
