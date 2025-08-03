@@ -3,59 +3,16 @@
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T19:58:30.385803"
+      "timestamp": "2025-08-03T19:59:00.545182"
     },
     "client_register": {
-      "success": true,
-      "details": "Client registered successfully with ID: 3e61fecb-6c4a-4a21-94fb-2e7b7e79dc8c",
-      "timestamp": "2025-08-03T19:58:30.646146"
-    },
-    "client_login": {
-      "success": true,
-      "details": "Successfully logged in as client",
-      "timestamp": "2025-08-03T19:58:30.904015"
-    },
-    "auth_me": {
-      "success": true,
-      "details": "User data retrieved - Role: client_standard, Points: 0, Tier: bronze",
-      "timestamp": "2025-08-03T19:58:30.923199"
+      "success": false,
+      "details": "Registration failed: Unknown error",
+      "timestamp": "2025-08-03T19:59:00.564961"
     }
   },
-  "client_apis": {
-    "dashboard": {
-      "success": true,
-      "details": "Dashboard stats - Points: 0, Tier: bronze, Quotes: 0",
-      "timestamp": "2025-08-03T19:58:31.053671"
-    },
-    "points_history": {
-      "success": true,
-      "details": "Retrieved 0 point transactions",
-      "timestamp": "2025-08-03T19:58:31.175329"
-    }
-  },
-  "admin_client_apis": {
-    "quotes": {
-      "success": true,
-      "details": "Retrieved 1 quotes",
-      "timestamp": "2025-08-03T19:58:31.257504"
-    },
-    "tickets": {
-      "success": true,
-      "details": "Retrieved 1 tickets",
-      "timestamp": "2025-08-03T19:58:31.278434"
-    },
-    "client_stats": {
-      "success": true,
-      "details": "Stats retrieved - Total clients: 3, Points distributed: 100",
-      "timestamp": "2025-08-03T19:58:31.313880"
-    }
-  },
-  "loyalty_system": {
-    "tier_calculation": {
-      "success": true,
-      "details": "Correct tier 'bronze' for 100 points",
-      "timestamp": "2025-08-03T19:58:31.372590"
-    }
-  },
+  "client_apis": {},
+  "admin_client_apis": {},
+  "loyalty_system": {},
   "errors": []
 }
