@@ -23,6 +23,7 @@ import {
   FolderPlus
 } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
+import { mediaAPI } from '../../services/api';
 
 const MediaManager = ({ 
   onSelectMedia,
