@@ -57,10 +57,18 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Services</h3>
             <div className="space-y-2">
-              <div className="text-gray-400">Développement Web</div>
-              <div className="text-gray-400">Intelligence Artificielle</div>
-              <div className="text-gray-400">Maintenance & Réparation</div>
-              <div className="text-gray-400">Montage PC</div>
+              <Link to="/client/quotes/new" className="block text-gray-400 hover:text-white transition-colors">
+                Développement Web
+              </Link>
+              <Link to="/client/quotes/new" className="block text-gray-400 hover:text-white transition-colors">
+                Intelligence Artificielle
+              </Link>
+              <Link to="/client/quotes/new" className="block text-gray-400 hover:text-white transition-colors">
+                Maintenance & Réparation
+              </Link>
+              <Link to="/client/quotes/new" className="block text-gray-400 hover:text-white transition-colors">
+                Montage PC
+              </Link>
             </div>
           </div>
 
