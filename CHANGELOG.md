@@ -40,7 +40,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.4] - 2025-01-02 🛠️
+## [0.5.4] - 2025-08-03 🛠️
 
 ### 🚀 Ajouté
 - **Système Client Complet** : Interface dédiée aux clients
