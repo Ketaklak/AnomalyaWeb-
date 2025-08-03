@@ -151,8 +151,8 @@ class ClientSystemTester:
         
         if response and response.status_code == 200:
             data = response.json()
-            if "id" in data:
-                self.test_client_id = data["id"]
+            if data.get("success") and "data" in data and "user_id" in data["data"]:
+                self.test_client_id = data["data"]["user_id"]
                 self.test_results["authentication"]["client_register"] = self.log_test(
                     "Client Registration", 
                     True, 
@@ -163,7 +163,7 @@ class ClientSystemTester:
                 self.test_results["authentication"]["client_register"] = self.log_test(
                     "Client Registration", 
                     False, 
-                    "No user ID in response"
+                    f"No user ID in response. Response: {data}"
                 )
                 return False
         else:
