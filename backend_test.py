@@ -503,7 +503,7 @@ class ComprehensiveAPITester:
         response = self.make_request("GET", "/admin/dashboard/stats", token_type="client")
         if response and response.status_code == 403:
             self.test_results["authentication"]["rbac_client_blocked"] = self.log_test(
-                "RBAC - Client Blocked from Admin", True, "Client correctly blocked from admin endpoint"
+                "RBAC - Client Blocked from Admin", True, "Client correctly blocked from admin endpoint (403 Forbidden)"
             )
         elif response is None:
             # Timeout can also indicate proper blocking at network/proxy level
