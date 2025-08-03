@@ -59,6 +59,23 @@ function App() {
                 <AdminUsers />
               </ProtectedRoute>
             } />
+            
+            {/* Client Routes */}
+            <Route path="/client/dashboard" element={
+              <ProtectedRoute requiredRole="client">
+                <ClientDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/client/quotes/new" element={
+              <ProtectedRoute requiredRole="client">
+                <RequestQuote />
+              </ProtectedRoute>
+            } />
+            <Route path="/client/profile" element={
+              <ProtectedRoute requiredRole="client">
+                <ClientProfile />
+              </ProtectedRoute>
+            } />
           </Routes>
           <Toaster />
         </BrowserRouter>
