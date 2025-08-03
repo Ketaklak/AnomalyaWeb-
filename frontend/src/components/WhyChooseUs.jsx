@@ -75,7 +75,7 @@ const WhyChooseUs = () => {
 
                 {/* Hover effect overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
-              </div>
+              </Link>
             );
           })}
         </div>
