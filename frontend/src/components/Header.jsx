@@ -191,7 +191,52 @@ const Header = () => {
                   <>
                     <div className="px-3 py-2 text-sm text-gray-400">
                       Connecté en tant que {user?.full_name || user?.username}
+                      {isClient && (
+                        <div className="mt-1 flex items-center space-x-2">
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${
+                            loyaltyTier === 'bronze' ? 'bg-amber-600/20 text-amber-300' :
+                            loyaltyTier === 'silver' ? 'bg-gray-400/20 text-gray-300' :
+                            loyaltyTier === 'gold' ? 'bg-yellow-400/20 text-yellow-300' :
+                            'bg-purple-400/20 text-purple-300'
+                          }`}>
+                            {loyaltyTier ? loyaltyTier.charAt(0).toUpperCase() + loyaltyTier.slice(1) : 'Bronze'}
+                          </div>
+                          <span className="text-xs">
+                            {totalPoints || 0} points
+                          </span>
+                        </div>
+                      )}
                     </div>
+                    
+                    {isClient && (
+                      <>
+                        <Link
+                          to="/client/dashboard"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <User className="h-4 w-4 mr-2" />
+                          Mon espace client
+                        </Link>
+                        <Link
+                          to="/client/profile"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <Settings className="h-4 w-4 mr-2" />
+                          Mon profil
+                        </Link>
+                        <Link
+                          to="/client/quotes/new"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Demander un devis
+                        </Link>
+                      </>
+                    )}
+                    
                     {isAdmin && (
                       <Link
                         to="/admin"
