@@ -1,11 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { mockServices } from '../data/mock';
-import { ArrowRight, Check } from 'lucide-react';
+import { servicesAPI } from '../services/api';
+import { ArrowRight, Check, Loader2 } from 'lucide-react';
 
 const ServicesSection = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const response = await servicesAPI.getAll();
+        setServices(response || []);
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setError('Erreur lors du chargement des services');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Nos <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Services</span>
+            </h2>
+          </div>
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
+            <span className="ml-2 text-gray-400">Chargement des services...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Nos <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Services</span>
+            </h2>
+            <div className="text-red-400 mb-8">{error}</div>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Réessayer
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +78,7 @@ const ServicesSection = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {mockServices.map((service, index) => (
+          {services.map((service, index) => (
             <Card key={service.id} className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-blue-500/50 transition-all duration-300 group overflow-hidden hover:transform hover:scale-105">
               <CardHeader className="text-center pb-4">
                 {/* Icon */}

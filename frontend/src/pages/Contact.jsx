@@ -7,7 +7,8 @@ import { Textarea } from '../components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { useToast } from '../hooks/use-toast';
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
+import { contactAPI } from '../services/api';
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Loader2 } from 'lucide-react';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -39,11 +40,12 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await contactAPI.create(formData);
+      
       toast({
         title: "Message envoyé !",
-        description: "Nous vous répondrons dans les plus brefs délais.",
+        description: response.message || "Nous vous répondrons dans les plus brefs délais.",
       });
       
       // Reset form
@@ -54,8 +56,16 @@ const Contact = () => {
         service: '',
         message: ''
       });
+    } catch (error) {
+      console.error('Error sending contact message:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.",
+        variant: "destructive"
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -176,7 +186,7 @@ const Contact = () => {
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          <Loader2 className="animate-spin h-4 w-4 mr-2" />
                           Envoi en cours...
                         </>
                       ) : (

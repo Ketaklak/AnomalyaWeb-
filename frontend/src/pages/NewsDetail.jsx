@@ -1,32 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { mockNews } from '../data/mock';
-import { Calendar, Clock, User, ArrowLeft, Share2, Bookmark } from 'lucide-react';
+import { newsAPI } from '../services/api';
+import { Calendar, Clock, User, ArrowLeft, Share2, Bookmark, Loader2 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const NewsDetail = () => {
   const { id } = useParams();
   const { toast } = useToast();
-  const article = mockNews.find(news => news.id === parseInt(id));
+  const [article, setArticle] = useState(null);
+  const [relatedArticles, setRelatedArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!article) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Header />
-        <div className="text-center text-white">
-          <h1 className="text-2xl mb-4">Article non trouvé</h1>
-          <Button asChild>
-            <Link to="/actualites">Retour aux actualités</Link>
-          </Button>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        setLoading(true);
+        const response = await newsAPI.getById(id);
+        setArticle(response);
+
+        // Fetch related articles
+        if (response.category) {
+          const relatedResponse = await newsAPI.getAll({
+            category: response.category,
+            limit: 4
+          });
+          const filtered = relatedResponse.articles.filter(a => a.id !== response.id).slice(0, 2);
+          setRelatedArticles(filtered);
+        }
+      } catch (err) {
+        console.error('Error fetching article:', err);
+        setError('Article non trouvé ou erreur de chargement');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchArticle();
+    }
+  }, [id]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -50,6 +67,40 @@ const NewsDetail = () => {
       description: "L'article a été ajouté à vos favoris.",
     });
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950">
+        <Header />
+        <section className="pt-24 pb-12 bg-gradient-to-br from-slate-900 to-slate-950">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
+              <span className="ml-2 text-gray-400">Chargement de l'article...</span>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="min-h-screen bg-slate-950">
+        <Header />
+        <section className="pt-24 pb-12 bg-gradient-to-br from-slate-900 to-slate-950">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h1 className="text-2xl mb-4">{error || 'Article non trouvé'}</h1>
+            <Button asChild>
+              <Link to="/actualites">Retour aux actualités</Link>
+            </Button>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -159,32 +210,34 @@ const NewsDetail = () => {
           </div>
 
           {/* Related Articles */}
-          <div className="mt-16 pt-8 border-t border-slate-700">
-            <h3 className="text-2xl font-bold text-white mb-8">Articles similaires</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {mockNews.filter(news => news.id !== article.id && news.category === article.category).slice(0, 2).map((relatedArticle) => (
-                <Link key={relatedArticle.id} to={`/news/${relatedArticle.id}`} className="group">
-                  <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
-                    <img 
-                      src={relatedArticle.image} 
-                      alt={relatedArticle.title}
-                      className="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <h4 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors mb-2">
-                      {relatedArticle.title}
-                    </h4>
-                    <p className="text-gray-400 text-sm line-clamp-2">
-                      {relatedArticle.excerpt}
-                    </p>
-                    <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
-                      <Calendar className="h-3 w-3" />
-                      <span>{new Date(relatedArticle.date).toLocaleDateString('fr-FR')}</span>
+          {relatedArticles.length > 0 && (
+            <div className="mt-16 pt-8 border-t border-slate-700">
+              <h3 className="text-2xl font-bold text-white mb-8">Articles similaires</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {relatedArticles.map((relatedArticle) => (
+                  <Link key={relatedArticle.id} to={`/news/${relatedArticle.id}`} className="group">
+                    <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
+                      <img 
+                        src={relatedArticle.image} 
+                        alt={relatedArticle.title}
+                        className="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <h4 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors mb-2">
+                        {relatedArticle.title}
+                      </h4>
+                      <p className="text-gray-400 text-sm line-clamp-2">
+                        {relatedArticle.excerpt}
+                      </p>
+                      <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
+                        <Calendar className="h-3 w-3" />
+                        <span>{new Date(relatedArticle.date).toLocaleDateString('fr-FR')}</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
