@@ -32,16 +32,17 @@ const ProtectedRoute = ({ children, requiredRole, requireAdmin = false }) => {
       return <Navigate to="/unauthorized" replace />;
     }
     
-    if (requiredRole === 'client' && !isClient) {
+    // Allow admins to access client routes for testing/supervision
+    if (requiredRole === 'client' && !isClient && !isAdmin) {
       return <Navigate to="/unauthorized" replace />;
     }
     
-    // Check for specific client roles
-    if (requiredRole === 'client_premium' && user?.role !== 'client_premium') {
+    // Check for specific client roles (admins bypass this)
+    if (requiredRole === 'client_premium' && user?.role !== 'client_premium' && !isAdmin) {
       return <Navigate to="/unauthorized" replace />;
     }
     
-    if (requiredRole === 'client_standard' && user?.role !== 'client_standard') {
+    if (requiredRole === 'client_standard' && user?.role !== 'client_standard' && !isAdmin) {
       return <Navigate to="/unauthorized" replace />;
     }
   }
