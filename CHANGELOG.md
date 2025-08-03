@@ -162,7 +162,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## 🎯 Roadmap Prochaines Versions
 
-### [0.6.0] - Prévue pour Février 2025
+### [0.6.0] - Prévue pour Septembre 2025
 - **Intégrations IA** : Chatbot et génération automatique de contenu
 - **Système de Facturation** : Génération PDF et paiements
 - **PWA** : Application mobile progressive
