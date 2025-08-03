@@ -168,7 +168,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **PWA** : Application mobile progressive
 - **Analytics Avancés** : Intégration Google Analytics
 
-### [0.7.0] - Prévue pour Mars 2025
+### [0.7.0] - Prévue pour Octobre 2025
 - **Multi-langue** : Support i18n complet
 - **API REST Publique** : Documentation OpenAPI
 - **Système de Cache** : Redis pour optimisation
