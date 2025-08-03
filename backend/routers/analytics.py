@@ -21,25 +21,57 @@ async def get_analytics_overview(
     time_range: str = Query("7d", regex="^(7d|30d|90d)$"),
     current_user=Depends(get_current_admin)
 ):
-    """Get analytics overview with growth metrics"""
+    """Get analytics overview with real growth metrics from database"""
     try:
         # Calculate date range
         days = int(time_range[:-1])
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
         
-        # Get actual data from database
-        users, total_users = await get_documents("users", {}, limit=1000)
-        articles, total_articles = await get_documents("articles", {}, limit=1000)
-        contacts, total_contacts = await get_documents("contacts", {}, limit=1000)
-        quotes, total_quotes = await get_documents("quotes", {}, limit=1000)
+        # Get real data from database
+        users, total_users = await get_documents("users", {}, limit=10000)
+        articles, total_articles = await get_documents("articles", {}, limit=10000)
+        contacts, total_contacts = await get_documents("contacts", {}, limit=10000)
+        quotes, total_quotes = await get_documents("quotes", {}, limit=10000)
         
-        # Simulate growth percentages based on actual data (replace with real calculation when historical data available)
-        # For now, calculate simple percentages based on data distribution
-        growth_users = random.uniform(5, 15) if total_users > 10 else random.uniform(-5, 10)
-        growth_articles = random.uniform(0, 10) if total_articles > 3 else random.uniform(-2, 5)
-        growth_contacts = random.uniform(-10, 5) if total_contacts > 0 else random.uniform(0, 3)
-        growth_quotes = random.uniform(0, 20) if total_quotes > 5 else random.uniform(-5, 8)
+        # Calculate real growth based on creation dates within time range
+        def calculate_growth(documents, date_field="created_at"):
+            current_period = 0
+            previous_period = 0
+            
+            for doc in documents:
+                doc_date_str = doc.get(date_field) or doc.get("date") or doc.get("createdAt")
+                if doc_date_str:
+                    try:
+                        if isinstance(doc_date_str, str):
+                            # Try multiple date formats
+                            for fmt in ["%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d"]:
+                                try:
+                                    doc_date = datetime.strptime(doc_date_str, fmt)
+                                    break
+                                except ValueError:
+                                    continue
+                            else:
+                                doc_date = datetime.fromisoformat(doc_date_str.replace('Z', '+00:00'))
+                        else:
+                            doc_date = doc_date_str
+                        
+                        if doc_date >= start_date:
+                            current_period += 1
+                        elif doc_date >= start_date - timedelta(days=days):
+                            previous_period += 1
+                    except:
+                        continue
+            
+            if previous_period == 0:
+                return 100.0 if current_period > 0 else 0.0
+            return round(((current_period - previous_period) / previous_period) * 100, 1)
+        
+        # Calculate real growth rates
+        growth_users = calculate_growth(users)
+        growth_articles = calculate_growth(articles, "date")
+        growth_contacts = calculate_growth(contacts)
+        growth_quotes = calculate_growth(quotes)
         
         return {
             "success": True,
@@ -50,10 +82,10 @@ async def get_analytics_overview(
                     "totalContacts": total_contacts,
                     "totalQuotes": total_quotes,
                     "growth": {
-                        "users": round(growth_users, 1),
-                        "articles": round(growth_articles, 1),
-                        "contacts": round(growth_contacts, 1),
-                        "quotes": round(growth_quotes, 1)
+                        "users": growth_users,
+                        "articles": growth_articles,
+                        "contacts": growth_contacts,
+                        "quotes": growth_quotes
                     }
                 },
                 "timeRange": time_range
