@@ -7,7 +7,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.5] - 2025-01-03 🎯
+## [0.5.5] - 2025-08-04 🎯
 
 ### 🚀 Ajouté
 - **Dashboard Analytics Avancé** : Interface complète d'analytics avec données réelles
