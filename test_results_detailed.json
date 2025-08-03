@@ -1,0 +1,22 @@
+{
+  "authentication": {
+    "login": {
+      "success": true,
+      "details": "Successfully logged in as admin",
+      "timestamp": "2025-08-03T19:29:31.280739"
+    }
+  },
+  "admin_endpoints": {
+    "dashboard_stats": {
+      "success": true,
+      "details": "Stats retrieved - Articles: 5, Users: 1, Contacts: 0",
+      "timestamp": "2025-08-03T19:29:31.309258"
+    },
+    "contacts": {
+      "success": true,
+      "details": "Retrieved 0 contacts",
+      "timestamp": "2025-08-03T19:29:31.429068"
+    }
+  },
+  "errors": []
+}
