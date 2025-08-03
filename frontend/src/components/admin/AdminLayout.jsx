@@ -13,7 +13,8 @@ import {
   Settings, 
   LogOut,
   Zap,
-  Home
+  Home,
+  BarChart3
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
