@@ -91,6 +91,7 @@ app.include_router(newsletter.router)
 app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(analytics.router)
+app.include_router(media.router)
 app.include_router(client.router)
 
 # Health check endpoint for Docker
