@@ -56,6 +56,11 @@ function App() {
                 <AdminDashboard />
               </ProtectedRoute>
             } />
+            <Route path="/admin/analytics" element={
+              <ProtectedRoute requireAdmin={true}>
+                <AnalyticsDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/admin/articles" element={
               <ProtectedRoute requireAdmin={true}>
                 <AdminArticles />
