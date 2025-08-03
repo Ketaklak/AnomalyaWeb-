@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import NewsDetail from "./pages/NewsDetail";
 import Services from "./pages/Services";
-import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ActualitesPage from "./pages/ActualitesPage";
 import CompetencesPage from "./pages/CompetencesPage";
@@ -20,7 +19,6 @@ function App() {
           <Route path="/actualites" element={<ActualitesPage />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/competences" element={<CompetencesPage />} />
-          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
         <Toaster />
