@@ -60,7 +60,7 @@ const ActualitesPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await newsAPI.getCategories();
-        setCategories(response.categories || []);
+        setCategories(response.data.categories || []);
       } catch (err) {
         console.error('Error fetching categories:', err);
       }
