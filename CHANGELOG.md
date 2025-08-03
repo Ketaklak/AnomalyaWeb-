@@ -130,7 +130,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.0] - 2024-12-25 🎯
+## [0.5.0] - 2025-07-30 🎯
 
 ### 🚀 Version Initiale
 - **Architecture Full-Stack** : React + FastAPI + MongoDB
