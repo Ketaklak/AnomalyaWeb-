@@ -90,12 +90,18 @@ const WhyChooseUs = () => {
               vous accompagner dans votre transformation numérique.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-lg">
+              <Link 
+                to="/contact"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-lg text-center"
+              >
                 Commencer maintenant
-              </button>
-              <button className="border border-slate-600 text-gray-300 hover:bg-slate-800 hover:border-blue-500 px-6 py-3 rounded-lg transition-all duration-300">
+              </Link>
+              <Link 
+                to="/services"
+                className="border border-slate-600 text-gray-300 hover:bg-slate-800 hover:border-blue-500 px-6 py-3 rounded-lg transition-all duration-300 text-center"
+              >
                 En savoir plus
-              </button>
+              </Link>
             </div>
           </div>
         </div>
