@@ -106,6 +106,13 @@ async def health_check():
         "database": "connected"  # TODO: Vérifier la connexion DB réelle
     }
 
+# Static files for media
+uploads_dir = Path("uploads")
+uploads_dir.mkdir(exist_ok=True)
+
+app.mount("/api/media/files", StaticFiles(directory=uploads_dir), name="media_files")
+app.mount("/api/media/thumbnails", StaticFiles(directory=uploads_dir / "thumbnails"), name="media_thumbnails")
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
