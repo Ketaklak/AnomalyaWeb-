@@ -103,9 +103,14 @@
 #====================================================================================================
 
 ## user_problem_statement: |
-  Continuer le développement du système d'administration et de gestion des actualités pour le clone d'Anomalya.fr. 
-  L'objectif est de compléter l'intégration du panneau d'administration avec toutes ses fonctionnalités CRUD et 
-  d'améliorer le système de gestion des utilisateurs/clients.
+  Extension du système d'administration avec un système de comptes clients complet incluant :
+  - Système de points de fidélité avec attribution manuelle par techniciens
+  - Profils clients détaillés (personnel + entreprise)
+  - Dashboard client avec statistiques
+  - Système de devis en ligne
+  - Support tickets avec messagerie
+  - Remplissage de toutes les pages et fonctionnalités
+  - Amélioration générale du site
 
 ## backend:
   - task: "Admin Dashboard Stats API"
