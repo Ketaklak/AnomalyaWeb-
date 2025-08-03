@@ -1,5 +1,12 @@
 from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import List, Optional
+import sys
+from pathlib import Path
+
+# Add backend directory to path
+backend_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_dir))
+
 from models import Article, ArticleCreate, ArticleUpdate, ArticleListResponse, ApiResponse
 from database import get_documents, get_document, create_document, update_document, delete_document, search_documents
 import re
