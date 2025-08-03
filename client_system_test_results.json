@@ -3,12 +3,12 @@
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-03T19:56:49.668678"
+      "timestamp": "2025-08-03T19:57:37.921814"
     },
     "client_register": {
       "success": false,
-      "details": "No user ID in response",
-      "timestamp": "2025-08-03T19:56:49.954721"
+      "details": "Registration failed: Unknown error",
+      "timestamp": "2025-08-03T19:57:37.945469"
     }
   },
   "client_apis": {},
