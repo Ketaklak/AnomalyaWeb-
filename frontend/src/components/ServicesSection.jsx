@@ -15,7 +15,7 @@ const ServicesSection = () => {
       try {
         setLoading(true);
         const response = await servicesAPI.getAll();
-        setServices(response || []);
+        setServices(response.data || []);
       } catch (err) {
         console.error('Error fetching services:', err);
         setError('Erreur lors du chargement des services');
