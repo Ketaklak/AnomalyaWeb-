@@ -1,0 +1,184 @@
+# Docker Compose pour production
+version: '3.8'
+
+services:
+  # Base de données MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: anomalya-db-prod
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: anomalya_db
+    ports:
+      - "127.0.0.1:27017:27017"  # Bind seulement sur localhost
+    volumes:
+      - mongodb_prod_data:/data/db
+      - mongodb_prod_config:/data/configdb
+      - ./backup:/backup
+    networks:
+      - anomalya-prod-network
+    command: mongod --auth
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh -u ${MONGO_ROOT_USERNAME} -p ${MONGO_ROOT_PASSWORD} localhost:27017/anomalya_db --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend FastAPI
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: anomalya-backend-prod
+    restart: always
+    ports:
+      - "127.0.0.1:8001:8001"  # Bind seulement sur localhost
+    environment:
+      - MONGO_URL=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/anomalya_db?authSource=admin
+      - DB_NAME=anomalya_db
+      - DEBUG=false
+      - SECRET_KEY=${SECRET_KEY}
+      - CORS_ORIGINS=["https://${DOMAIN_NAME}"]
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    volumes:
+      - backend_prod_uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - mongodb
+    networks:
+      - anomalya-prod-network
+    healthcheck:
+      test: curl -f http://localhost:8001/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Frontend React avec Nginx
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - REACT_APP_BACKEND_URL=https://${DOMAIN_NAME}/api
+    container_name: anomalya-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - backend
+    networks:
+      - anomalya-prod-network
+    healthcheck:
+      test: curl -f http://localhost/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Reverse Proxy Nginx (optionnel si pas de load balancer externe)
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: anomalya-proxy-prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - nginx_proxy_logs:/var/log/nginx
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - anomalya-prod-network
+
+  # Monitoring avec Prometheus (optionnel)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: anomalya-prometheus
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - anomalya-prod-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+
+  # Grafana pour la visualisation (optionnel)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: anomalya-grafana
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - anomalya-prod-network
+
+  # Backup automatique
+  backup:
+    image: mongo:7.0
+    container_name: anomalya-backup
+    restart: "no"  # Lancé par cron
+    volumes:
+      - ./backup:/backup
+      - ./scripts:/scripts:ro
+    networks:
+      - anomalya-prod-network
+    command: /scripts/backup.sh
+    depends_on:
+      - mongodb
+
+# Volumes persistants de production
+volumes:
+  mongodb_prod_data:
+    driver: local
+  mongodb_prod_config:
+    driver: local
+  backend_prod_uploads:
+    driver: local
+  nginx_logs:
+    driver: local
+  nginx_proxy_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+# Réseau de production
+networks:
+  anomalya-prod-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

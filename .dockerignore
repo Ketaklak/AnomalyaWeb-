@@ -1,0 +1,123 @@
+# Fichiers et dossiers à ignorer lors du build Docker
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md
+docs/
+
+# Fichiers de configuration IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencies (seront installées dans le container)
+node_modules/
+frontend/node_modules/
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build outputs
+frontend/build/
+backend/dist/
+backend/*.egg-info/
+
+# Test files
+backend/tests/
+frontend/src/tests/
+coverage/
+.nyc_output/
+.coverage
+htmlcov/
+
+# Development files
+backend/temp/
+backend/tmp/
+frontend/temp/
+frontend/tmp/
+
+# Cache files
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# Database files (development)
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+backup/
+
+# Uploads (development)
+uploads/
+backend/uploads/
+
+# SSL certificates (should be mounted as volumes)
+ssl/
+*.pem
+*.key
+*.crt
+
+# Docker files (pour éviter la récursion)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Scripts de déploiement
+scripts/
+deploy/
+
+# Monitoring
+monitoring/
+prometheus/
+grafana/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Local configuration
+config.local.*
+settings.local.*

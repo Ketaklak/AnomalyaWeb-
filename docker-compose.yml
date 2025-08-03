@@ -1,0 +1,107 @@
+# Docker Compose pour développement
+version: '3.8'
+
+services:
+  # Base de données MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: anomalya-db-dev
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: anomalya_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./backend/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - anomalya-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/anomalya_db --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend FastAPI
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: anomalya-backend-dev
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=anomalya_db
+      - DEBUG=true
+      - CORS_ORIGINS=["http://localhost:3000"]
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+    depends_on:
+      - mongodb
+    networks:
+      - anomalya-network
+    healthcheck:
+      test: curl -f http://localhost:8001/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend React
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: anomalya-frontend-dev
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8001
+    depends_on:
+      - backend
+    networks:
+      - anomalya-network
+    healthcheck:
+      test: curl -f http://localhost/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis pour le cache (optionnel)
+  redis:
+    image: redis:7-alpine
+    container_name: anomalya-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - anomalya-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: redis-cli ping
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Volumes persistants
+volumes:
+  mongodb_data:
+    driver: local
+  backend_uploads:
+    driver: local
+  redis_data:
+    driver: local
+
+# Réseau
+networks:
+  anomalya-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

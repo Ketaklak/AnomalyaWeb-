@@ -1,0 +1,46 @@
+# Dockerfile pour le backend FastAPI
+FROM python:3.10-slim
+
+# Métadonnées
+LABEL maintainer="Anomalya Corp <dev@anomalya-corp.com>"
+LABEL version="0.5.5"
+LABEL description="Anomalya Corp Backend API"
+
+# Variables d'environnement
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_CACHE_DIR=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Répertoire de travail
+WORKDIR /app
+
+# Installer les dépendances système
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copier les fichiers de dépendances
+COPY backend/requirements.txt .
+
+# Installer les dépendances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le code source
+COPY backend/ .
+
+# Créer un utilisateur non-root pour la sécurité
+RUN useradd --create-home --shell /bin/bash app \
+    && chown -R app:app /app
+USER app
+
+# Exposer le port
+EXPOSE 8001
+
+# Vérification de santé
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8001/health || exit 1
+
+# Commande par défaut
+CMD ["python", "server.py"]
