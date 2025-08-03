@@ -225,7 +225,11 @@ async def create_user(user: UserCreate):
         "hashed_password": get_password_hash(user.password),
         "role": user.role,
         "is_active": True,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
+        # Extended fields for loyalty system
+        "total_points": 0,
+        "available_points": 0,
+        "loyalty_tier": "bronze"
     }
     
     await create_document("users", user_data)
@@ -233,6 +237,44 @@ async def create_user(user: UserCreate):
     # Return user without password
     user_data.pop('hashed_password')
     return User(**user_data)
+
+async def update_user_points(user_id: str, points_to_add: int, description: str, created_by: str = None):
+    """Update user loyalty points and create transaction record"""
+    from models import PointTransaction
+    
+    # Get current user
+    user = await get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Calculate new points
+    new_total = user.total_points + points_to_add
+    new_available = max(0, user.available_points + points_to_add)
+    
+    # Calculate new loyalty tier
+    new_tier = get_loyalty_tier(new_total)
+    
+    # Update user
+    update_data = {
+        "total_points": new_total,
+        "available_points": new_available,
+        "loyalty_tier": new_tier
+    }
+    
+    await update_document("users", user_id, update_data)
+    
+    # Create transaction record
+    transaction = PointTransaction(
+        user_id=user_id,
+        points=points_to_add,
+        transaction_type="earned" if points_to_add > 0 else "spent",
+        description=description,
+        created_by=created_by
+    )
+    
+    await create_document("point_transactions", transaction.dict())
+    
+    return new_total, new_available, new_tier
 
 async def init_admin_user():
     """Initialize default admin user if none exists"""
