@@ -41,9 +41,9 @@ const ActualitesPage = () => {
         }
 
         const response = await newsAPI.getAll(params);
-        setArticles(response.articles || []);
-        setHasMore(response.hasMore || false);
-        setTotal(response.total || 0);
+        setArticles(response.data.articles || []);
+        setHasMore(response.data.hasMore || false);
+        setTotal(response.data.total || 0);
       } catch (err) {
         console.error('Error fetching articles:', err);
         setError('Erreur lors du chargement des articles');
