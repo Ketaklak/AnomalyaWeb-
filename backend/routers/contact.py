@@ -1,4 +1,11 @@
 from fastapi import APIRouter, HTTPException
+import sys
+from pathlib import Path
+
+# Add backend directory to path
+backend_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_dir))
+
 from models import Contact, ContactCreate, ApiResponse
 from database import create_document, get_documents
 from typing import List
