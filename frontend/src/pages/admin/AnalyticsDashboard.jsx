@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
 import { analyticsAPI } from '../../services/api';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const AnalyticsDashboard = () => {
   const { toast } = useToast();
