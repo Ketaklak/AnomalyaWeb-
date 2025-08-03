@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Zap, Shield, Users, Globe } from 'lucide-react';
 
 const WhyChooseUs = () => {
