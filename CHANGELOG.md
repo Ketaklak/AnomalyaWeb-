@@ -66,7 +66,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [0.5.3] - 2025-01-01 🎊
+## [0.5.3] - 2025-08-02 🎊
 
 ### 🚀 Ajouté
 - **Backend FastAPI** : Migration complète de mock data vers base de données
