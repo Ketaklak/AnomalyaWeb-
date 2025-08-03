@@ -74,6 +74,21 @@ function App() {
                 <RequestQuote />
               </ProtectedRoute>
             } />
+            <Route path="/client/quotes" element={
+              <ProtectedRoute requiredRole="client">
+                <MyQuotes />
+              </ProtectedRoute>
+            } />
+            <Route path="/client/tickets/new" element={
+              <ProtectedRoute requiredRole="client">
+                <CreateTicket />
+              </ProtectedRoute>
+            } />
+            <Route path="/client/tickets" element={
+              <ProtectedRoute requiredRole="client">
+                <MyTickets />
+              </ProtectedRoute>
+            } />
             <Route path="/client/profile" element={
               <ProtectedRoute requiredRole="client">
                 <ClientProfile />
