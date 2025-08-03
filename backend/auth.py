@@ -1,0 +1,201 @@
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+from datetime import datetime, timedelta
+from typing import Optional
+import os
+from pydantic import BaseModel
+from database import get_document, create_document, get_documents
+
+# Security configuration
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-this-in-production")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_DAYS = 7
+
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+
+# Models
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+    user_id: Optional[str] = None
+
+class User(BaseModel):
+    id: str
+    username: str
+    email: str
+    full_name: str
+    role: str
+    is_active: bool
+    created_at: datetime
+
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    full_name: str
+    password: str
+    role: str = "client"
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class UserInDB(User):
+    hashed_password: str
+
+# Utility functions
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def create_refresh_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def get_user(username: str):
+    """Get user from database by username"""
+    users, _ = await get_documents("users", {"username": username}, limit=1)
+    if users:
+        user_data = users[0]
+        user_data.pop('_id', None)
+        return UserInDB(**user_data)
+    return None
+
+async def get_user_by_id(user_id: str):
+    """Get user from database by ID"""
+    user_data = await get_document("users", user_id)
+    if user_data:
+        user_data.pop('_id', None)
+        return UserInDB(**user_data)
+    return None
+
+async def authenticate_user(username: str, password: str):
+    """Authenticate user credentials"""
+    user = await get_user(username)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get current user from JWT token"""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        user_id: str = payload.get("user_id")
+        if username is None or user_id is None:
+            raise credentials_exception
+        token_data = TokenData(username=username, user_id=user_id)
+    except JWTError:
+        raise credentials_exception
+    
+    user = await get_user_by_id(token_data.user_id)
+    if user is None:
+        raise credentials_exception
+    return user
+
+async def get_current_active_user(current_user: UserInDB = Depends(get_current_user)):
+    """Get current active user"""
+    if not current_user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+async def get_current_admin(current_user: UserInDB = Depends(get_current_active_user)):
+    """Get current admin user"""
+    if current_user.role not in ["admin", "moderator"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions"
+        )
+    return current_user
+
+async def create_user(user: UserCreate):
+    """Create a new user"""
+    # Check if user already exists
+    existing_user = await get_user(user.username)
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Username already registered"
+        )
+    
+    # Check if email already exists
+    users, _ = await get_documents("users", {"email": user.email}, limit=1)
+    if users:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+    
+    # Create user
+    import uuid
+    user_data = {
+        "id": str(uuid.uuid4()),
+        "username": user.username,
+        "email": user.email,
+        "full_name": user.full_name,
+        "hashed_password": get_password_hash(user.password),
+        "role": user.role,
+        "is_active": True,
+        "created_at": datetime.utcnow()
+    }
+    
+    await create_document("users", user_data)
+    
+    # Return user without password
+    user_data.pop('hashed_password')
+    return User(**user_data)
+
+async def init_admin_user():
+    """Initialize default admin user if none exists"""
+    try:
+        # Check if any admin exists
+        users, count = await get_documents("users", {"role": "admin"}, limit=1)
+        
+        if count == 0:
+            # Create default admin
+            admin_data = UserCreate(
+                username="admin",
+                email="admin@anomalya.fr",
+                full_name="Administrateur",
+                password="admin123",  # Change this in production!
+                role="admin"
+            )
+            
+            await create_user(admin_data)
+            print("✅ Default admin user created: admin/admin123")
+        else:
+            print("✅ Admin user already exists")
+            
+    except Exception as e:
+        print(f"❌ Error initializing admin user: {str(e)}")
