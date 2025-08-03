@@ -710,6 +710,8 @@ class ComprehensiveAPITester:
             ("Authentication APIs", self.test_authentication_apis),
             ("Admin APIs", self.test_admin_apis),
             ("Client APIs", self.test_client_apis),
+            ("Analytics APIs", self.test_analytics_apis),
+            ("Analytics Authentication", self.test_analytics_authentication),
             ("Role-Based Access Control", self.test_role_based_access_control)
         ]
         
