@@ -65,6 +65,21 @@ function App() {
                 <AdminUsers />
               </ProtectedRoute>
             } />
+            <Route path="/admin/clients" element={
+              <ProtectedRoute requireAdmin={true}>
+                <AdminClients />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/quotes" element={
+              <ProtectedRoute requireAdmin={true}>
+                <AdminQuotes />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/tickets" element={
+              <ProtectedRoute requireAdmin={true}>
+                <AdminTickets />
+              </ProtectedRoute>
+            } />
             
             {/* Client Routes */}
             <Route path="/client/dashboard" element={
