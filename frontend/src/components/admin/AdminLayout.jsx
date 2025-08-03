@@ -31,6 +31,9 @@ const AdminLayout = ({ children }) => {
     { name: 'Articles', href: '/admin/articles', icon: FileText },
     { name: 'Contacts', href: '/admin/contacts', icon: MessageSquare },
     { name: 'Utilisateurs', href: '/admin/users', icon: Users },
+    { name: 'Clients', href: '/admin/clients', icon: UserPlus },
+    { name: 'Devis', href: '/admin/quotes', icon: Quote },
+    { name: 'Support', href: '/admin/tickets', icon: LifeBuoy },
   ];
 
   const isActive = (href) => {
