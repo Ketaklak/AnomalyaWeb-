@@ -234,15 +234,29 @@ const MediaManager = ({
   // Créer un dossier
   const handleCreateFolder = useCallback(async () => {
     if (newFolderName.trim()) {
-      // TODO: API call to create folder
-      setShowNewFolderDialog(false);
-      setNewFolderName('');
-      toast({
-        title: "Dossier créé",
-        description: `Le dossier "${newFolderName}" a été créé`
-      });
+      try {
+        const response = await mediaAPI.createFolder(newFolderName.trim(), currentFolder);
+        
+        if (response.data.success) {
+          setShowNewFolderDialog(false);
+          setNewFolderName('');
+          // Recharger les fichiers pour afficher le nouveau dossier
+          loadMediaFiles();
+          toast({
+            title: "Dossier créé",
+            description: `Le dossier "${newFolderName}" a été créé`
+          });
+        }
+      } catch (error) {
+        console.error('Folder creation error:', error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de créer le dossier",
+          variant: "destructive"
+        });
+      }
     }
-  }, [newFolderName, toast]);
+  }, [newFolderName, currentFolder, loadMediaFiles, toast]);
 
   // Formater la taille de fichier
   const formatFileSize = (bytes) => {
