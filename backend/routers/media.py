@@ -320,7 +320,7 @@ async def delete_media_file(
             print(f"Erreur suppression fichier physique: {e}")
         
         # Supprimer de la base de données
-        await delete_document("media_files", {"id": file_id})
+        await delete_document("media_files", file_id)
         
         return ApiResponse(
             success=True,
