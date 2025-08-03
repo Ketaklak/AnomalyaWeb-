@@ -3,8 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 
-const ProtectedRoute = ({ children, requireAdmin = false }) => {
-  const { user, loading, isAuthenticated, isAdmin } = useAuth();
+const ProtectedRoute = ({ children, requiredRole, requireAdmin = false }) => {
+  const { user, loading, isAuthenticated, isAdmin, isClient } = useAuth();
 
   if (loading) {
     return (
@@ -21,8 +21,29 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Handle legacy requireAdmin prop
   if (requireAdmin && !isAdmin) {
     return <Navigate to="/unauthorized" replace />;
+  }
+
+  // Handle new role-based access
+  if (requiredRole) {
+    if (requiredRole === 'admin' && !isAdmin) {
+      return <Navigate to="/unauthorized" replace />;
+    }
+    
+    if (requiredRole === 'client' && !isClient) {
+      return <Navigate to="/unauthorized" replace />;
+    }
+    
+    // Check for specific client roles
+    if (requiredRole === 'client_premium' && user?.role !== 'client_premium') {
+      return <Navigate to="/unauthorized" replace />;
+    }
+    
+    if (requiredRole === 'client_standard' && user?.role !== 'client_standard') {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   return children;
