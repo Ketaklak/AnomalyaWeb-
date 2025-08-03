@@ -63,7 +63,8 @@ async def root():
             "faq": "/api/faq",
             "newsletter": "/api/newsletter",
             "auth": "/api/auth",
-            "admin": "/api/admin"
+            "admin": "/api/admin",
+            "client": "/api/client"
         }
     }
 
