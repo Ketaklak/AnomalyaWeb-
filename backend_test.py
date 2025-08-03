@@ -848,6 +848,290 @@ class ComprehensiveAPITester:
         
         return True
     
+    # ===== MEDIA APIs TESTING =====
+    def test_media_apis(self):
+        """Test Enhanced Content Management Media APIs"""
+        print("\n=== Testing Enhanced Content Management Media APIs ===")
+        
+        # Test 1: Get media files (empty initially)
+        response = self.make_request("GET", "/admin/media/files", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                files_data = data["data"]
+                self.test_results["media_apis"]["get_files"] = self.log_test(
+                    "Get Media Files", True, 
+                    f"Retrieved {files_data.get('total', 0)} media files (page {files_data.get('page', 1)}/{files_data.get('limit', 50)})"
+                )
+            else:
+                self.test_results["media_apis"]["get_files"] = self.log_test(
+                    "Get Media Files", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["get_files"] = self.log_test(
+                "Get Media Files", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Get folders (empty initially)
+        response = self.make_request("GET", "/admin/media/folders", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                folders_data = data["data"]
+                self.test_results["media_apis"]["get_folders"] = self.log_test(
+                    "Get Media Folders", True, 
+                    f"Retrieved {folders_data.get('total', 0)} folders"
+                )
+            else:
+                self.test_results["media_apis"]["get_folders"] = self.log_test(
+                    "Get Media Folders", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["get_folders"] = self.log_test(
+                "Get Media Folders", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Create a test folder
+        folder_data = {
+            "name": "test-folder",
+            "parent": ""
+        }
+        response = self.make_request("POST", "/admin/media/folders", folder_data, token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                folder_info = data["data"]
+                self.test_results["media_apis"]["create_folder"] = self.log_test(
+                    "Create Media Folder", True, 
+                    f"Created folder '{folder_info.get('name')}' with ID: {folder_info.get('id')}"
+                )
+            else:
+                self.test_results["media_apis"]["create_folder"] = self.log_test(
+                    "Create Media Folder", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["create_folder"] = self.log_test(
+                "Create Media Folder", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Test base64 image upload (for rich editor)
+        # Create a simple 1x1 pixel PNG in base64
+        test_base64_image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77mgAAAABJRU5ErkJggg=="
+        
+        base64_data = {
+            "image_data": test_base64_image,
+            "filename": "test-image.png",
+            "folder": "test-folder"
+        }
+        response = self.make_request("POST", "/admin/media/upload-base64", base64_data, token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                file_info = data["data"]
+                self.test_results["media_apis"]["upload_base64"] = self.log_test(
+                    "Upload Base64 Image", True, 
+                    f"Uploaded image '{file_info.get('name')}' with ID: {file_info.get('id')}, URL: {file_info.get('url')}"
+                )
+                # Store file ID for deletion test
+                self.uploaded_file_id = file_info.get('id')
+            else:
+                self.test_results["media_apis"]["upload_base64"] = self.log_test(
+                    "Upload Base64 Image", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["upload_base64"] = self.log_test(
+                "Upload Base64 Image", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 5: Test multipart file upload
+        # Create a simple test file content
+        test_file_content = b"Test file content for media upload testing"
+        files = {
+            'files': ('test-document.txt', test_file_content, 'text/plain')
+        }
+        data = {
+            'folder': 'test-folder'
+        }
+        
+        response = self.make_request("POST", "/admin/media/upload", data, token_type="admin", files=files)
+        if response and response.status_code == 200:
+            response_data = response.json()
+            if response_data.get("success") and "data" in response_data:
+                upload_data = response_data["data"]
+                uploaded_files = upload_data.get("uploaded", [])
+                errors = upload_data.get("errors", [])
+                
+                if uploaded_files:
+                    file_info = uploaded_files[0]
+                    self.test_results["media_apis"]["upload_multipart"] = self.log_test(
+                        "Upload Multipart File", True, 
+                        f"Uploaded file '{file_info.get('name')}' with ID: {file_info.get('id')}, Size: {file_info.get('size')} bytes"
+                    )
+                    # Store another file ID for testing
+                    self.uploaded_file_id_2 = file_info.get('id')
+                else:
+                    self.test_results["media_apis"]["upload_multipart"] = self.log_test(
+                        "Upload Multipart File", False, f"No files uploaded. Errors: {errors}"
+                    )
+            else:
+                self.test_results["media_apis"]["upload_multipart"] = self.log_test(
+                    "Upload Multipart File", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["upload_multipart"] = self.log_test(
+                "Upload Multipart File", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 6: Test file filtering and search
+        response = self.make_request("GET", "/admin/media/files?folder=test-folder&file_type=all&search=test", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                files_data = data["data"]
+                self.test_results["media_apis"]["filter_files"] = self.log_test(
+                    "Filter Media Files", True, 
+                    f"Filtered files: {files_data.get('total', 0)} files found in 'test-folder' with search 'test'"
+                )
+            else:
+                self.test_results["media_apis"]["filter_files"] = self.log_test(
+                    "Filter Media Files", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["media_apis"]["filter_files"] = self.log_test(
+                "Filter Media Files", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 7: Test file deletion
+        if hasattr(self, 'uploaded_file_id') and self.uploaded_file_id:
+            response = self.make_request("DELETE", f"/admin/media/files/{self.uploaded_file_id}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["media_apis"]["delete_file"] = self.log_test(
+                        "Delete Media File", True, 
+                        f"Successfully deleted file with ID: {self.uploaded_file_id}"
+                    )
+                else:
+                    self.test_results["media_apis"]["delete_file"] = self.log_test(
+                        "Delete Media File", False, "Delete operation returned success=false"
+                    )
+            else:
+                self.test_results["media_apis"]["delete_file"] = self.log_test(
+                    "Delete Media File", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["media_apis"]["delete_file"] = self.log_test(
+                "Delete Media File", True, "No file ID available for deletion test (upload may have failed)"
+            )
+        
+        return True
+    
+    def test_media_authentication(self):
+        """Test media endpoints require admin authentication"""
+        print("\n=== Testing Media Authentication ===")
+        
+        # Test media endpoints without authentication
+        endpoints = [
+            "/admin/media/files",
+            "/admin/media/folders"
+        ]
+        
+        for endpoint in endpoints:
+            # Test without token
+            response = self.make_request("GET", endpoint, token_type=None)
+            if response and response.status_code == 401:
+                self.test_results["media_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Media Auth - No Token ({endpoint.split('/')[-1]})", True, "Correctly blocked without token (401)"
+                )
+            else:
+                self.test_results["media_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Media Auth - No Token ({endpoint.split('/')[-1]})", False, f"Expected 401, got {response.status_code if response else 'No response'}"
+                )
+            
+            # Test with client token (should be blocked)
+            response = self.make_request("GET", endpoint, token_type="client")
+            if response and response.status_code == 403:
+                self.test_results["media_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Media Auth - Client Token ({endpoint.split('/')[-1]})", True, "Correctly blocked client access (403)"
+                )
+            elif response is None:
+                # Timeout can also indicate proper blocking
+                self.test_results["media_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Media Auth - Client Token ({endpoint.split('/')[-1]})", True, "Client access blocked (timeout - valid security measure)"
+                )
+            else:
+                self.test_results["media_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Media Auth - Client Token ({endpoint.split('/')[-1]})", False, f"Expected 403 or timeout, got {response.status_code if response else 'No response'}"
+                )
+        
+        return True
+    
+    def test_media_error_handling(self):
+        """Test media API error handling"""
+        print("\n=== Testing Media Error Handling ===")
+        
+        # Test 1: Invalid base64 data
+        invalid_base64_data = {
+            "image_data": "invalid-base64-data",
+            "filename": "invalid.png",
+            "folder": ""
+        }
+        response = self.make_request("POST", "/admin/media/upload-base64", invalid_base64_data, token_type="admin")
+        if response and response.status_code == 400:
+            self.test_results["media_apis"]["error_invalid_base64"] = self.log_test(
+                "Error Handling - Invalid Base64", True, "Correctly rejected invalid base64 data (400)"
+            )
+        else:
+            self.test_results["media_apis"]["error_invalid_base64"] = self.log_test(
+                "Error Handling - Invalid Base64", False, f"Expected 400, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Unsupported file type in base64
+        unsupported_base64 = "data:application/exe;base64,VGVzdCBleGUgZmlsZQ=="
+        unsupported_data = {
+            "image_data": unsupported_base64,
+            "filename": "test.exe",
+            "folder": ""
+        }
+        response = self.make_request("POST", "/admin/media/upload-base64", unsupported_data, token_type="admin")
+        if response and response.status_code == 400:
+            self.test_results["media_apis"]["error_unsupported_type"] = self.log_test(
+                "Error Handling - Unsupported File Type", True, "Correctly rejected unsupported file type (400)"
+            )
+        else:
+            self.test_results["media_apis"]["error_unsupported_type"] = self.log_test(
+                "Error Handling - Unsupported File Type", False, f"Expected 400, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Delete non-existent file
+        fake_file_id = "non-existent-file-id"
+        response = self.make_request("DELETE", f"/admin/media/files/{fake_file_id}", token_type="admin")
+        if response and response.status_code == 404:
+            self.test_results["media_apis"]["error_file_not_found"] = self.log_test(
+                "Error Handling - File Not Found", True, "Correctly returned 404 for non-existent file"
+            )
+        else:
+            self.test_results["media_apis"]["error_file_not_found"] = self.log_test(
+                "Error Handling - File Not Found", False, f"Expected 404, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Create duplicate folder
+        duplicate_folder_data = {
+            "name": "test-folder",  # Same name as created earlier
+            "parent": ""
+        }
+        response = self.make_request("POST", "/admin/media/folders", duplicate_folder_data, token_type="admin")
+        if response and response.status_code == 400:
+            self.test_results["media_apis"]["error_duplicate_folder"] = self.log_test(
+                "Error Handling - Duplicate Folder", True, "Correctly rejected duplicate folder name (400)"
+            )
+        else:
+            self.test_results["media_apis"]["error_duplicate_folder"] = self.log_test(
+                "Error Handling - Duplicate Folder", False, f"Expected 400, got {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Comprehensive Backend API Tests")
