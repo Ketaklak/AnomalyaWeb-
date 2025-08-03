@@ -388,6 +388,7 @@ async def get_folders(
         
         return ApiResponse(
             success=True,
+            message="Dossiers récupérés avec succès",
             data={
                 "folders": folders,
                 "total": total
