@@ -25,6 +25,8 @@ import MyQuotes from "./pages/client/MyQuotes";
 import CreateTicket from "./pages/client/CreateTicket";
 import MyTickets from "./pages/client/MyTickets";
 import TicketDetail from "./pages/client/TicketDetail";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import Unauthorized from "./pages/Unauthorized";
 import { Toaster } from "./components/ui/toaster";
 
