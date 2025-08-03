@@ -154,8 +154,9 @@ async def get_current_admin(current_user: UserInDB = Depends(get_current_active_
     return current_user
 
 async def get_current_client(current_user: UserInDB = Depends(get_current_active_user)):
-    """Get current client user (any client role)"""
-    if not current_user.role.startswith("client") and current_user.role != "prospect":
+    """Get current client user (any client role) - admins have access for supervision"""
+    if (not current_user.role.startswith("client") and 
+        current_user.role not in ["prospect", "admin", "moderator"]):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Client access required"
