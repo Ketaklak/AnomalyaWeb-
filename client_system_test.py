@@ -24,9 +24,9 @@ class ClientSystemTester:
             "password": "admin123"
         }
         self.test_client_user = {
-            "username": "testclient",
-            "email": "testclient@anomalya.fr",
-            "full_name": "Client Test",
+            "username": "testclient3",
+            "email": "testclient3@anomalya.fr",
+            "full_name": "Client Test 3",
             "password": "test123",
             "role": "client_standard"
         }
