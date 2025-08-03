@@ -631,21 +631,33 @@ class ClientSystemTester:
         print("\n=== Testing Role-Based Access Control ===")
         
         # Test client accessing admin endpoint (should fail)
-        response = self.make_request("GET", "/admin/clients", use_client_token=True)
-        
-        if response and response.status_code == 403:
-            self.log_test("Client Access to Admin Endpoint", True, "Correctly blocked client access to admin endpoint")
-        else:
-            self.log_test("Client Access to Admin Endpoint", False, f"Should have returned 403, got {response.status_code if response else 'No response'}")
+        try:
+            response = self.make_request("GET", "/admin/clients", use_client_token=True)
+            
+            if response and response.status_code == 403:
+                self.log_test("Client Access to Admin Endpoint", True, "Correctly blocked client access to admin endpoint")
+            elif response:
+                self.log_test("Client Access to Admin Endpoint", False, f"Should have returned 403, got {response.status_code}")
+                return False
+            else:
+                self.log_test("Client Access to Admin Endpoint", False, "No response received")
+                return False
+        except Exception as e:
+            self.log_test("Client Access to Admin Endpoint", False, f"Exception occurred: {str(e)}")
             return False
         
-        # Test admin accessing client endpoint (should work)
-        response = self.make_request("GET", "/client/dashboard", use_client_token=False)
-        
-        if response and response.status_code == 403:
-            self.log_test("Admin Access to Client Endpoint", True, "Admin correctly blocked from client-only endpoint (admin is not a client)")
-        else:
-            self.log_test("Admin Access to Client Endpoint", False, f"Unexpected response: {response.status_code if response else 'No response'}")
+        # Test admin accessing client endpoint (should fail because admin is not a client)
+        try:
+            response = self.make_request("GET", "/client/dashboard", use_client_token=False)
+            
+            if response and response.status_code == 403:
+                self.log_test("Admin Access to Client Endpoint", True, "Admin correctly blocked from client-only endpoint (admin is not a client)")
+            elif response:
+                self.log_test("Admin Access to Client Endpoint", False, f"Unexpected response: {response.status_code}")
+            else:
+                self.log_test("Admin Access to Client Endpoint", False, "No response received")
+        except Exception as e:
+            self.log_test("Admin Access to Client Endpoint", False, f"Exception occurred: {str(e)}")
         
         return True
     
