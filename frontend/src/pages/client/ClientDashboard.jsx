@@ -123,7 +123,26 @@ const ClientDashboard = () => {
             <h1 className="text-3xl font-bold text-white mb-2">
               Bonjour {user?.full_name} ! 👋
             </h1>
-            <p className="text-gray-400">Bienvenue dans votre espace client Anomalya Corp</p>
+            <p className="text-gray-400">
+              {user?.role === 'admin' ? 
+                'Interface client - Mode administrateur (pour test et supervision)' : 
+                'Bienvenue dans votre espace client Anomalya Corp'
+              }
+            </p>
+            
+            {/* Admin Notice */}
+            {user?.role === 'admin' && (
+              <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <span className="text-blue-300 text-sm font-medium">Mode Administrateur</span>
+                </div>
+                <p className="text-blue-200 text-sm mt-2">
+                  Vous accédez à l'interface client en tant qu'administrateur. 
+                  Cette vue vous permet de tester et comprendre l'expérience client.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Loyalty Status Card */}
