@@ -23,6 +23,7 @@ const AdminLayout = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const handleLogout = () => {
     logout();
