@@ -182,7 +182,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute left-0 right-0 top-16 bg-slate-900/95 backdrop-blur-md border-t border-slate-700">
             <nav className="px-4 py-4 space-y-2">
-              {navigation.map((item) => (
+              {fullNavigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
