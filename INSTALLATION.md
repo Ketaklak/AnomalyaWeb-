@@ -4,7 +4,7 @@ Guide complet d'installation pour l'application Anomalya Corp sur différentes p
 
 ## 📋 Prérequis
 
-### Linux (Ubuntu/Debian/CentOS/Fedora)
+### Linux (Ubuntu/Debian/Kali/CentOS/Fedora)
 - Python 3.8+ 
 - Node.js 18+
 - MongoDB 5.0+
@@ -16,6 +16,12 @@ Guide complet d'installation pour l'application Anomalya Corp sur différentes p
 - Git
 - Python 3.8+ (optionnel si utilisation de Chocolatey)
 - Node.js 18+ (optionnel si utilisation de Chocolatey)
+
+### Spécificités Kali Linux
+- ✅ **Support complet** pour Kali Linux Rolling
+- 🔐 **Détection automatique** du mode root (courant sur Kali)
+- 📦 **Gestion spécialisée** des packages et repositories Kali
+- 🛡️ **MongoDB optimisé** pour l'environnement Kali
 
 ## 🐧 Installation sur Linux
 
