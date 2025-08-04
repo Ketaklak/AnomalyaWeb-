@@ -155,6 +155,7 @@ async def get_unread_notifications_count(
         
         return ApiResponse(
             success=True,
+            message="Nombre de notifications non lues récupéré",
             data={"unreadCount": total}
         )
         
