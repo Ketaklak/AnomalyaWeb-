@@ -112,6 +112,13 @@ async def get_notifications(
                 notification.pop('_id')  # Supprimer l'ObjectId MongoDB
             if 'id' not in notification:
                 notification['id'] = str(uuid.uuid4())  # Générer un UUID si manquant
+            
+            # Convert any datetime objects to ISO strings
+            for key, value in notification.items():
+                if hasattr(value, 'isoformat'):  # datetime object
+                    notification[key] = value.isoformat()
+                elif str(type(value)) == "<class 'bson.objectid.ObjectId'>":
+                    notification[key] = str(value)
                 
             notification_type = notification.get("type", "SYSTEM_UPDATE")
             if notification_type in NOTIFICATION_TYPES:
