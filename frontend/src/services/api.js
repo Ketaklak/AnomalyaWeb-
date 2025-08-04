@@ -306,6 +306,34 @@ export const adminAPI = {
 
   bulkDeleteClients: (clientIds) => {
     return api.delete(`/admin/clients/bulk`, { data: { client_ids: clientIds } });
+  },
+
+  // User Management APIs
+  getUsers: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.role) queryParams.append('role', params.role);
+    if (params.status) queryParams.append('status', params.status);
+    if (params.search) queryParams.append('search', params.search);
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.offset) queryParams.append('offset', params.offset);
+    
+    return api.get(`/admin/users?${queryParams.toString()}`);
+  },
+
+  createUser: (userData) => {
+    return api.post(`/admin/users`, userData);
+  },
+
+  updateUser: (userId, userData) => {
+    return api.put(`/admin/users/${userId}`, userData);
+  },
+
+  deleteUser: (userId) => {
+    return api.delete(`/admin/users/${userId}`);
+  },
+
+  updateUserStatus: (userId, isActive) => {
+    return api.put(`/admin/users/${userId}/status`, { is_active: isActive });
   }
 };
 
