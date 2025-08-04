@@ -40,6 +40,7 @@ class ComprehensiveAPITester:
             "client_apis": {},
             "analytics_apis": {},
             "media_apis": {},
+            "notifications_apis": {},
             "errors": []
         }
     
