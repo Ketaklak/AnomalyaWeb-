@@ -1156,6 +1156,9 @@ class ComprehensiveAPITester:
             ("Media APIs", self.test_media_apis),
             ("Media Authentication", self.test_media_authentication),
             ("Media Error Handling", self.test_media_error_handling),
+            ("Notifications APIs", self.test_notifications_apis),
+            ("Notifications Authentication", self.test_notifications_authentication),
+            ("Notifications System Integration", self.test_notifications_system_integration),
             ("Role-Based Access Control", self.test_role_based_access_control)
         ]
         
