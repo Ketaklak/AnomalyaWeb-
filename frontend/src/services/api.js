@@ -219,66 +219,32 @@ export const adminAPI = {
 
 // Client API
 export const clientAPI = {
-  // Profile Management
-  getProfile: () => {
-    return api.get('/client/profile');
-  },
-
-  createProfile: (profileData) => {
-    return api.post('/client/profile', profileData);
-  },
-
-  updateProfile: (profileData) => {
-    return api.put('/client/profile', profileData);
-  },
-
-  // Dashboard
-  getDashboard: () => {
-    return api.get('/client/dashboard');
-  },
-
-  // Quote Requests
-  createQuote: (quoteData) => {
-    return api.post('/client/quotes', quoteData);
-  },
-
+  getProfile: () => api.get('/client/profile'),
+  createProfile: (profileData) => api.post('/client/profile', profileData),
+  updateProfile: (profileData) => api.put('/client/profile', profileData),
+  getDashboard: () => api.get('/client/dashboard'),
+  createQuote: (quoteData) => api.post('/client/quotes', quoteData),
   getQuotes: (params = {}) => {
     const queryParams = new URLSearchParams();
     if (params.status) queryParams.append('status', params.status);
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/client/quotes?${queryParams.toString()}`);
   },
-
-  getQuote: (quoteId) => {
-    return api.get(`/client/quotes/${quoteId}`);
-  },
-
-  // Support Tickets
-  createTicket: (ticketData) => {
-    return api.post('/client/tickets', ticketData);
-  },
-
+  getQuote: (quoteId) => api.get(`/client/quotes/${quoteId}`),
+  createTicket: (ticketData) => api.post('/client/tickets', ticketData),
   getTickets: (params = {}) => {
     const queryParams = new URLSearchParams();
     if (params.status) queryParams.append('status', params.status);
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/client/tickets?${queryParams.toString()}`);
   },
-
-  addTicketMessage: (ticketId, message) => {
-    return api.post(`/client/tickets/${ticketId}/messages`, { ticket_id: ticketId, message });
-  },
-
-  // Points History
+  addTicketMessage: (ticketId, message) => api.post(`/client/tickets/${ticketId}/messages`, { ticket_id: ticketId, message }),
   getPointsHistory: (params = {}) => {
     const queryParams = new URLSearchParams();
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/client/points/history?${queryParams.toString()}`);
   }
 };
