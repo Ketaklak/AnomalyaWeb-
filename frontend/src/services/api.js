@@ -124,9 +124,7 @@ export const authAPI = {
 
 // Admin API
 export const adminAPI = {
-  getDashboardStats: () => {
-    return api.get(`/admin/dashboard/stats`);
-  },
+  getDashboardStats: () => api.get(`/admin/dashboard/stats`),
 
   // Articles
   getArticles: (params = {}) => {
@@ -135,48 +133,28 @@ export const adminAPI = {
     if (params.search) queryParams.append('search', params.search);
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/admin/articles?${queryParams.toString()}`);
   },
 
-  createArticle: (articleData) => {
-    return api.post(`/admin/articles`, articleData);
-  },
-
-  updateArticle: (id, articleData) => {
-    return api.put(`/admin/articles/${id}`, articleData);
-  },
-
-  deleteArticle: (id) => {
-    return api.delete(`/admin/articles/${id}`);
-  },
+  createArticle: (articleData) => api.post(`/admin/articles`, articleData),
+  updateArticle: (id, articleData) => api.put(`/admin/articles/${id}`, articleData),
+  deleteArticle: (id) => api.delete(`/admin/articles/${id}`),
 
   // Contacts
   getContacts: (params = {}) => {
     const queryParams = new URLSearchParams();
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/admin/contacts?${queryParams.toString()}`);
   },
 
   // Services
-  getServices: () => {
-    return api.get(`/admin/services`);
-  },
-
-  createService: (serviceData) => {
-    return api.post(`/admin/services`, serviceData);
-  },
+  getServices: () => api.get(`/admin/services`),
+  createService: (serviceData) => api.post(`/admin/services`, serviceData),
 
   // Testimonials
-  getTestimonials: () => {
-    return api.get(`/admin/testimonials`);
-  },
-
-  createTestimonial: (testimonialData) => {
-    return api.post(`/admin/testimonials`, testimonialData);
-  },
+  getTestimonials: () => api.get(`/admin/testimonials`),
+  createTestimonial: (testimonialData) => api.post(`/admin/testimonials`, testimonialData),
 
   // Extended Client Management
   getClients: (params = {}) => {
