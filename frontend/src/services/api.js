@@ -91,13 +91,8 @@ export const testimonialsAPI = {
 
 // Competences API
 export const competencesAPI = {
-  getAll: () => {
-    return api.get(`/competences/`);
-  },
-
-  getByCategory: () => {
-    return api.get(`/competences/by-category`);
-  }
+  getAll: () => api.get(`/competences/`),
+  getByCategory: () => api.get(`/competences/by-category`)
 };
 
 // FAQ API
