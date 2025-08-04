@@ -113,6 +113,18 @@
   - Amélioration générale du site
 
 ## backend:
+  - task: "Sistema de Notifications Backend APIs"
+    implemented: true
+    working: "unknown"
+    file: "/app/backend/routers/notifications.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "unknown"
+        agent: "main"
+        comment: "Complete notification system APIs implemented: CRUD operations, notification types (NEW_USER, NEW_CONTACT, NEW_QUOTE, etc.), unread count tracking, mark as read/all read, delete operations, system notification utilities. Integration with existing modules (contact.py, auth.py) for automatic notifications. All endpoints secured with admin authentication."
+
   - task: "Enhanced Content Management Backend APIs"
     implemented: true
     working: "unknown"
