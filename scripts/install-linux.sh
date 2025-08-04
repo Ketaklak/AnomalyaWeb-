@@ -1,7 +1,6 @@
 #!/bin/bash
-# Script d'installation automatique pour Linux (Ubuntu/Debian/Kali/CentOS/Fedora)
+# Script d'installation automatique pour Linux (Ubuntu/Debian/CentOS/Fedora)
 # Version: 2.1.0 (Mai 2025) - Support complet de la gestion utilisateurs unifiée avec pagination
-# Nouveau: Support ajouté pour Kali Linux avec gestion root automatique
 # Usage: bash install-linux.sh
 
 # Obtenir le répertoire du script
