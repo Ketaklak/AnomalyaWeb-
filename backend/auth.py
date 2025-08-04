@@ -235,6 +235,14 @@ async def create_user(user: UserCreate):
     
     await create_document("users", user_data)
     
+    # Create system notification for new user
+    try:
+        from routers.notifications import notify_new_user
+        await notify_new_user(user_data['full_name'], user_data['email'])
+    except Exception as e:
+        print(f"System notification failed: {str(e)}")
+        # Don't fail the request if notification fails
+    
     # Return user without password
     user_data.pop('hashed_password')
     return User(**user_data)
