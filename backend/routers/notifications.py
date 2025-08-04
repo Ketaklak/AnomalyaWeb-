@@ -274,7 +274,7 @@ async def create_notification(
         await create_document("notifications", notification_data)
         
         # Ajouter les métadonnées de type
-        notification_data.update(NOTIFICATION_TYPES[type])
+        notification_data.update(NOTIFICATION_TYPES[notification.type])
         
         return ApiResponse(
             success=True,
