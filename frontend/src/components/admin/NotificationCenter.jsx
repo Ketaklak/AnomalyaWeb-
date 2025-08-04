@@ -163,34 +163,16 @@ const NotificationCenter = ({
   // Marquer une notification comme lue
   const markAsRead = useCallback(async (notificationId) => {
     try {
-      const response = await fetch(`/api/admin/notifications/${notificationId}/read`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      await notificationsAPI.markAsRead(notificationId);
       
-      if (response.ok) {
-        setNotifications(prev => 
-          prev.map(n => 
-            n.id === notificationId 
-              ? { ...n, read: true, readAt: new Date().toISOString() }
-              : n
-          )
-        );
-        fetchUnreadCount();
-      } else {
-        // Fallback pour le développement
-        setNotifications(prev => 
-          prev.map(n => 
-            n.id === notificationId 
-              ? { ...n, read: true, readAt: new Date().toISOString() }
-              : n
-          )
-        );
-        fetchUnreadCount();
-      }
+      setNotifications(prev => 
+        prev.map(n => 
+          n.id === notificationId 
+            ? { ...n, read: true, readAt: new Date().toISOString() }
+            : n
+        )
+      );
+      fetchUnreadCount();
     } catch (error) {
       console.error('Erreur marquage notification:', error);
       toast({
@@ -204,25 +186,17 @@ const NotificationCenter = ({
   // Marquer toutes les notifications comme lues
   const markAllAsRead = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/notifications/mark-all-read', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      await notificationsAPI.markAllAsRead();
       
-      if (response.ok) {
-        setNotifications(prev => 
-          prev.map(n => ({ ...n, read: true, readAt: new Date().toISOString() }))
-        );
-        setUnreadCount(0);
-        onNotificationCountChange?.(0);
-        toast({
-          title: "Succès",
-          description: "Toutes les notifications ont été marquées comme lues"
-        });
-      }
+      setNotifications(prev => 
+        prev.map(n => ({ ...n, read: true, readAt: new Date().toISOString() }))
+      );
+      setUnreadCount(0);
+      onNotificationCountChange?.(0);
+      toast({
+        title: "Succès",
+        description: "Toutes les notifications ont été marquées comme lues"
+      });
     } catch (error) {
       console.error('Erreur marquage toutes notifications:', error);
       toast({
@@ -236,22 +210,14 @@ const NotificationCenter = ({
   // Supprimer une notification
   const deleteNotification = useCallback(async (notificationId) => {
     try {
-      const response = await fetch(`/api/admin/notifications/${notificationId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      await notificationsAPI.delete(notificationId);
       
-      if (response.ok) {
-        setNotifications(prev => prev.filter(n => n.id !== notificationId));
-        fetchUnreadCount();
-        toast({
-          title: "Succès",
-          description: "Notification supprimée"
-        });
-      }
+      setNotifications(prev => prev.filter(n => n.id !== notificationId));
+      fetchUnreadCount();
+      toast({
+        title: "Succès",
+        description: "Notification supprimée"
+      });
     } catch (error) {
       console.error('Erreur suppression notification:', error);
       toast({
