@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 
 # Configuration
-BACKEND_URL = "https://3ee42b67-7d54-4b68-ade5-8a4373029958.preview.emergentagent.com/api"
+BACKEND_URL = "https://122cdea4-46f5-4709-9c7a-cbec682c2c68.preview.emergentagent.com/api"
 
 class AnalyticsRealisticTester:
     def __init__(self):
