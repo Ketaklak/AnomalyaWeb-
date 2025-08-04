@@ -45,10 +45,16 @@ const AdminClients = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [selectedClient, setSelectedClient] = useState(null);
   const [pointsData, setPointsData] = useState({ points: '', description: '' });
   const [addingPoints, setAddingPoints] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'detail'
+  const [editingClient, setEditingClient] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [selectedClients, setSelectedClients] = useState([]);
+  const [showBulkActions, setShowBulkActions] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
