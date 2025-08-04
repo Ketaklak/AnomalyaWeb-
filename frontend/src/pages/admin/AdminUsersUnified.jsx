@@ -452,20 +452,22 @@ const AdminUsersUnified = () => {
     <AdminLayout>
       <div className="p-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 space-y-4 lg:space-y-0">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Gestion des utilisateurs</h1>
-            <p className="text-gray-400">Gérez tous les utilisateurs : admins, clients et modérateurs</p>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Button 
-              onClick={() => setCreateUserModal(true)}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Nouvel utilisateur
-            </Button>
+        <div className="flex flex-col space-y-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-4 sm:space-y-0">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Gestion des utilisateurs</h1>
+              <p className="text-gray-400 text-sm md:text-base">Gérez tous les utilisateurs : admins, clients et modérateurs</p>
+            </div>
+            
+            <div className="flex items-center">
+              <Button 
+                onClick={() => setCreateUserModal(true)}
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white w-full sm:w-auto"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Nouvel utilisateur
+              </Button>
+            </div>
           </div>
         </div>
 
