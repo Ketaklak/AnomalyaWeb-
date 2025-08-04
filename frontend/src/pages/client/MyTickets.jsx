@@ -307,9 +307,10 @@ const MyTickets = () => {
                         <div className="text-sm text-gray-400 mb-1">
                           Dernier message {ticket.messages[ticket.messages.length - 1].is_admin ? '(Support)' : '(Vous)'}:
                         </div>
-                        <div className="text-sm text-white line-clamp-2">
-                          {ticket.messages[ticket.messages.length - 1].message}
-                        </div>
+                        <div 
+                          className="text-sm text-white line-clamp-2"
+                          dangerouslySetInnerHTML={{ __html: ticket.messages[ticket.messages.length - 1].message }}
+                        />
                         <div className="text-xs text-gray-500 mt-1">
                           {new Date(ticket.messages[ticket.messages.length - 1].timestamp).toLocaleDateString('fr-FR', {
                             day: 'numeric',
