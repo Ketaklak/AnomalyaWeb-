@@ -44,12 +44,59 @@ install_dependencies() {
     
     if [[ $OS == *"Ubuntu"* ]] || [[ $OS == *"Debian"* ]]; then
         sudo apt update
-        sudo apt install -y python3.10 python3-pip python3-venv nodejs npm mongodb-server git curl wget gnupg2
+        
+        # Détection version Python disponible (Debian 12 = Python 3.11, Ubuntu/Debian 11 = Python 3.10)
+        if apt-cache policy python3.11 | grep -q "Candidate:"; then
+            PYTHON_VERSION="python3.11"
+            info "Utilisation de Python 3.11 (Debian 12 detected)"
+        elif apt-cache policy python3.10 | grep -q "Candidate:"; then
+            PYTHON_VERSION="python3.10"
+            info "Utilisation de Python 3.10"
+        else
+            PYTHON_VERSION="python3"
+            info "Utilisation de Python 3 par défaut"
+        fi
+        
+        # Installation des dépendances de base
+        sudo apt install -y $PYTHON_VERSION python3-pip python3-venv nodejs npm git curl wget gnupg2
+        
+        # Installation MongoDB - Debian 12 nécessite l'installation depuis les repos MongoDB officiels
+        info "Installation de MongoDB..."
+        if [[ $OS == *"Debian"* ]] && [[ $VERSION == "12"* ]]; then
+            warning "Debian 12 détecté - Installation MongoDB depuis les repositories officiels MongoDB"
+            
+            # Ajout de la clé GPG MongoDB
+            curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+            
+            # Ajout du repository MongoDB pour Debian 12
+            echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+            
+            # Mise à jour et installation
+            sudo apt update
+            sudo apt install -y mongodb-org || {
+                warning "Installation MongoDB officielle échouée, tentative avec mongodb du repo Debian"
+                sudo apt install -y mongodb || warning "MongoDB non installé - fonctionnalités limitées"
+            }
+        else
+            # Pour Ubuntu et Debian < 12
+            sudo apt install -y mongodb-server 2>/dev/null || {
+                warning "mongodb-server non disponible, installation alternative..."
+                sudo apt install -y mongodb 2>/dev/null || warning "MongoDB non installé - fonctionnalités limitées"
+            }
+        fi
         
         # Installer Yarn
-        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-        sudo apt update && sudo apt install -y yarn
+        if ! command -v yarn &> /dev/null; then
+            info "Installation de Yarn..."
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - 2>/dev/null || {
+                # Nouvelle méthode pour les systèmes récents
+                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/yarnkey.gpg
+                echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            }
+            sudo apt update && sudo apt install -y yarn 2>/dev/null || {
+                warning "Installation Yarn échouée, utilisation de npm comme alternative"
+            }
+        fi
         
     elif [[ $OS == *"Kali"* ]]; then
         info "Configuration spéciale pour Kali Linux détectée"
