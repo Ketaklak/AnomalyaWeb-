@@ -145,6 +145,26 @@ yarn start
 - **Backend API**: http://localhost:8001
 - **Admin**: Connectez-vous avec `admin` / `admin123`
 
+## 🪟 Dépannage Windows
+
+En cas de problème sur Windows (MongoDB, connexions, etc.) :
+
+### Diagnostic Rapide
+```powershell
+# Diagnostic complet automatique
+PowerShell -ExecutionPolicy Bypass -File scripts\diagnose-windows.ps1
+
+# Correction PATH MongoDB si nécessaire
+PowerShell -ExecutionPolicy Bypass -File scripts\fix-mongodb-path.ps1
+```
+
+### Problèmes Courants
+- **"Client mongo non disponible"** : MongoDB installé mais pas dans PATH
+- **"Aucune actualité"** : Service MongoDB non démarré
+- **Erreur de connexion** : Fichier `.env` manquant ou mal configuré
+
+**📋 Guide complet** : Consultez `WINDOWS_TROUBLESHOOT.md` pour toutes les solutions détaillées.
+
 ## 📁 Structure des fichiers après installation
 
 ```
