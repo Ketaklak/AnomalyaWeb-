@@ -347,8 +347,18 @@ setup_project() {
     info "Configuration du frontend..."
     cd frontend
     
-    # Installer les dépendances Node.js
-    yarn install
+    # Installer les dépendances Node.js avec fallback
+    info "Installation des dépendances frontend..."
+    if command -v yarn &> /dev/null; then
+        success "Utilisation de Yarn pour l'installation des dépendances"
+        yarn install || {
+            warning "Yarn install échoué, tentative avec npm..."
+            npm install
+        }
+    else
+        warning "Yarn non disponible, utilisation de npm"
+        npm install
+    fi
     
     # Copier le fichier de configuration
     if [[ ! -f .env ]]; then
