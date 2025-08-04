@@ -434,31 +434,31 @@ export const notificationsAPI = {
         queryParams.append(key, params[key]);
       }
     });
-    return api.get(`/admin/notifications?${queryParams.toString()}`);
+    return api.get(`/admin/notifications/?${queryParams.toString()}`);
   },
 
   getUnreadCount: () => {
-    return api.get('/admin/notifications/unread-count');
+    return api.get('/admin/notifications/unread-count/');
   },
 
   markAsRead: (notificationId) => {
-    return api.put(`/admin/notifications/${notificationId}/read`);
+    return api.put(`/admin/notifications/${notificationId}/read/`);
   },
 
   markAllAsRead: () => {
-    return api.put('/admin/notifications/mark-all-read');
+    return api.put('/admin/notifications/mark-all-read/');
   },
 
   delete: (notificationId) => {
-    return api.delete(`/admin/notifications/${notificationId}`);
+    return api.delete(`/admin/notifications/${notificationId}/`);
   },
 
   deleteOld: (days = 30) => {
-    return api.delete(`/admin/notifications?days=${days}`);
+    return api.delete(`/admin/notifications/?days=${days}`);
   },
 
   create: (type, title, message, link = null) => {
-    return api.post('/admin/notifications', {
+    return api.post('/admin/notifications/', {
       type,
       title,
       message,
