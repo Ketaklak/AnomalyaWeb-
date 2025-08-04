@@ -86,9 +86,7 @@ export const contactAPI = {
 
 // Testimonials API
 export const testimonialsAPI = {
-  getAll: () => {
-    return api.get(`/testimonials/`);
-  }
+  getAll: () => api.get(`/testimonials/`)
 };
 
 // Competences API
