@@ -272,7 +272,7 @@ export const adminAPI = {
   },
 
   addTicketMessage: (ticketId, message) => {
-    return api.post(`/admin/tickets/${ticketId}/messages?message=${encodeURIComponent(message)}`);
+    return api.post(`/admin/tickets/${ticketId}/messages`, { message });
   },
 
   getClientStats: () => {
