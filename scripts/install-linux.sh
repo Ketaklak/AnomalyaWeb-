@@ -443,7 +443,8 @@ install_system_service() {
         
         PROJECT_DIR=$(pwd)
         
-        sudo tee /etc/systemd/system/anomalya.service > /dev/null << 'EOF'
+        # Créer le fichier de service avec interpolation des variables
+        sudo bash -c "cat > /etc/systemd/system/anomalya.service" << EOF
 [Unit]
 Description=Anomalya Corp Application
 After=network.target mongodb.service mongod.service
