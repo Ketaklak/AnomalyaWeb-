@@ -509,4 +509,5 @@ if ! sudo -n true 2>/dev/null; then
 fi
 
 # Exécuter l'installation
-main
+main "$@"
+exit 0
