@@ -248,7 +248,7 @@ async def create_notification(
     title: str,
     message: str,
     link: Optional[str] = None,
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Créer une nouvelle notification (pour les tests ou notifications manuelles)"""
     try:
@@ -263,7 +263,7 @@ async def create_notification(
             "link": link,
             "read": False,
             "createdAt": datetime.now().isoformat(),
-            "createdBy": current_user.id
+            "createdBy": current_admin.id
         }
         
         await create_document("notifications", notification_data)
