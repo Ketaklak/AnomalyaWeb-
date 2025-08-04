@@ -65,84 +65,76 @@ const NotificationCenter = ({
     setLoading(true);
     try {
       const currentPage = reset ? 1 : page;
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        limit: '20'
-      });
+      const params = {
+        page: currentPage,
+        limit: 20
+      };
       
       if (filter !== 'all') {
         if (filter === 'unread') {
-          params.append('read_status', 'unread');
+          params.read_status = 'unread';
         } else if (filter === 'read') {
-          params.append('read_status', 'read');
+          params.read_status = 'read';
         } else {
-          params.append('type_filter', filter);
+          params.type_filter = filter;
         }
       }
 
-      // Simuler l'API (remplacer par vraie API plus tard)
-      const response = await fetch(`/api/admin/notifications?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await notificationsAPI.getAll(params);
       
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          const newNotifications = data.data.notifications || [];
-          setNotifications(reset ? newNotifications : [...notifications, ...newNotifications]);
-          setHasMore(data.data.hasMore || false);
-          if (reset) setPage(1);
-        }
-      } else {
-        // Données mockées pour le développement
-        const mockNotifications = [
-          {
-            id: '1',
-            type: 'NEW_USER',
-            title: 'Nouvel utilisateur inscrit',
-            message: 'Jean Dupont (jean@example.com) vient de s\'inscrire',
-            link: '/admin/users',
-            read: false,
-            createdAt: new Date().toISOString(),
-            color: 'blue',
-            icon: 'user-plus'
-          },
-          {
-            id: '2',
-            type: 'NEW_CONTACT',
-            title: 'Nouveau message de contact',
-            message: 'Marie Martin a envoyé un message: Demande d\'information',
-            link: '/admin/contacts',
-            read: false,
-            createdAt: new Date(Date.now() - 3600000).toISOString(),
-            color: 'green',
-            icon: 'mail'
-          },
-          {
-            id: '3',
-            type: 'NEW_QUOTE',
-            title: 'Nouvelle demande de devis',
-            message: 'Paul Durand a demandé un devis pour: Développement Web',
-            link: '/admin/quotes',
-            read: true,
-            createdAt: new Date(Date.now() - 7200000).toISOString(),
-            color: 'orange',
-            icon: 'file-text'
-          }
-        ];
-        
-        setNotifications(reset ? mockNotifications : [...notifications, ...mockNotifications]);
-        setHasMore(false);
+      if (response.data.success) {
+        const newNotifications = response.data.data.notifications || [];
+        setNotifications(reset ? newNotifications : [...notifications, ...newNotifications]);
+        setHasMore(response.data.data.hasMore || false);
+        if (reset) setPage(1);
       }
     } catch (error) {
       console.error('Erreur chargement notifications:', error);
+      
+      // Données mockées en cas d'erreur pour le développement
+      const mockNotifications = [
+        {
+          id: '1',
+          type: 'NEW_USER',
+          title: 'Nouvel utilisateur inscrit',
+          message: 'Jean Dupont (jean@example.com) vient de s\'inscrire',
+          link: '/admin/users',
+          read: false,
+          createdAt: new Date().toISOString(),
+          color: 'blue',
+          icon: 'user-plus'
+        },
+        {
+          id: '2',
+          type: 'NEW_CONTACT',
+          title: 'Nouveau message de contact',
+          message: 'Marie Martin a envoyé un message: Demande d\'information',
+          link: '/admin/contacts',
+          read: false,
+          createdAt: new Date(Date.now() - 3600000).toISOString(),
+          color: 'green',
+          icon: 'mail'
+        },
+        {
+          id: '3',
+          type: 'NEW_QUOTE',
+          title: 'Nouvelle demande de devis',
+          message: 'Paul Durand a demandé un devis pour: Développement Web',
+          link: '/admin/quotes',
+          read: true,
+          createdAt: new Date(Date.now() - 7200000).toISOString(),
+          color: 'orange',
+          icon: 'file-text'
+        }
+      ];
+      
+      setNotifications(reset ? mockNotifications : [...notifications, ...mockNotifications]);
+      setHasMore(false);
+      
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les notifications",
-        variant: "destructive"
+        title: "Mode développement",
+        description: "Utilisation des données de test (API non disponible)",
+        variant: "default"
       });
     } finally {
       setLoading(false);
