@@ -635,13 +635,13 @@ const AdminUsersUnified = () => {
                 <Input
                   placeholder="Rechercher par nom, email..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
                   className="pl-10 bg-slate-800 border-slate-600 text-white placeholder-gray-400"
                 />
               </div>
               
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <Select value={roleFilter} onValueChange={(value) => handleFilterChange('role', value)}>
                   <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
                     <SelectValue placeholder="Filtrer par rôle" />
                   </SelectTrigger>
@@ -653,7 +653,7 @@ const AdminUsersUnified = () => {
                   </SelectContent>
                 </Select>
 
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select value={statusFilter} onValueChange={(value) => handleFilterChange('status', value)}>
                   <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
                     <SelectValue placeholder="Filtrer par statut" />
                   </SelectTrigger>
