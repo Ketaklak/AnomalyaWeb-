@@ -524,7 +524,8 @@
 
 ## test_plan:
   current_focus:
-    - "Enhanced Content Management Backend APIs"
+    - "Sistema de Notifications Backend APIs"
+    - "Sistema de Notifications Frontend Integration"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
   test_all: false
