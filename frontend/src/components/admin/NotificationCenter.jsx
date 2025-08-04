@@ -144,28 +144,19 @@ const NotificationCenter = ({
   // Fonction pour récupérer le nombre de notifications non lues
   const fetchUnreadCount = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/notifications/unread-count', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await notificationsAPI.getUnreadCount();
       
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          const count = data.data.unreadCount || 0;
-          setUnreadCount(count);
-          onNotificationCountChange?.(count);
-        }
-      } else {
-        // Mock count pour le développement
-        const mockCount = notifications.filter(n => !n.read).length;
-        setUnreadCount(mockCount);
-        onNotificationCountChange?.(mockCount);
+      if (response.data.success) {
+        const count = response.data.data.unreadCount || 0;
+        setUnreadCount(count);
+        onNotificationCountChange?.(count);
       }
     } catch (error) {
       console.error('Erreur comptage notifications:', error);
+      // Mock count pour le développement
+      const mockCount = notifications.filter(n => !n.read).length;
+      setUnreadCount(mockCount);
+      onNotificationCountChange?.(mockCount);
     }
   }, [notifications, onNotificationCountChange]);
 
