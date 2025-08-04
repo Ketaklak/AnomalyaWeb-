@@ -73,12 +73,12 @@ function App() {
             } />
             <Route path="/admin/users" element={
               <ProtectedRoute requireAdmin={true}>
-                <AdminUsers />
+                <AdminUsersUnified />
               </ProtectedRoute>
             } />
             <Route path="/admin/clients" element={
               <ProtectedRoute requireAdmin={true}>
-                <AdminClients />
+                <AdminUsersUnified />
               </ProtectedRoute>
             } />
             <Route path="/admin/quotes" element={
