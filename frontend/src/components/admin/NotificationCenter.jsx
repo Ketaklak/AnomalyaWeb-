@@ -34,7 +34,7 @@ const NOTIFICATION_ICONS = {
   "NEW_TICKET": HelpCircle,
   "SYSTEM_UPDATE": Settings,
   "SECURITY_ALERT": ShieldAlert,
-  "MAINTENANCE": Tools,
+  "MAINTENANCE": Wrench,
 };
 
 // Mapping des couleurs selon le type
