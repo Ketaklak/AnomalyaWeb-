@@ -600,7 +600,7 @@
 
 ## test_plan:
   current_focus:
-    - "Unified User Management Frontend"
+    - "Enhanced Content Management Frontend Integration"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
   test_all: false
