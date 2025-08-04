@@ -6,6 +6,8 @@ import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import { Textarea } from '../../components/ui/textarea';
+import { Label } from '../../components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { adminAPI } from '../../services/api';
 import { useToast } from '../../hooks/use-toast';
 import AdminLayout from '../../components/admin/AdminLayout';
@@ -15,13 +17,26 @@ import {
   Filter, 
   Plus, 
   Eye, 
+  Edit,
+  Trash2,
   Star,
   Trophy,
   Award,
   FileText,
   MessageSquare,
   Calendar,
-  Loader2
+  Loader2,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  MoreVertical,
+  Activity,
+  CreditCard,
+  Settings
 } from 'lucide-react';
 
 const AdminClients = () => {
