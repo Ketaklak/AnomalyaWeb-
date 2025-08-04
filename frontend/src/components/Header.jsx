@@ -226,6 +226,16 @@ const Header = () => {
                       )}
                     </div>
                     
+                    {/* Support link for all authenticated users */}
+                    <Link
+                      to="/client/tickets"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                    >
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Support & Tickets
+                    </Link>
+                    
                     {isClient && (
                       <>
                         <Link
