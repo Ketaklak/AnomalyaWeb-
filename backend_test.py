@@ -1183,7 +1183,7 @@ class ComprehensiveAPITester:
             "message": "This is a test notification created during API testing",
             "link": "/admin/users"
         }
-        response = self.make_request("POST", "/admin/notifications", test_notification, token_type="admin")
+        response = self.make_request("POST", "/admin/notifications/", test_notification, token_type="admin")
         if response and response.status_code == 200:
             data = response.json()
             if data.get("success") and "data" in data:
