@@ -336,65 +336,65 @@ const AdminNotifications = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6">
+      <div className="space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Gestion des notifications</h1>
-            <p className="text-gray-400">Gérez les notifications système et créez de nouvelles alertes</p>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 truncate">Gestion des notifications</h1>
+            <p className="text-gray-400 text-sm sm:text-base">Gérez les notifications système et créez de nouvelles alertes</p>
           </div>
           <Button 
             onClick={() => setIsCreateModalOpen(true)}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 w-full sm:w-auto"
           >
             <Plus className="mr-2 h-4 w-4" />
-            Nouvelle notification
+            <span className="sm:inline">Nouvelle notification</span>
           </Button>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm">Total</p>
-                  <p className="text-2xl font-bold text-white">{stats.total}</p>  
+                  <p className="text-xl sm:text-2xl font-bold text-white">{stats.total}</p>  
                 </div>
-                <Bell className="h-8 w-8 text-blue-400" />
+                <Bell className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm">Non lues</p>
-                  <p className="text-2xl font-bold text-orange-400">{stats.unread}</p>  
+                  <p className="text-xl sm:text-2xl font-bold text-orange-400">{stats.unread}</p>  
                 </div>
-                <BellDot className="h-8 w-8 text-orange-400" />
+                <BellDot className="h-6 w-6 sm:h-8 sm:w-8 text-orange-400" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+          <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700 sm:col-span-2 lg:col-span-1">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm">Lues</p>
-                  <p className="text-2xl font-bold text-green-400">{stats.read}</p>  
+                  <p className="text-xl sm:text-2xl font-bold text-green-400">{stats.read}</p>  
                 </div>
-                <Check className="h-8 w-8 text-green-400" />
+                <Check className="h-6 w-6 sm:h-8 sm:w-8 text-green-400" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Filters & Actions */}
-        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700 mb-6">
+        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
           <CardContent className="p-4">
-            <div className="flex flex-col lg:flex-row gap-4 items-center">
+            <div className="flex flex-col gap-4">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -405,53 +405,56 @@ const AdminNotifications = () => {
                 />
               </div>
               
-              <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="w-48 bg-slate-800 border-slate-600 text-white">
-                  <SelectValue placeholder="Filtrer" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-600">
-                  <SelectItem value="all" className="text-white hover:bg-slate-700">Toutes</SelectItem>
-                  <SelectItem value="unread" className="text-white hover:bg-slate-700">Non lues</SelectItem>
-                  <SelectItem value="read" className="text-white hover:bg-slate-700">Lues</SelectItem>
-                  <SelectItem value="NEW_USER" className="text-white hover:bg-slate-700">Nouveaux utilisateurs</SelectItem>
-                  <SelectItem value="NEW_CONTACT" className="text-white hover:bg-slate-700">Messages de contact</SelectItem>
-                  <SelectItem value="NEW_QUOTE" className="text-white hover:bg-slate-700">Demandes de devis</SelectItem>
-                  <SelectItem value="SYSTEM_UPDATE" className="text-white hover:bg-slate-700">Mises à jour</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+                <Select value={filter} onValueChange={setFilter}>
+                  <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
+                    <SelectValue placeholder="Filtrer" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-600">
+                    <SelectItem value="all" className="text-white hover:bg-slate-700">Toutes</SelectItem>
+                    <SelectItem value="unread" className="text-white hover:bg-slate-700">Non lues</SelectItem>
+                    <SelectItem value="read" className="text-white hover:bg-slate-700">Lues</SelectItem>
+                    <SelectItem value="NEW_USER" className="text-white hover:bg-slate-700">Nouveaux utilisateurs</SelectItem>
+                    <SelectItem value="NEW_CONTACT" className="text-white hover:bg-slate-700">Messages de contact</SelectItem>
+                    <SelectItem value="NEW_QUOTE" className="text-white hover:bg-slate-700">Demandes de devis</SelectItem>
+                    <SelectItem value="SYSTEM_UPDATE" className="text-white hover:bg-slate-700">Mises à jour</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={fetchNotifications}
-                  disabled={loading}
-                  className="border-slate-600"
-                >
-                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                </Button>
-                
-                {stats.unread > 0 && (
+                <div className="flex gap-2 ml-auto">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={markAllAsRead}
+                    onClick={fetchNotifications}
+                    disabled={loading}
                     className="border-slate-600"
                   >
-                    <CheckCheck className="h-4 w-4 mr-2" />
-                    Tout marquer lu
+                    <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                    <span className="hidden sm:inline ml-2">Actualiser</span>
                   </Button>
-                )}
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={deleteOldNotifications}
-                  className="border-slate-600 text-red-400 hover:bg-red-900/20"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Nettoyer
-                </Button>
+                  
+                  {stats.unread > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={markAllAsRead}
+                      className="border-slate-600"
+                    >
+                      <CheckCheck className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-2">Tout marquer lu</span>
+                    </Button>
+                  )}
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={deleteOldNotifications}
+                    className="border-slate-600 text-red-400 hover:bg-red-900/20"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="hidden sm:inline ml-2">Nettoyer</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>
