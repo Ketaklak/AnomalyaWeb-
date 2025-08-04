@@ -285,12 +285,12 @@ const NotificationCenter = ({
 
       {/* Modal des notifications */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[80vh] overflow-hidden">
+        <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] mx-4 overflow-hidden">
           <DialogHeader className="pb-4">
             <div className="flex items-center justify-between">
               <DialogTitle className="text-white flex items-center gap-2">
                 <Bell className="h-5 w-5" />
-                Centre de notifications
+                <span className="truncate">Centre de notifications</span>
                 {unreadCount > 0 && (
                   <Badge className="bg-red-500 text-white">
                     {unreadCount}
@@ -312,10 +312,10 @@ const NotificationCenter = ({
                     variant="ghost"
                     size="sm"
                     onClick={markAllAsRead}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-white hidden sm:flex"
                   >
                     <CheckCheck className="h-4 w-4 mr-1" />
-                    Tout marquer lu
+                    <span className="hidden md:inline">Tout marquer lu</span>
                   </Button>
                 )}
               </div>
@@ -323,9 +323,9 @@ const NotificationCenter = ({
           </DialogHeader>
 
           {/* Filtres */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-col sm:flex-row gap-2 mb-4">
             <Select value={filter} onValueChange={setFilter}>
-              <SelectTrigger className="w-48 bg-slate-800 border-slate-600 text-white">
+              <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-slate-800 border-slate-600">
@@ -338,14 +338,26 @@ const NotificationCenter = ({
                 <SelectItem value="SYSTEM_UPDATE" className="text-white hover:bg-slate-700">Mises à jour</SelectItem>
               </SelectContent>
             </Select>
+            
+            {unreadCount > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={markAllAsRead}
+                className="border-slate-600 sm:hidden"
+              >
+                <CheckCheck className="h-4 w-4 mr-1" />
+                Tout marquer lu
+              </Button>
+            )}
           </div>
 
           {/* Liste des notifications */}
           <div className="flex-1 overflow-y-auto max-h-96">
             {notifications.length === 0 ? (
               <div className="text-center py-8 text-gray-400">
-                <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Aucune notification</p>
+                <Bell className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm sm:text-base">Aucune notification</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -356,28 +368,28 @@ const NotificationCenter = ({
                   return (
                     <div
                       key={notification.id}
-                      className={`p-4 rounded-lg border transition-all duration-200 ${
+                      className={`p-3 sm:p-4 rounded-lg border transition-all duration-200 ${
                         notification.read 
                           ? 'bg-slate-800/30 border-slate-700' 
                           : 'bg-slate-800/50 border-slate-600'
                       }`}
                     >
-                      <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg ${colorClass}`}>
-                          <IconComponent className="h-4 w-4" />
+                      <div className="flex items-start gap-2 sm:gap-3">
+                        <div className={`p-1.5 sm:p-2 rounded-lg flex-shrink-0 ${colorClass}`}>
+                          <IconComponent className="h-3 w-3 sm:h-4 sm:w-4" />
                         </div>
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <h4 className={`font-medium ${notification.read ? 'text-gray-300' : 'text-white'}`}>
+                            <h4 className={`font-medium text-sm ${notification.read ? 'text-gray-300' : 'text-white'} truncate`}>
                               {notification.title}
                             </h4>
                             {!notification.read && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
                             )}
                           </div>
                           
-                          <p className={`text-sm ${notification.read ? 'text-gray-400' : 'text-gray-300'} mb-2`}>
+                          <p className={`text-xs sm:text-sm ${notification.read ? 'text-gray-400' : 'text-gray-300'} mb-2 line-clamp-2`}>
                             {notification.message}
                           </p>
                           
@@ -398,10 +410,9 @@ const NotificationCenter = ({
                                       markAsRead(notification.id);
                                     }
                                   }}
-                                  className="h-7 px-2 text-xs text-gray-400 hover:text-white"
+                                  className="h-6 w-6 p-0 text-xs text-gray-400 hover:text-white"
                                 >
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  Voir
+                                  <ExternalLink className="h-3 w-3" />
                                 </Button>
                               )}
                               
@@ -410,7 +421,7 @@ const NotificationCenter = ({
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => markAsRead(notification.id)}
-                                  className="h-7 px-2 text-xs text-gray-400 hover:text-white"
+                                  className="h-6 w-6 p-0 text-xs text-gray-400 hover:text-white"
                                 >
                                   <Check className="h-3 w-3" />
                                 </Button>
@@ -420,7 +431,7 @@ const NotificationCenter = ({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => deleteNotification(notification.id)}
-                                className="h-7 px-2 text-xs text-gray-400 hover:text-red-400"
+                                className="h-6 w-6 p-0 text-xs text-gray-400 hover:text-red-400"
                               >
                                 <Trash2 className="h-3 w-3" />
                               </Button>
@@ -441,7 +452,7 @@ const NotificationCenter = ({
                         fetchNotifications();
                       }}
                       disabled={loading}
-                      className="border-slate-600 text-gray-300 hover:bg-slate-800"
+                      className="border-slate-600 text-gray-300 hover:bg-slate-800 w-full sm:w-auto"
                     >
                       {loading ? 'Chargement...' : 'Charger plus'}
                     </Button>
