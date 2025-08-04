@@ -114,6 +114,12 @@ const Header = () => {
                           Demander un devis
                         </Link>
                       </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="text-white hover:bg-slate-700">
+                        <Link to="/client/tickets">
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Support & Tickets
+                        </Link>
+                      </DropdownMenuItem>
                       
                       {/* Loyalty Status */}
                       <DropdownMenuSeparator className="bg-slate-600" />
