@@ -92,6 +92,11 @@ function App() {
                 <AdminTickets />
               </ProtectedRoute>
             } />
+            <Route path="/admin/notifications" element={
+              <ProtectedRoute requireAdmin={true}>
+                <AdminNotifications />
+              </ProtectedRoute>
+            } />
             
             {/* Client Routes */}
             <Route path="/client/dashboard" element={
