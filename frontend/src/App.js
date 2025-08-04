@@ -19,6 +19,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminClients from "./pages/admin/AdminClients";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminTickets from "./pages/admin/AdminTickets";
+import AdminNotifications from "./pages/admin/AdminNotifications";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import RequestQuote from "./pages/client/RequestQuote";
 import ClientProfile from "./pages/client/ClientProfile";
