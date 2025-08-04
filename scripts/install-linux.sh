@@ -204,12 +204,23 @@ setup_mongodb() {
         warning "Client MongoDB (mongo/mongosh) non disponible pour test"
     fi
     
-    # Créer la base de données (optionnel)
-    mongo --eval "
-        use anomalya_db;
-        db.createCollection('users');
-        print('Base de données anomalya_db créée');
-    " 2>/dev/null || warning "Impossible de créer la base de données (MongoDB peut ne pas être démarré)"
+    # Créer la base de données (optionnel) 
+    info "Initialisation de la base de données..."
+    if command -v mongo &> /dev/null; then
+        mongo --eval "
+            use anomalya_db;
+            db.createCollection('users');
+            db.createCollection('news'); 
+            print('Base de données anomalya_db initialisée');
+        " 2>/dev/null || warning "Initialisation DB échouée, sera créée automatiquement au démarrage"
+    elif command -v mongosh &> /dev/null; then
+        mongosh --eval "
+            use('anomalya_db');
+            db.createCollection('users');
+            db.createCollection('news');
+            print('Base de données anomalya_db initialisée');
+        " 2>/dev/null || warning "Initialisation DB échouée, sera créée automatiquement au démarrage"
+    fi
     
     success "MongoDB configuré"
 }
