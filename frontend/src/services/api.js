@@ -277,6 +277,35 @@ export const adminAPI = {
 
   getClientStats: () => {
     return api.get(`/admin/stats/clients`);
+  },
+
+  // Enhanced Client Management APIs
+  deleteClient: (clientId) => {
+    return api.delete(`/admin/clients/${clientId}`);
+  },
+
+  updateClient: (clientId, clientData) => {
+    return api.put(`/admin/clients/${clientId}`, clientData);
+  },
+
+  updateClientStatus: (clientId, isActive) => {
+    return api.put(`/admin/clients/${clientId}/status`, { is_active: isActive });
+  },
+
+  getClientDetails: (clientId) => {
+    return api.get(`/admin/clients/${clientId}`);
+  },
+
+  getClientActivity: (clientId) => {
+    return api.get(`/admin/clients/${clientId}/activity`);
+  },
+
+  bulkUpdateClients: (clientIds, updateData) => {
+    return api.put(`/admin/clients/bulk`, { client_ids: clientIds, data: updateData });
+  },
+
+  bulkDeleteClients: (clientIds) => {
+    return api.delete(`/admin/clients/bulk`, { data: { client_ids: clientIds } });
   }
 };
 
