@@ -216,7 +216,7 @@ async def delete_notification(
 @router.delete("/")
 async def delete_old_notifications(
     days: int = Query(30, ge=1, description="Supprimer les notifications plus anciennes que X jours"),
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Supprimer les anciennes notifications"""
     try:
