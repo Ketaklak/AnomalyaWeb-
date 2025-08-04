@@ -66,7 +66,7 @@ const NOTIFICATION_TYPES = {
   },
   "MAINTENANCE": {
     title: "Maintenance programmée",
-    icon: Tools,
+    icon: Wrench,
     color: "yellow"
   }
 };
