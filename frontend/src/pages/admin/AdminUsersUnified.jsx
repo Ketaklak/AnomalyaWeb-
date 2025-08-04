@@ -470,51 +470,51 @@ const AdminUsersUnified = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-3 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Total</p>
-                  <p className="text-2xl font-bold text-white">{users.length}</p>  
+                  <p className="text-gray-400 text-xs md:text-sm">Total</p>
+                  <p className="text-lg md:text-2xl font-bold text-white">{users.length}</p>  
                 </div>
-                <Users className="h-8 w-8 text-blue-400" />
+                <Users className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-3 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Clients</p>
-                  <p className="text-2xl font-bold text-green-400">{users.filter(u => u.role === 'client').length}</p>  
+                  <p className="text-gray-400 text-xs md:text-sm">Clients</p>
+                  <p className="text-lg md:text-2xl font-bold text-green-400">{users.filter(u => u.role === 'client').length}</p>  
                 </div>
-                <User className="h-8 w-8 text-green-400" />
+                <User className="h-6 md:h-8 w-6 md:w-8 text-green-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-3 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Admins</p>
-                  <p className="text-2xl font-bold text-red-400">{users.filter(u => u.role === 'admin').length}</p>  
+                  <p className="text-gray-400 text-xs md:text-sm">Admins</p>
+                  <p className="text-lg md:text-2xl font-bold text-red-400">{users.filter(u => u.role === 'admin').length}</p>  
                 </div>
-                <Crown className="h-8 w-8 text-red-400" />
+                <Crown className="h-6 md:h-8 w-6 md:w-8 text-red-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-6">
+            <CardContent className="p-3 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Actifs</p>
-                  <p className="text-2xl font-bold text-blue-400">{users.filter(u => u.is_active).length}</p>  
+                  <p className="text-gray-400 text-xs md:text-sm">Actifs</p>
+                  <p className="text-lg md:text-2xl font-bold text-blue-400">{users.filter(u => u.is_active).length}</p>  
                 </div>
-                <CheckCircle className="h-8 w-8 text-blue-400" />
+                <CheckCircle className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
               </div>
             </CardContent>
           </Card>
