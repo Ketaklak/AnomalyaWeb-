@@ -60,7 +60,7 @@ const Register = () => {
         email: formData.email,
         full_name: formData.full_name,
         password: formData.password,
-        role: 'client'
+        role: 'client_standard'
       };
 
       const result = await register(userData);
