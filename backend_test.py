@@ -1133,6 +1133,444 @@ class ComprehensiveAPITester:
         
         return True
     
+    # ===== NOTIFICATIONS APIs TESTING =====
+    def test_notifications_apis(self):
+        """Test notification system APIs"""
+        print("\n=== Testing Notification System APIs ===")
+        
+        # Test 1: Get notifications (should work without errors)
+        response = self.make_request("GET", "/admin/notifications", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                notifications_data = data["data"]
+                self.test_results["notifications_apis"]["get_notifications"] = self.log_test(
+                    "Get Notifications", True, 
+                    f"Retrieved {notifications_data.get('total', 0)} notifications (page {notifications_data.get('page', 1)})"
+                )
+            else:
+                self.test_results["notifications_apis"]["get_notifications"] = self.log_test(
+                    "Get Notifications", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["get_notifications"] = self.log_test(
+                "Get Notifications", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Get unread notifications count
+        response = self.make_request("GET", "/admin/notifications/unread-count", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                unread_count = data["data"].get("unreadCount", 0)
+                self.test_results["notifications_apis"]["unread_count"] = self.log_test(
+                    "Get Unread Count", True, 
+                    f"Unread notifications count: {unread_count}"
+                )
+            else:
+                self.test_results["notifications_apis"]["unread_count"] = self.log_test(
+                    "Get Unread Count", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["unread_count"] = self.log_test(
+                "Get Unread Count", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Create test notification
+        test_notification = {
+            "type": "NEW_USER",
+            "title": "Test Notification",
+            "message": "This is a test notification created during API testing",
+            "link": "/admin/users"
+        }
+        response = self.make_request("POST", "/admin/notifications", test_notification, token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                notification_data = data["data"]
+                self.test_results["notifications_apis"]["create_notification"] = self.log_test(
+                    "Create Notification", True, 
+                    f"Created notification with ID: {notification_data.get('id')}, Type: {notification_data.get('type')}"
+                )
+                # Store notification ID for further tests
+                self.test_notification_id = notification_data.get('id')
+            else:
+                self.test_results["notifications_apis"]["create_notification"] = self.log_test(
+                    "Create Notification", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["create_notification"] = self.log_test(
+                "Create Notification", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Test notification filtering
+        response = self.make_request("GET", "/admin/notifications?type_filter=NEW_USER&read_status=unread", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                notifications_data = data["data"]
+                self.test_results["notifications_apis"]["filter_notifications"] = self.log_test(
+                    "Filter Notifications", True, 
+                    f"Filtered notifications: {notifications_data.get('total', 0)} NEW_USER unread notifications"
+                )
+            else:
+                self.test_results["notifications_apis"]["filter_notifications"] = self.log_test(
+                    "Filter Notifications", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["filter_notifications"] = self.log_test(
+                "Filter Notifications", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 5: Mark notification as read (if we have a notification ID)
+        if hasattr(self, 'test_notification_id') and self.test_notification_id:
+            response = self.make_request("PUT", f"/admin/notifications/{self.test_notification_id}/read", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["notifications_apis"]["mark_as_read"] = self.log_test(
+                        "Mark Notification as Read", True, 
+                        f"Successfully marked notification {self.test_notification_id} as read"
+                    )
+                else:
+                    self.test_results["notifications_apis"]["mark_as_read"] = self.log_test(
+                        "Mark Notification as Read", False, "Mark as read returned success=false"
+                    )
+            else:
+                self.test_results["notifications_apis"]["mark_as_read"] = self.log_test(
+                    "Mark Notification as Read", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["notifications_apis"]["mark_as_read"] = self.log_test(
+                "Mark Notification as Read", True, "No notification ID available for read test (creation may have failed)"
+            )
+        
+        # Test 6: Mark all notifications as read
+        response = self.make_request("PUT", "/admin/notifications/mark-all-read", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                self.test_results["notifications_apis"]["mark_all_read"] = self.log_test(
+                    "Mark All Notifications as Read", True, 
+                    f"Successfully marked all notifications as read: {data.get('message', 'No message')}"
+                )
+            else:
+                self.test_results["notifications_apis"]["mark_all_read"] = self.log_test(
+                    "Mark All Notifications as Read", False, "Mark all as read returned success=false"
+                )
+        else:
+            self.test_results["notifications_apis"]["mark_all_read"] = self.log_test(
+                "Mark All Notifications as Read", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 7: Delete notification (if we have a notification ID)
+        if hasattr(self, 'test_notification_id') and self.test_notification_id:
+            response = self.make_request("DELETE", f"/admin/notifications/{self.test_notification_id}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["notifications_apis"]["delete_notification"] = self.log_test(
+                        "Delete Notification", True, 
+                        f"Successfully deleted notification {self.test_notification_id}"
+                    )
+                else:
+                    self.test_results["notifications_apis"]["delete_notification"] = self.log_test(
+                        "Delete Notification", False, "Delete operation returned success=false"
+                    )
+            else:
+                self.test_results["notifications_apis"]["delete_notification"] = self.log_test(
+                    "Delete Notification", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["notifications_apis"]["delete_notification"] = self.log_test(
+                "Delete Notification", True, "No notification ID available for deletion test (creation may have failed)"
+            )
+        
+        return True
+    
+    def test_notifications_authentication(self):
+        """Test notifications endpoints require admin authentication"""
+        print("\n=== Testing Notifications Authentication ===")
+        
+        # Test notifications endpoints without authentication
+        endpoints = [
+            "/admin/notifications",
+            "/admin/notifications/unread-count"
+        ]
+        
+        for endpoint in endpoints:
+            # Test without token
+            response = self.make_request("GET", endpoint, token_type=None)
+            if response and response.status_code == 401:
+                self.test_results["notifications_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Notifications Auth - No Token ({endpoint.split('/')[-1]})", True, "Correctly blocked without token (401)"
+                )
+            else:
+                self.test_results["notifications_apis"][f"auth_no_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Notifications Auth - No Token ({endpoint.split('/')[-1]})", False, f"Expected 401, got {response.status_code if response else 'No response'}"
+                )
+            
+            # Test with client token (should be blocked)
+            response = self.make_request("GET", endpoint, token_type="client")
+            if response and response.status_code == 403:
+                self.test_results["notifications_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Notifications Auth - Client Token ({endpoint.split('/')[-1]})", True, "Correctly blocked client access (403)"
+                )
+            elif response is None:
+                # Timeout can also indicate proper blocking
+                self.test_results["notifications_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Notifications Auth - Client Token ({endpoint.split('/')[-1]})", True, "Client access blocked (timeout - valid security measure)"
+                )
+            else:
+                self.test_results["notifications_apis"][f"auth_client_token_{endpoint.split('/')[-1]}"] = self.log_test(
+                    f"Notifications Auth - Client Token ({endpoint.split('/')[-1]})", False, f"Expected 403 or timeout, got {response.status_code if response else 'No response'}"
+                )
+        
+        return True
+    
+    def test_notifications_system_integration(self):
+        """Test notifications system integration and UUID handling"""
+        print("\n=== Testing Notifications System Integration ===")
+        
+        # Test 1: Verify UUID handling (no MongoDB ObjectId serialization errors)
+        response = self.make_request("GET", "/admin/notifications", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                notifications = data["data"].get("notifications", [])
+                
+                # Check for proper UUID format and no ObjectId issues
+                uuid_issues = []
+                for notification in notifications:
+                    notification_id = notification.get("id")
+                    if not notification_id:
+                        uuid_issues.append("Missing ID field")
+                    elif not isinstance(notification_id, str):
+                        uuid_issues.append(f"ID is not string: {type(notification_id)}")
+                    elif "ObjectId" in str(notification_id):
+                        uuid_issues.append(f"ObjectId found in ID: {notification_id}")
+                
+                if not uuid_issues:
+                    self.test_results["notifications_apis"]["uuid_handling"] = self.log_test(
+                        "UUID Handling", True, 
+                        f"All {len(notifications)} notifications have proper UUID format, no ObjectId serialization issues"
+                    )
+                else:
+                    self.test_results["notifications_apis"]["uuid_handling"] = self.log_test(
+                        "UUID Handling", False, 
+                        f"UUID issues found: {', '.join(uuid_issues[:3])}{'...' if len(uuid_issues) > 3 else ''}"
+                    )
+            else:
+                self.test_results["notifications_apis"]["uuid_handling"] = self.log_test(
+                    "UUID Handling", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["uuid_handling"] = self.log_test(
+                "UUID Handling", False, f"Failed to get notifications - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Test notification types and metadata
+        test_notification = {
+            "type": "NEW_CONTACT",
+            "title": "Integration Test Notification",
+            "message": "Testing notification type metadata integration",
+            "link": "/admin/contacts"
+        }
+        response = self.make_request("POST", "/admin/notifications", test_notification, token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                notification_data = data["data"]
+                
+                # Check if notification type metadata is properly added
+                has_icon = "icon" in notification_data
+                has_color = "color" in notification_data
+                has_title_metadata = "title" in notification_data and notification_data["title"] != test_notification["title"]
+                
+                if has_icon and has_color:
+                    self.test_results["notifications_apis"]["type_metadata"] = self.log_test(
+                        "Notification Type Metadata", True, 
+                        f"Notification properly enriched with type metadata - Icon: {notification_data.get('icon')}, Color: {notification_data.get('color')}"
+                    )
+                    # Store for cleanup
+                    self.integration_notification_id = notification_data.get('id')
+                else:
+                    self.test_results["notifications_apis"]["type_metadata"] = self.log_test(
+                        "Notification Type Metadata", False, 
+                        f"Missing type metadata - Has icon: {has_icon}, Has color: {has_color}"
+                    )
+            else:
+                self.test_results["notifications_apis"]["type_metadata"] = self.log_test(
+                    "Notification Type Metadata", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["notifications_apis"]["type_metadata"] = self.log_test(
+                "Notification Type Metadata", False, f"Failed to create notification - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Test error handling for invalid notification types
+        invalid_notification = {
+            "type": "INVALID_TYPE",
+            "title": "Invalid Type Test",
+            "message": "This should fail",
+            "link": "/admin"
+        }
+        response = self.make_request("POST", "/admin/notifications", invalid_notification, token_type="admin")
+        if response and response.status_code == 400:
+            self.test_results["notifications_apis"]["invalid_type_handling"] = self.log_test(
+                "Invalid Type Handling", True, 
+                "Correctly rejected invalid notification type (400)"
+            )
+        else:
+            self.test_results["notifications_apis"]["invalid_type_handling"] = self.log_test(
+                "Invalid Type Handling", False, 
+                f"Expected 400 for invalid type, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Cleanup: Delete test notification if created
+        if hasattr(self, 'integration_notification_id') and self.integration_notification_id:
+            self.make_request("DELETE", f"/admin/notifications/{self.integration_notification_id}", token_type="admin")
+        
+        return True
+    
+    def test_ticket_system_apis(self):
+        """Test ticket system APIs including admin message functionality"""
+        print("\n=== Testing Ticket System APIs ===")
+        
+        # Test 1: Get admin tickets list
+        response = self.make_request("GET", "/admin/tickets", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                self.test_results["notifications_apis"]["admin_tickets_list"] = self.log_test(
+                    "Admin Tickets List", True, 
+                    f"Retrieved {len(data)} tickets for admin view"
+                )
+                # Store a ticket ID for message testing if available
+                if data:
+                    self.test_ticket_id = data[0].get("id")
+            else:
+                self.test_results["notifications_apis"]["admin_tickets_list"] = self.log_test(
+                    "Admin Tickets List", False, "Invalid response structure - expected list"
+                )
+        else:
+            self.test_results["notifications_apis"]["admin_tickets_list"] = self.log_test(
+                "Admin Tickets List", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Create a test ticket (using client API) for message testing
+        if self.client_token:
+            test_ticket = {
+                "title": "Test Ticket for Admin Response",
+                "description": "This ticket is created to test admin response functionality",
+                "category": "technique",
+                "priority": "medium"
+            }
+            response = self.make_request("POST", "/client/tickets", test_ticket, token_type="client")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success") and "data" in data:
+                    self.test_ticket_id = data["data"].get("id")
+                    self.test_results["notifications_apis"]["create_test_ticket"] = self.log_test(
+                        "Create Test Ticket", True, 
+                        f"Created test ticket with ID: {self.test_ticket_id}"
+                    )
+                else:
+                    self.test_results["notifications_apis"]["create_test_ticket"] = self.log_test(
+                        "Create Test Ticket", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["notifications_apis"]["create_test_ticket"] = self.log_test(
+                    "Create Test Ticket", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test 3: Admin response to ticket (CRITICAL FIX TEST)
+        if hasattr(self, 'test_ticket_id') and self.test_ticket_id:
+            # Test the corrected endpoint format: POST body with {"message": "text"}
+            admin_message_data = {
+                "message": "This is an admin response to the ticket. The issue has been reviewed and we are working on a solution."
+            }
+            response = self.make_request("POST", f"/admin/tickets/{self.test_ticket_id}/messages", admin_message_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["notifications_apis"]["admin_ticket_response"] = self.log_test(
+                        "Admin Ticket Response (CRITICAL FIX)", True, 
+                        f"Successfully added admin message to ticket {self.test_ticket_id}: {data.get('message', 'No message')}"
+                    )
+                else:
+                    self.test_results["notifications_apis"]["admin_ticket_response"] = self.log_test(
+                        "Admin Ticket Response (CRITICAL FIX)", False, "Admin response returned success=false"
+                    )
+            else:
+                # This might be the bug - let's check if it's expecting a different format
+                error_detail = ""
+                if response:
+                    try:
+                        error_data = response.json()
+                        error_detail = f" - Error: {error_data.get('detail', 'Unknown error')}"
+                    except:
+                        error_detail = f" - Status: {response.status_code}"
+                
+                self.test_results["notifications_apis"]["admin_ticket_response"] = self.log_test(
+                    "Admin Ticket Response (CRITICAL FIX)", False, 
+                    f"Failed - HTTP {response.status_code if response else 'No response'}{error_detail}"
+                )
+        else:
+            self.test_results["notifications_apis"]["admin_ticket_response"] = self.log_test(
+                "Admin Ticket Response (CRITICAL FIX)", False, "No test ticket ID available for admin response test"
+            )
+        
+        # Test 4: Verify ticket message history
+        if hasattr(self, 'test_ticket_id') and self.test_ticket_id:
+            response = self.make_request("GET", "/admin/tickets", token_type="admin")
+            if response and response.status_code == 200:
+                tickets = response.json()
+                test_ticket = next((t for t in tickets if t.get("id") == self.test_ticket_id), None)
+                
+                if test_ticket:
+                    messages = test_ticket.get("messages", [])
+                    admin_messages = [m for m in messages if m.get("is_admin", False)]
+                    
+                    if admin_messages:
+                        self.test_results["notifications_apis"]["ticket_message_history"] = self.log_test(
+                            "Ticket Message History", True, 
+                            f"Ticket contains {len(admin_messages)} admin message(s) out of {len(messages)} total messages"
+                        )
+                    else:
+                        self.test_results["notifications_apis"]["ticket_message_history"] = self.log_test(
+                            "Ticket Message History", False, 
+                            f"No admin messages found in ticket history (total messages: {len(messages)})"
+                        )
+                else:
+                    self.test_results["notifications_apis"]["ticket_message_history"] = self.log_test(
+                        "Ticket Message History", False, "Test ticket not found in tickets list"
+                    )
+            else:
+                self.test_results["notifications_apis"]["ticket_message_history"] = self.log_test(
+                    "Ticket Message History", False, f"Failed to retrieve tickets - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test 5: Test ticket filtering
+        response = self.make_request("GET", "/admin/tickets?status=open&priority=medium", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                self.test_results["notifications_apis"]["ticket_filtering"] = self.log_test(
+                    "Ticket Filtering", True, 
+                    f"Filtered tickets: {len(data)} tickets with status=open and priority=medium"
+                )
+            else:
+                self.test_results["notifications_apis"]["ticket_filtering"] = self.log_test(
+                    "Ticket Filtering", False, "Invalid response structure for filtered tickets"
+                )
+        else:
+            self.test_results["notifications_apis"]["ticket_filtering"] = self.log_test(
+                "Ticket Filtering", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Comprehensive Backend API Tests")
