@@ -1294,7 +1294,7 @@ class ComprehensiveAPITester:
         
         # Test notifications endpoints without authentication
         endpoints = [
-            "/admin/notifications",
+            "/admin/notifications/",
             "/admin/notifications/unread-count"
         ]
         
