@@ -443,20 +443,23 @@ install_system_service() {
         
         PROJECT_DIR=$(pwd)
         
-        sudo tee /etc/systemd/system/anomalya.service > /dev/null << EOF
+        sudo tee /etc/systemd/system/anomalya.service > /dev/null << 'EOF'
 [Unit]
 Description=Anomalya Corp Application
-After=network.target mongod.service
-Requires=mongod.service
+After=network.target mongodb.service mongod.service
+Wants=mongodb.service mongod.service
 
 [Service]
-Type=forking
+Type=simple
 User=$USER
+Group=$USER
 WorkingDirectory=$PROJECT_DIR
-ExecStart=$PROJECT_DIR/start.sh
-ExecStop=$PROJECT_DIR/stop.sh
+ExecStart=/bin/bash $PROJECT_DIR/start.sh
+ExecStop=/bin/bash $PROJECT_DIR/stop.sh
 Restart=always
 RestartSec=10
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
