@@ -7,6 +7,64 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.6.0] - 2025-08-04 🚀
+
+### ✨ **NOUVELLES FONCTIONNALITÉS**
+- **GESTION UTILISATEURS UNIFIÉE** : Interface unique pour gérer tous les types d'utilisateurs
+  - AdminUsersUnified.jsx remplace les anciens AdminUsers.jsx et AdminClients.jsx
+  - Gestion centralisée : admins, clients, modérateurs dans un seul interface
+  - Fonctionnalités spécifiques par rôle (points de fidélité pour clients, stats de connexion pour admins)
+  - Filtres avancés par rôle, statut et recherche textuelle
+  - Actions CRUD complètes : créer, modifier, supprimer, activer/désactiver
+
+- **SYSTÈME DE PAGINATION COMPLET** : Navigation efficace dans les listes d'utilisateurs
+  - Pagination côté serveur avec paramètres `limit` et `offset`
+  - Interface de navigation : première page, précédente, suivante, dernière page  
+  - Boutons de pages numérotés avec navigation intelligente (affichage de 5 pages max)
+  - Info de pagination : "Affichage 1 à 10 sur 25 utilisateurs"
+  - Pagination responsive (desktop et mobile)
+  - Reset automatique à la page 1 lors du changement de filtres
+
+### 🔧 **AMÉLIORATIONS BACKEND**
+- **API PAGINATION** : Endpoints optimisés pour la gestion des grandes listes
+  - GET `/api/admin/users` avec support `limit`, `offset`, filtres
+  - Format de réponse standardisé : `{success: true, data: [...], total: number, limit: number, offset: number}`
+  - Pagination combinée avec filtres de rôle, statut et recherche
+  - Optimisation des requêtes MongoDB pour les grandes collections
+  - Tests complets : 9/10 scenarios de pagination validés
+
+### 📱 **INTERFACE MOBILE OPTIMISÉE**
+- **RESPONSIVE DESIGN CORRIGÉ** : Interface parfaitement adaptée aux mobiles
+  - Stats cards : passage de 1 colonne à grille 2x2 sur mobile
+  - User cards : empilement vertical avec informations adaptées
+  - Actions : icônes seules ou texte réduit selon l'espace disponible
+  - Filtres : layout vertical sur petit écran
+  - Pagination mobile : contrôles tactiles optimisés
+  - Score parfait : 6/6 éléments critiques mobiles validés
+
+### 🎨 **AMÉLIORATIONS UX**
+- **NAVIGATION SIMPLIFIÉE** : Routes unifiées pour éviter la redondance
+  - `/admin/users` et `/admin/clients` utilisent la même interface unifiée
+  - Suppression de la navigation "Clients" séparée du menu admin
+  - Gestion contextuelle des fonctionnalités par type d'utilisateur
+  - Interface intuitive avec badges visuels pour les rôles
+
+### 🔒 **CONTRÔLES ET SÉCURITÉ**
+- **VALIDATION RENFORCÉE** : Contrôles d'accès et validation des données
+  - Protection contre l'auto-suppression d'admin
+  - Protection contre l'auto-désactivation d'admin
+  - Validation des rôles et permissions
+  - Gestion d'erreurs robuste avec messages utilisateur
+
+### 🛠️ **INFRASTRUCTURE**
+- **SCRIPTS D'INSTALLATION MISE À JOUR** : Version 2.1.0
+  - Support complet de la gestion utilisateurs unifiée avec pagination
+  - Installation Linux (Ubuntu/Debian/CentOS/Fedora) mise à jour
+  - Installation Windows PowerShell mise à jour
+  - Documentation technique actualisée
+
+---
+
 ## [0.5.7] - 2025-08-04 ✨
 
 ### 🎯 **Corrections Interface Utilisateur Publique**
