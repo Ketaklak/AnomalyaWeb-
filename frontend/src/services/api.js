@@ -109,33 +109,17 @@ export const newsletterAPI = {
 
 // Auth API
 export const authAPI = {
-  login: (credentials) => {
-    return api.post(`/auth/login`, credentials);
-  },
-
-  register: (userData) => {
-    return api.post(`/auth/register`, userData);
-  },
-
-  me: () => {
-    return api.get(`/auth/me`);
-  },
-
-  refreshToken: () => {
-    return api.post(`/auth/refresh-token`);
-  },
-
+  login: (credentials) => api.post(`/auth/login`, credentials),
+  register: (userData) => api.post(`/auth/register`, userData),
+  me: () => api.get(`/auth/me`),
+  refreshToken: () => api.post(`/auth/refresh-token`),
   getUsers: (params = {}) => {
     const queryParams = new URLSearchParams();
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/auth/users?${queryParams.toString()}`);
   },
-
-  getStats: () => {
-    return api.get(`/auth/stats`);
-  }
+  getStats: () => api.get(`/auth/stats`)
 };
 
 // Admin API
