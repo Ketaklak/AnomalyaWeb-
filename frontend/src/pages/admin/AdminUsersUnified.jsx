@@ -713,8 +713,8 @@ const AdminUsersUnified = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-700">
-                      <div className="flex items-center space-x-4 text-xs text-gray-500">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t border-slate-700 space-y-2 sm:space-y-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-xs text-gray-500 space-y-1 sm:space-y-0">
                         <div className="flex items-center">
                           <Calendar className="h-3 w-3 mr-1" />
                           Inscrit le {new Date(user.created_at).toLocaleDateString('fr-FR')}
@@ -722,7 +722,7 @@ const AdminUsersUnified = () => {
                         {user.last_login && (
                           <div className="flex items-center">
                             <Clock className="h-3 w-3 mr-1" />
-                            Dernière connexion: {new Date(user.last_login).toLocaleDateString('fr-FR')}
+                            Dernière: {new Date(user.last_login).toLocaleDateString('fr-FR')}
                           </div>
                         )}
                       </div>
