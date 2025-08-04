@@ -285,7 +285,7 @@ async def create_notification(
             "link": notification.link,
             "read": False,
             "createdAt": datetime.now().isoformat(),
-            "createdBy": current_admin.id
+            "createdBy": str(current_admin.id)  # Ensure it's a string
         }
         
         await create_document("notifications", notification_data)
