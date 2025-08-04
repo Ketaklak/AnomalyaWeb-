@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { 
@@ -45,16 +45,26 @@ const RichTextEditor = ({
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [linkText, setLinkText] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
   const { toast } = useToast();
+
+  // Initialiser le contenu une seule fois
+  useEffect(() => {
+    if (editorRef.current && !isInitialized && content) {
+      editorRef.current.innerHTML = content;
+      setIsInitialized(true);
+    }
+  }, [content, isInitialized]);
 
   // Commandes d'édition
   const execCommand = useCallback((command, value = null) => {
     document.execCommand(command, false, value);
     if (editorRef.current) {
-      setEditorContent(editorRef.current.innerHTML);
-      onChange?.(editorRef.current.innerHTML);
+      const newContent = editorRef.current.innerHTML;
+      setEditorContent(newContent);
+      onChange?.(newContent);
     }
   }, [onChange]);
 
@@ -172,8 +182,8 @@ const RichTextEditor = ({
     }
   }, [execCommand]);
 
-  // Gestion du contenu éditeur
-  const handleContentChange = useCallback(() => {
+  // Gestion du contenu éditeur - FIXE : ne pas utiliser innerHTML pour éviter les re-renders
+  const handleContentChange = useCallback((e) => {
     if (editorRef.current) {
       const newContent = editorRef.current.innerHTML;
       setEditorContent(newContent);
@@ -280,11 +290,19 @@ const RichTextEditor = ({
               onMouseUp={handleSelectionChange}
               className="min-h-[400px] p-4 bg-white text-gray-900 rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-auto"
               style={{ height }}
-              dangerouslySetInnerHTML={{ __html: editorContent }}
-              placeholder={placeholder}
+              data-placeholder={placeholder}
             />
           )}
         </div>
+
+        {/* CSS pour le placeholder */}
+        <style jsx>{`
+          [contenteditable][data-placeholder]:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+            cursor: text;
+          }
+        `}</style>
 
         {/* Input de fichier caché */}
         {enableImageUpload && (
