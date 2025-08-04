@@ -1941,6 +1941,404 @@ class ComprehensiveAPITester:
         
         return True
     
+    def test_unified_user_management_pagination(self):
+        """Test pagination functionality for unified user management system"""
+        print("\n=== Testing Unified User Management Pagination ===")
+        
+        # Test 1: Basic pagination - Page 1 with 5 users per page
+        print("\n🎯 Testing Basic Pagination (Page 1, 5 per page)...")
+        response = self.make_request("GET", "/admin/users?limit=5&offset=0", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate pagination response format
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 5 and
+                    limit == 5 and
+                    offset == 0 and
+                    total >= 0
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_basic"] = self.log_test(
+                        "Basic Pagination (Page 1)", True, 
+                        f"Retrieved {len(users_data)} users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_basic"] = self.log_test(
+                        "Basic Pagination (Page 1)", False, 
+                        f"Invalid response format: data length {len(users_data)}, limit {limit}, offset {offset}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_basic"] = self.log_test(
+                    "Basic Pagination (Page 1)", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_basic"] = self.log_test(
+                "Basic Pagination (Page 1)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Next page - Page 2 with 5 users per page
+        print("\n🎯 Testing Next Page (Page 2, 5 per page)...")
+        response = self.make_request("GET", "/admin/users?limit=5&offset=5", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate second page
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 5 and
+                    limit == 5 and
+                    offset == 5 and
+                    total >= 0
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_page2"] = self.log_test(
+                        "Pagination Page 2", True, 
+                        f"Retrieved {len(users_data)} users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_page2"] = self.log_test(
+                        "Pagination Page 2", False, 
+                        f"Invalid response format: data length {len(users_data)}, limit {limit}, offset {offset}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_page2"] = self.log_test(
+                    "Pagination Page 2", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_page2"] = self.log_test(
+                "Pagination Page 2", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Different page size - 10 users per page
+        print("\n🎯 Testing Different Page Size (10 per page)...")
+        response = self.make_request("GET", "/admin/users?limit=10&offset=0", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate different page size
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 10 and
+                    limit == 10 and
+                    offset == 0 and
+                    total >= 0
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_size10"] = self.log_test(
+                        "Pagination Size 10", True, 
+                        f"Retrieved {len(users_data)} users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_size10"] = self.log_test(
+                        "Pagination Size 10", False, 
+                        f"Invalid response format: data length {len(users_data)}, limit {limit}, offset {offset}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_size10"] = self.log_test(
+                    "Pagination Size 10", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_size10"] = self.log_test(
+                "Pagination Size 10", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Large offset - Page 3 with 10 users per page
+        print("\n🎯 Testing Large Offset (Page 3, 10 per page)...")
+        response = self.make_request("GET", "/admin/users?limit=10&offset=20", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate large offset (may return empty if not enough users)
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 10 and
+                    limit == 10 and
+                    offset == 20 and
+                    total >= 0
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_large_offset"] = self.log_test(
+                        "Pagination Large Offset", True, 
+                        f"Retrieved {len(users_data)} users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_large_offset"] = self.log_test(
+                        "Pagination Large Offset", False, 
+                        f"Invalid response format: data length {len(users_data)}, limit {limit}, offset {offset}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_large_offset"] = self.log_test(
+                    "Pagination Large Offset", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_large_offset"] = self.log_test(
+                "Pagination Large Offset", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 5: Pagination with role filter - Client users only
+        print("\n🎯 Testing Pagination with Role Filter (client users)...")
+        response = self.make_request("GET", "/admin/users?limit=5&offset=0&role=client", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate role filtering
+                all_clients = all(user.get("role", "").startswith("client") for user in users_data)
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 5 and
+                    limit == 5 and
+                    offset == 0 and
+                    total >= 0 and
+                    all_clients
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_role_filter"] = self.log_test(
+                        "Pagination with Role Filter", True, 
+                        f"Retrieved {len(users_data)} client users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_role_filter"] = self.log_test(
+                        "Pagination with Role Filter", False, 
+                        f"Invalid filtering: all_clients={all_clients}, data length {len(users_data)}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_role_filter"] = self.log_test(
+                    "Pagination with Role Filter", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_role_filter"] = self.log_test(
+                "Pagination with Role Filter", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 6: Pagination with search
+        print("\n🎯 Testing Pagination with Search...")
+        response = self.make_request("GET", "/admin/users?limit=5&offset=0&search=admin", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate search functionality
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 5 and
+                    limit == 5 and
+                    offset == 0 and
+                    total >= 0
+                )
+                
+                # Check if search results contain "admin" in relevant fields
+                search_relevant = True
+                if users_data:
+                    search_relevant = any(
+                        "admin" in user.get("username", "").lower() or
+                        "admin" in user.get("email", "").lower() or
+                        "admin" in user.get("full_name", "").lower()
+                        for user in users_data
+                    )
+                
+                if format_valid and search_relevant:
+                    self.test_results["admin_apis"]["pagination_search"] = self.log_test(
+                        "Pagination with Search", True, 
+                        f"Retrieved {len(users_data)} users matching 'admin' (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_search"] = self.log_test(
+                        "Pagination with Search", False, 
+                        f"Search validation failed: format_valid={format_valid}, search_relevant={search_relevant}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_search"] = self.log_test(
+                    "Pagination with Search", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_search"] = self.log_test(
+                "Pagination with Search", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 7: Edge case - Offset beyond total results
+        print("\n🎯 Testing Edge Case - Offset Beyond Total...")
+        response = self.make_request("GET", "/admin/users?limit=10&offset=1000", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Should return empty array when offset exceeds total
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) == 0 and
+                    limit == 10 and
+                    offset == 1000 and
+                    total >= 0
+                )
+                
+                if format_valid:
+                    self.test_results["admin_apis"]["pagination_edge_case"] = self.log_test(
+                        "Pagination Edge Case", True, 
+                        f"Correctly returned empty array for large offset (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_edge_case"] = self.log_test(
+                        "Pagination Edge Case", False, 
+                        f"Edge case handling failed: data length {len(users_data)}, should be 0"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_edge_case"] = self.log_test(
+                    "Pagination Edge Case", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_edge_case"] = self.log_test(
+                "Pagination Edge Case", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 8: Combined filters - Role + Status + Pagination
+        print("\n🎯 Testing Combined Filters (role=client, status=active, pagination)...")
+        response = self.make_request("GET", "/admin/users?limit=5&offset=0&role=client&status=active", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total = data.get("total", 0)
+                limit = data.get("limit", 0)
+                offset = data.get("offset", 0)
+                
+                # Validate combined filtering
+                all_clients = all(user.get("role", "").startswith("client") for user in users_data)
+                all_active = all(user.get("is_active", False) for user in users_data)
+                format_valid = (
+                    isinstance(users_data, list) and
+                    len(users_data) <= 5 and
+                    limit == 5 and
+                    offset == 0 and
+                    total >= 0
+                )
+                
+                if format_valid and all_clients and all_active:
+                    self.test_results["admin_apis"]["pagination_combined_filters"] = self.log_test(
+                        "Pagination with Combined Filters", True, 
+                        f"Retrieved {len(users_data)} active client users (limit: {limit}, offset: {offset}, total: {total})"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_combined_filters"] = self.log_test(
+                        "Pagination with Combined Filters", False, 
+                        f"Combined filtering failed: format_valid={format_valid}, all_clients={all_clients}, all_active={all_active}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_combined_filters"] = self.log_test(
+                    "Pagination with Combined Filters", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_combined_filters"] = self.log_test(
+                "Pagination with Combined Filters", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 9: Total count consistency across pages
+        print("\n🎯 Testing Total Count Consistency...")
+        page1_response = self.make_request("GET", "/admin/users?limit=5&offset=0", token_type="admin")
+        page2_response = self.make_request("GET", "/admin/users?limit=5&offset=5", token_type="admin")
+        
+        if (page1_response and page1_response.status_code == 200 and 
+            page2_response and page2_response.status_code == 200):
+            
+            page1_data = page1_response.json()
+            page2_data = page2_response.json()
+            
+            if (page1_data.get("success") and page2_data.get("success") and
+                "data" in page1_data and "data" in page2_data):
+                
+                page1_total = page1_data.get("total", 0)
+                page2_total = page2_data.get("total", 0)
+                
+                # Total count should be consistent across pages
+                if page1_total == page2_total:
+                    self.test_results["admin_apis"]["pagination_total_consistency"] = self.log_test(
+                        "Total Count Consistency", True, 
+                        f"Total count consistent across pages: {page1_total}"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_total_consistency"] = self.log_test(
+                        "Total Count Consistency", False, 
+                        f"Total count inconsistent: page1={page1_total}, page2={page2_total}"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_total_consistency"] = self.log_test(
+                    "Total Count Consistency", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_total_consistency"] = self.log_test(
+                "Total Count Consistency", False, "Failed to get both pages"
+            )
+        
+        # Test 10: Maximum page size limit
+        print("\n🎯 Testing Maximum Page Size Limit...")
+        response = self.make_request("GET", "/admin/users?limit=200&offset=0", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                limit = data.get("limit", 0)
+                
+                # Should be capped at 100 (as per API definition)
+                if limit <= 100:
+                    self.test_results["admin_apis"]["pagination_max_limit"] = self.log_test(
+                        "Maximum Page Size Limit", True, 
+                        f"Page size properly limited to {limit} (requested 200)"
+                    )
+                else:
+                    self.test_results["admin_apis"]["pagination_max_limit"] = self.log_test(
+                        "Maximum Page Size Limit", False, 
+                        f"Page size not limited: {limit} (should be ≤ 100)"
+                    )
+            else:
+                self.test_results["admin_apis"]["pagination_max_limit"] = self.log_test(
+                    "Maximum Page Size Limit", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["pagination_max_limit"] = self.log_test(
+                "Maximum Page Size Limit", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Comprehensive Backend API Tests")
