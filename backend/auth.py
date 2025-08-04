@@ -188,15 +188,15 @@ def get_next_tier_points(current_tier: str, current_points: int) -> int:
     tiers = {
         "bronze": 500,
         "silver": 2000,
-        "gold": 5000,
-        "platinum": float('inf')
+        "gold": 5000
     }
     
     for tier, required_points in tiers.items():
         if required_points > current_points:
             return required_points - current_points
     
-    return 0  # Already at highest tier
+    # Already at highest tier (platinum)
+    return 0
 
 async def create_user(user: UserCreate):
     """Create a new user"""
