@@ -496,7 +496,7 @@ async def admin_get_tickets(
 @router.post("/tickets/{ticket_id}/messages", response_model=ApiResponse)
 async def admin_add_ticket_message(
     ticket_id: str,
-    message: str,
+    message_data: TicketMessageCreate,
     current_admin: User = Depends(get_current_admin)
 ):
     """Add admin message to support ticket"""
@@ -510,7 +510,7 @@ async def admin_add_ticket_message(
         new_message = {
             "user_id": current_admin.id,
             "user_name": current_admin.full_name,
-            "message": message,
+            "message": message_data.message,
             "timestamp": datetime.utcnow(),
             "is_admin": True
         }
