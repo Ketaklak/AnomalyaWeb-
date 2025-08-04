@@ -501,8 +501,8 @@
 ## test_plan:
   current_focus:
     - "Enhanced Content Management Backend APIs"
+  stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
-  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
