@@ -493,13 +493,14 @@ const AdminTickets = () => {
                             {/* Reply Form */}
                             <div className="space-y-3">
                               <h4 className="text-white font-medium">Votre réponse</h4>
-                              <Textarea
-                                placeholder="Tapez votre réponse au client..."
-                                value={replyMessage}
-                                onChange={(e) => setReplyMessage(e.target.value)}
-                                className="bg-slate-800 border-slate-600 text-white resize-none"
-                                rows={4}
-                              />
+                              <div className="bg-slate-800 border border-slate-600 rounded-md">
+                                <RichTextEditor
+                                  value={replyMessage}
+                                  onChange={setReplyMessage}
+                                  placeholder="Tapez votre réponse au client..."
+                                  className="min-h-[120px]"
+                                />
+                              </div>
                               <div className="flex justify-end space-x-2">
                                 <Button 
                                   variant="outline" 
