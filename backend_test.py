@@ -1795,7 +1795,9 @@ class ComprehensiveAPITester:
             return False
         
         # Add 8000 points using admin privileges
-        response = self.make_request("POST", f"/admin/clients/{client_id}/points?points=8000&description=Test points for 8000 points bug fix validation", token_type="admin")
+        import urllib.parse
+        description = urllib.parse.quote("Test points for 8000 points bug fix validation")
+        response = self.make_request("POST", f"/admin/clients/{client_id}/points?points=8000&description={description}", token_type="admin")
         if response and response.status_code == 200:
             points_result = response.json()
             print(f"✅ Successfully added 8000 points. New total: {points_result.get('new_total', 'Unknown')}")
