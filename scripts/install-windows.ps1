@@ -1,5 +1,5 @@
 # Script d'installation PowerShell pour Windows
-# Version: 2.1.0 (Mai 2025) - Support complet de la gestion utilisateurs unifiée avec pagination
+# Version: 2.1.1 (Mai 2025) - Corrections MongoDB PATH et diagnostics améliorés
 # Usage: PowerShell -ExecutionPolicy Bypass -File install-windows.ps1
 
 param(
