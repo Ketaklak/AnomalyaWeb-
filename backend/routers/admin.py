@@ -586,3 +586,244 @@ async def admin_get_client_stats(current_admin: User = Depends(get_current_admin
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching client stats: {str(e)}")
+
+# User Management (Unified with clients)
+@router.get("/users")
+async def admin_get_users(
+    role: Optional[str] = Query(None),
+    status: Optional[str] = Query(None), 
+    search: Optional[str] = Query(None),
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    current_admin: User = Depends(get_current_admin)
+):
+    """Get all users with filtering and search (admin only)"""
+    try:
+        filter_dict = {}
+        
+        # Role filter
+        if role and role != 'all':
+            if role == 'client':
+                filter_dict["role"] = {"$regex": "^client|^prospect"}
+            else:
+                filter_dict["role"] = role
+        
+        # Status filter
+        if status and status != 'all':
+            if status == 'active':
+                filter_dict["is_active"] = True
+            elif status == 'inactive':
+                filter_dict["is_active"] = False
+        
+        # Search functionality
+        if search:
+            users, total = await search_documents(
+                "users", search, ["username", "email", "full_name"], 
+                skip=offset, limit=limit
+            )
+        else:
+            users, total = await get_documents(
+                "users", filter_dict, skip=offset, limit=limit,
+                sort_field="created_at", sort_direction=-1
+            )
+        
+        # Process users to remove sensitive data and add stats
+        user_list = []
+        for user in users:
+            user.pop('_id', None)
+            user.pop('hashed_password', None)
+            
+            # For clients, add additional stats
+            if user.get('role', '').startswith('client'):
+                # Get quotes count
+                quotes, quotes_count = await get_documents("quotes", {"user_id": user["id"]}, limit=1)
+                user["quotes_count"] = quotes_count
+                
+                # Get tickets count
+                tickets, tickets_count = await get_documents("tickets", {"user_id": user["id"]}, limit=1)
+                user["tickets_count"] = tickets_count
+                
+                # Ensure points fields exist
+                user["total_points"] = user.get("total_points", 0)
+                user["available_points"] = user.get("available_points", 0)
+                user["loyalty_tier"] = user.get("loyalty_tier", "bronze")
+            
+            user_list.append(user)
+        
+        return {
+            "success": True,
+            "data": user_list,
+            "total": total,
+            "limit": limit,
+            "offset": offset
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
+
+from pydantic import BaseModel
+
+class UserCreateAdmin(BaseModel):
+    username: str
+    email: str
+    full_name: str
+    password: str
+    role: str = "client"
+    phone: Optional[str] = None
+    address: Optional[str] = None
+
+class UserUpdateAdmin(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    role: Optional[str] = None
+    loyalty_tier: Optional[str] = None
+    notes: Optional[str] = None
+
+class UserStatusUpdate(BaseModel):
+    is_active: bool
+
+@router.post("/users")
+async def admin_create_user(
+    user_data: UserCreateAdmin,
+    current_admin: User = Depends(get_current_admin)
+):
+    """Create a new user (admin only)"""
+    try:
+        from auth import create_user, UserCreate
+        
+        # Convert to UserCreate model
+        new_user = UserCreate(
+            username=user_data.username,
+            email=user_data.email,
+            full_name=user_data.full_name,
+            password=user_data.password,
+            role=user_data.role
+        )
+        
+        created_user = await create_user(new_user)
+        
+        # Update additional fields if provided
+        if user_data.phone or user_data.address:
+            update_data = {}
+            if user_data.phone:
+                update_data["phone"] = user_data.phone
+            if user_data.address:
+                update_data["address"] = user_data.address
+            
+            if update_data:
+                await update_document("users", created_user.id, update_data)
+        
+        return {
+            "success": True,
+            "message": "Utilisateur créé avec succès",
+            "data": {"user_id": created_user.id}
+        }
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating user: {str(e)}")
+
+@router.put("/users/{user_id}")
+async def admin_update_user(
+    user_id: str,
+    user_data: UserUpdateAdmin,
+    current_admin: User = Depends(get_current_admin)
+):
+    """Update user information (admin only)"""
+    try:
+        # Get existing user
+        existing_user = await get_document("users", user_id)
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Prepare update data
+        update_data = {}
+        if user_data.full_name is not None:
+            update_data["full_name"] = user_data.full_name
+        if user_data.email is not None:
+            update_data["email"] = user_data.email
+        if user_data.phone is not None:
+            update_data["phone"] = user_data.phone
+        if user_data.address is not None:
+            update_data["address"] = user_data.address
+        if user_data.role is not None:
+            update_data["role"] = user_data.role
+        if user_data.loyalty_tier is not None:
+            update_data["loyalty_tier"] = user_data.loyalty_tier
+        if user_data.notes is not None:
+            update_data["notes"] = user_data.notes
+        
+        if update_data:
+            await update_document("users", user_id, update_data)
+        
+        return {
+            "success": True,
+            "message": "Utilisateur mis à jour avec succès"
+        }
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating user: {str(e)}")
+
+@router.delete("/users/{user_id}")
+async def admin_delete_user(
+    user_id: str,
+    current_admin: User = Depends(get_current_admin)
+):
+    """Delete a user (admin only)"""
+    try:
+        # Check if user exists
+        existing_user = await get_document("users", user_id)
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Prevent admin from deleting themselves
+        if user_id == current_admin.id:
+            raise HTTPException(status_code=400, detail="Cannot delete your own account")
+        
+        # Delete user
+        await delete_document("users", user_id)
+        
+        return {
+            "success": True,
+            "message": "Utilisateur supprimé avec succès"
+        }
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting user: {str(e)}")
+
+@router.put("/users/{user_id}/status")
+async def admin_update_user_status(
+    user_id: str,
+    status_data: UserStatusUpdate,
+    current_admin: User = Depends(get_current_admin)
+):
+    """Update user status (activate/deactivate) (admin only)"""
+    try:
+        # Check if user exists
+        existing_user = await get_document("users", user_id)
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Prevent admin from deactivating themselves
+        if user_id == current_admin.id and not status_data.is_active:
+            raise HTTPException(status_code=400, detail="Cannot deactivate your own account")
+        
+        # Update status
+        await update_document("users", user_id, {"is_active": status_data.is_active})
+        
+        return {
+            "success": True,
+            "message": f"Utilisateur {'activé' if status_data.is_active else 'désactivé'} avec succès"
+        }
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating user status: {str(e)}")
