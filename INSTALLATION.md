@@ -21,7 +21,6 @@ Guide complet d'installation pour l'application Anomalya Corp sur différentes p
 
 ### Distributions supportées
 - ✅ **Ubuntu** 20.04+ / **Debian** 11+
-- ✅ **Kali Linux** Rolling (2023.1+)
 - ✅ **CentOS** 8+ / **RHEL** 8+
 - ✅ **Fedora** 35+
 - ✅ **Arch Linux** (communautaire)
@@ -46,24 +45,6 @@ chmod +x scripts/install-linux.sh
 cd scripts
 ./install-linux.sh
 ```
-
-### 🛡️ Installation spécifique Kali Linux
-
-Kali Linux est entièrement supporté avec des optimisations spéciales :
-
-```bash
-# Sur Kali, le script détecte automatiquement:
-# - L'exécution en mode root (pas de sudo nécessaire)
-# - Les repositories spéciaux Kali
-# - Les packages MongoDB adaptés
-./scripts/install-linux.sh
-```
-
-**Caractéristiques Kali:**
-- 🔓 **Mode root automatique** : Le script détecte si vous êtes root
-- 📦 **Packages optimisés** : Utilise les repos Kali quand disponibles  
-- 🔄 **Fallback intelligent** : Installation alternative si packages manquants
-- ⚡ **MongoDB spécialisé** : Gestion des différentes versions MongoDB sur Kali
 
 ### Options disponibles
 ```bash
