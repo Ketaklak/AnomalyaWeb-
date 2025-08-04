@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script d'installation automatique pour Linux (Ubuntu/Debian/CentOS/Fedora)
-# Version: 2.1.0 (Mai 2025) - Support complet de la gestion utilisateurs unifiée avec pagination
+# Version: 2.1.1 (Mai 2025) - Corrections Debian 12 (Python 3.11, MongoDB officiel)
 # Usage: bash install-linux.sh
 
 # Obtenir le répertoire du script
