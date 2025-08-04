@@ -79,6 +79,14 @@ const AdminUsersUnified = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [usersPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [globalStats, setGlobalStats] = useState({
+    total: 0,
+    clients: 0,
+    admins: 0,
+    moderators: 0,
+    active: 0,
+    inactive: 0
+  });
 
   useEffect(() => {
     fetchUsers();
