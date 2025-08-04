@@ -3,601 +3,611 @@
     "get_news": {
       "success": true,
       "details": "Retrieved 4 news articles",
-      "timestamp": "2025-08-04T15:44:55.788495"
+      "timestamp": "2025-08-04T16:25:29.465616"
     },
     "get_single_news": {
       "success": true,
       "details": "Retrieved article: Les tendances IA en 2025",
-      "timestamp": "2025-08-04T15:44:55.810222"
+      "timestamp": "2025-08-04T16:25:29.486173"
     }
   },
   "services_apis": {
     "get_services": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-04T15:44:55.854817"
+      "timestamp": "2025-08-04T16:25:29.558472"
     },
     "get_single_service": {
       "success": true,
       "details": "Retrieved service: D\u00e9veloppement Web",
-      "timestamp": "2025-08-04T15:44:55.879964"
+      "timestamp": "2025-08-04T16:25:29.582538"
     }
   },
   "authentication": {
     "admin_login": {
       "success": true,
       "details": "Successfully logged in as admin",
-      "timestamp": "2025-08-04T15:44:56.178308"
+      "timestamp": "2025-08-04T16:25:29.869320"
     },
     "client_register": {
       "success": true,
       "details": "Client registered successfully",
-      "timestamp": "2025-08-04T15:44:56.445048"
+      "timestamp": "2025-08-04T16:25:30.134966"
     },
     "client_login": {
       "success": true,
       "details": "Successfully logged in as client",
-      "timestamp": "2025-08-04T15:44:56.699871"
+      "timestamp": "2025-08-04T16:25:30.391861"
     },
     "auth_me_admin": {
       "success": true,
       "details": "Retrieved admin user info: admin",
-      "timestamp": "2025-08-04T15:44:56.722092"
+      "timestamp": "2025-08-04T16:25:30.413543"
     },
     "auth_me_client": {
       "success": true,
-      "details": "Retrieved client user info: testclient322295",
-      "timestamp": "2025-08-04T15:44:56.739103"
+      "details": "Retrieved client user info: testclient324729",
+      "timestamp": "2025-08-04T16:25:30.434209"
     },
     "rbac_client_blocked": {
       "success": false,
       "details": "Expected 403 or timeout, got 403",
-      "timestamp": "2025-08-04T15:45:01.295011"
+      "timestamp": "2025-08-04T16:25:35.943317"
     },
     "rbac_admin_client": {
       "success": true,
       "details": "Admin access to client endpoint handled correctly (HTTP 200)",
-      "timestamp": "2025-08-04T15:45:01.312222"
+      "timestamp": "2025-08-04T16:25:36.007096"
     }
   },
   "admin_apis": {
     "dashboard_stats": {
       "success": true,
-      "details": "Articles: 4, Users: 42, Contacts: 0",
-      "timestamp": "2025-08-04T15:44:56.766687"
+      "details": "Articles: 4, Users: 46, Contacts: 0",
+      "timestamp": "2025-08-04T16:25:30.460580"
     },
     "articles_list": {
       "success": true,
       "details": "Retrieved 4 articles",
-      "timestamp": "2025-08-04T15:44:56.787787"
+      "timestamp": "2025-08-04T16:25:30.482094"
     },
     "contacts_list": {
       "success": true,
       "details": "Retrieved 0 contacts",
-      "timestamp": "2025-08-04T15:44:56.808368"
+      "timestamp": "2025-08-04T16:25:30.545269"
     },
     "services_list": {
       "success": true,
       "details": "Retrieved 5 services",
-      "timestamp": "2025-08-04T15:44:56.826927"
+      "timestamp": "2025-08-04T16:25:30.567334"
     },
     "clients_list": {
       "success": true,
-      "details": "Retrieved 33 clients",
-      "timestamp": "2025-08-04T15:44:56.953149"
+      "details": "Retrieved 35 clients",
+      "timestamp": "2025-08-04T16:25:30.872735"
     },
     "quotes_list": {
       "success": true,
-      "details": "Retrieved 21 quotes",
-      "timestamp": "2025-08-04T15:44:56.991251"
+      "details": "Retrieved 22 quotes",
+      "timestamp": "2025-08-04T16:25:30.975104"
     },
     "tickets_list": {
       "success": true,
-      "details": "Retrieved 27 tickets",
-      "timestamp": "2025-08-04T15:44:57.041250"
+      "details": "Retrieved 29 tickets",
+      "timestamp": "2025-08-04T16:25:31.146278"
     },
     "users_list_all": {
       "success": true,
-      "details": "Retrieved 20 users (total: 42)",
-      "timestamp": "2025-08-04T15:44:57.104044"
+      "details": "Retrieved 20 users (total: 46)",
+      "timestamp": "2025-08-04T16:25:31.350576"
     },
     "users_filter_role_all": {
       "success": true,
       "details": "Retrieved 20 users with role filter 'all'",
-      "timestamp": "2025-08-04T15:44:57.155612"
+      "timestamp": "2025-08-04T16:25:31.622454"
     },
     "users_filter_role_admin": {
       "success": true,
-      "details": "Retrieved 5 users with role filter 'admin'",
-      "timestamp": "2025-08-04T15:44:57.176453"
+      "details": "Retrieved 6 users with role filter 'admin'",
+      "timestamp": "2025-08-04T16:25:31.667981"
     },
     "users_filter_role_client": {
       "success": true,
       "details": "Retrieved 20 users with role filter 'client'",
-      "timestamp": "2025-08-04T15:44:57.253259"
+      "timestamp": "2025-08-04T16:25:31.875153"
     },
     "users_filter_role_moderator": {
       "success": true,
-      "details": "Retrieved 4 users with role filter 'moderator'",
-      "timestamp": "2025-08-04T15:44:57.273762"
+      "details": "Retrieved 5 users with role filter 'moderator'",
+      "timestamp": "2025-08-04T16:25:31.921375"
     },
     "users_filter_status_all": {
       "success": true,
       "details": "Retrieved 20 users with status filter 'all'",
-      "timestamp": "2025-08-04T15:44:57.330800"
+      "timestamp": "2025-08-04T16:25:31.991091"
     },
     "users_filter_status_active": {
       "success": true,
       "details": "Retrieved 20 users with status filter 'active'",
-      "timestamp": "2025-08-04T15:44:57.385500"
+      "timestamp": "2025-08-04T16:25:32.057727"
     },
     "users_filter_status_inactive": {
       "success": true,
       "details": "Retrieved 0 users with status filter 'inactive'",
-      "timestamp": "2025-08-04T15:44:57.405900"
+      "timestamp": "2025-08-04T16:25:32.082756"
     },
     "users_search_admin": {
       "success": true,
-      "details": "Found 5 users matching search term 'admin'",
-      "timestamp": "2025-08-04T15:44:57.423726"
+      "details": "Found 6 users matching search term 'admin'",
+      "timestamp": "2025-08-04T16:25:32.102632"
     },
     "users_search_test": {
       "success": true,
       "details": "Found 20 users matching search term 'test'",
-      "timestamp": "2025-08-04T15:44:57.482007"
+      "timestamp": "2025-08-04T16:25:32.158652"
     },
     "users_search_client": {
       "success": true,
       "details": "Found 20 users matching search term 'client'",
-      "timestamp": "2025-08-04T15:44:57.556822"
+      "timestamp": "2025-08-04T16:25:32.240422"
     },
     "create_user": {
       "success": true,
-      "details": "Successfully created user with ID: dbe57495-1e81-4436-8c3f-475be127ee17",
-      "timestamp": "2025-08-04T15:44:57.812805"
+      "details": "Successfully created user with ID: 94a39b5b-2f12-4bf4-85e4-390b942e4b9b",
+      "timestamp": "2025-08-04T16:25:32.499526"
     },
     "create_user_admin": {
       "success": true,
       "details": "Successfully created admin user",
-      "timestamp": "2025-08-04T15:44:58.076529"
+      "timestamp": "2025-08-04T16:25:32.761481"
     },
     "create_user_client_premium": {
       "success": true,
       "details": "Successfully created client_premium user",
-      "timestamp": "2025-08-04T15:44:58.345748"
+      "timestamp": "2025-08-04T16:25:33.017041"
     },
     "create_user_moderator": {
       "success": true,
       "details": "Successfully created moderator user",
-      "timestamp": "2025-08-04T15:44:58.601657"
+      "timestamp": "2025-08-04T16:25:33.272106"
     },
     "update_user": {
       "success": true,
       "details": "Successfully updated user information",
-      "timestamp": "2025-08-04T15:44:58.624568"
+      "timestamp": "2025-08-04T16:25:33.294007"
     },
     "update_user_role": {
       "success": true,
       "details": "Successfully updated user role to client_premium",
-      "timestamp": "2025-08-04T15:44:58.684810"
+      "timestamp": "2025-08-04T16:25:33.316138"
     },
     "deactivate_user": {
       "success": true,
       "details": "Successfully deactivated user",
-      "timestamp": "2025-08-04T15:44:58.703848"
+      "timestamp": "2025-08-04T16:25:33.340644"
     },
     "activate_user": {
       "success": true,
       "details": "Successfully activated user",
-      "timestamp": "2025-08-04T15:44:58.725914"
+      "timestamp": "2025-08-04T16:25:33.403983"
     },
     "delete_user": {
       "success": true,
       "details": "Successfully deleted user",
-      "timestamp": "2025-08-04T15:44:58.747926"
+      "timestamp": "2025-08-04T16:25:33.422257"
     },
     "users_access_control": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:44:58.824252"
+      "timestamp": "2025-08-04T16:25:33.458000"
     },
     "self_deletion_protection": {
       "success": false,
       "details": "Expected 400, got No response",
-      "timestamp": "2025-08-04T15:44:58.902460"
+      "timestamp": "2025-08-04T16:25:33.497222"
     },
     "client_stats_verification": {
       "success": true,
       "details": "Client users have all required stats fields (quotes: 0, tickets: 0, points: 0, tier: bronze)",
-      "timestamp": "2025-08-04T15:44:58.980131"
+      "timestamp": "2025-08-04T16:25:33.572441"
     },
     "pagination_basic": {
       "success": true,
-      "details": "Retrieved 5 users (limit: 5, offset: 0, total: 45)",
-      "timestamp": "2025-08-04T15:44:59.014221"
+      "details": "Retrieved 5 users (limit: 5, offset: 0, total: 49)",
+      "timestamp": "2025-08-04T16:25:33.602330"
     },
     "pagination_page2": {
       "success": true,
-      "details": "Retrieved 5 users (limit: 5, offset: 5, total: 45)",
-      "timestamp": "2025-08-04T15:44:59.045400"
+      "details": "Retrieved 5 users (limit: 5, offset: 5, total: 49)",
+      "timestamp": "2025-08-04T16:25:33.631655"
     },
     "pagination_size10": {
       "success": true,
-      "details": "Retrieved 10 users (limit: 10, offset: 0, total: 45)",
-      "timestamp": "2025-08-04T15:44:59.086025"
+      "details": "Retrieved 10 users (limit: 10, offset: 0, total: 49)",
+      "timestamp": "2025-08-04T16:25:33.678590"
     },
     "pagination_large_offset": {
       "success": true,
-      "details": "Retrieved 10 users (limit: 10, offset: 20, total: 45)",
-      "timestamp": "2025-08-04T15:44:59.136723"
+      "details": "Retrieved 10 users (limit: 10, offset: 20, total: 49)",
+      "timestamp": "2025-08-04T16:25:33.721020"
     },
     "pagination_role_filter": {
       "success": true,
-      "details": "Retrieved 5 client users (limit: 5, offset: 0, total: 34)",
-      "timestamp": "2025-08-04T15:44:59.177480"
+      "details": "Retrieved 5 client users (limit: 5, offset: 0, total: 36)",
+      "timestamp": "2025-08-04T16:25:33.757494"
     },
     "pagination_search": {
       "success": true,
-      "details": "Retrieved 5 users matching 'admin' (limit: 5, offset: 0, total: 6)",
-      "timestamp": "2025-08-04T15:44:59.200723"
+      "details": "Retrieved 5 users matching 'admin' (limit: 5, offset: 0, total: 7)",
+      "timestamp": "2025-08-04T16:25:33.776147"
     },
     "pagination_edge_case": {
       "success": true,
-      "details": "Correctly returned empty array for large offset (limit: 10, offset: 1000, total: 45)",
-      "timestamp": "2025-08-04T15:44:59.223995"
+      "details": "Correctly returned empty array for large offset (limit: 10, offset: 1000, total: 49)",
+      "timestamp": "2025-08-04T16:25:33.798067"
     },
     "pagination_combined_filters": {
       "success": true,
-      "details": "Retrieved 5 active client users (limit: 5, offset: 0, total: 34)",
-      "timestamp": "2025-08-04T15:44:59.272180"
+      "details": "Retrieved 5 active client users (limit: 5, offset: 0, total: 36)",
+      "timestamp": "2025-08-04T16:25:33.831281"
     },
     "pagination_total_consistency": {
       "success": true,
-      "details": "Total count consistent across pages: 45",
-      "timestamp": "2025-08-04T15:44:59.327526"
+      "details": "Total count consistent across pages: 49",
+      "timestamp": "2025-08-04T16:25:33.888761"
     },
     "pagination_max_limit": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-04T15:44:59.348068"
+      "timestamp": "2025-08-04T16:25:33.911816"
     }
   },
   "client_apis": {
     "dashboard": {
       "success": true,
       "details": "Retrieved dashboard data with 0 points",
-      "timestamp": "2025-08-04T15:44:59.376542"
+      "timestamp": "2025-08-04T16:25:33.942108"
     },
     "profile_get_initial": {
       "success": true,
       "details": "Retrieved initial client profile structure",
-      "timestamp": "2025-08-04T15:44:59.404991"
+      "timestamp": "2025-08-04T16:25:33.961387"
     },
     "profile_create_complete": {
       "success": true,
       "details": "\u2705 BUG FIX VERIFIED: Successfully created profile with ALL 14 fields (personal: 7, company: 4, preferences: 3). Previously only 5 fields were supported.",
-      "timestamp": "2025-08-04T15:44:59.473616"
+      "timestamp": "2025-08-04T16:25:34.024544"
     },
     "profile_fields_validation": {
       "success": true,
       "details": "\u2705 BUG FIX CONFIRMED: All 14 fields correctly saved and retrieved. Previously missing fields (address, city, postal_code, company_industry, company_size, job_title, newsletter_subscribed, sms_notifications, email_notifications) now working.",
-      "timestamp": "2025-08-04T15:44:59.494356"
+      "timestamp": "2025-08-04T16:25:34.043870"
     },
     "profile_update": {
       "success": true,
       "details": "\u2705 Profile update endpoint working correctly",
-      "timestamp": "2025-08-04T15:44:59.517681"
+      "timestamp": "2025-08-04T16:25:34.109609"
     },
     "profile_update_validation": {
       "success": true,
       "details": "\u2705 BUG FIX WORKING: Profile updates applied correctly, unchanged fields preserved",
-      "timestamp": "2025-08-04T15:44:59.537812"
+      "timestamp": "2025-08-04T16:25:34.130192"
     },
     "profile_create_vs_update_logic": {
       "success": true,
       "details": "\u2705 BUG FIX CONFIRMED: POST correctly updates existing profile instead of creating duplicate. Frontend should now choose between POST (create/update) and PUT (update only) correctly.",
-      "timestamp": "2025-08-04T15:44:59.581770"
+      "timestamp": "2025-08-04T16:25:34.191218"
     },
     "quotes_list": {
       "success": true,
       "details": "Retrieved 0 quotes",
-      "timestamp": "2025-08-04T15:44:59.644290"
+      "timestamp": "2025-08-04T16:25:34.217321"
     },
     "quote_request": {
       "success": true,
       "details": "Quote created with ID: Unknown",
-      "timestamp": "2025-08-04T15:44:59.665954"
+      "timestamp": "2025-08-04T16:25:34.238571"
     },
     "tickets_list": {
       "success": true,
       "details": "Retrieved 0 tickets",
-      "timestamp": "2025-08-04T15:44:59.690219"
+      "timestamp": "2025-08-04T16:25:34.260647"
     },
     "ticket_creation": {
       "success": true,
       "details": "Ticket created with ID: Unknown",
-      "timestamp": "2025-08-04T15:44:59.754454"
+      "timestamp": "2025-08-04T16:25:34.306753"
     },
     "points_history": {
       "success": true,
       "details": "Retrieved 0 point transactions",
-      "timestamp": "2025-08-04T15:44:59.776084"
+      "timestamp": "2025-08-04T16:25:34.330233"
+    },
+    "get_next_tier_points_logic": {
+      "success": false,
+      "details": "\u274c Some tier calculations incorrect. Check get_next_tier_points function.",
+      "timestamp": "2025-08-04T16:25:34.433138"
+    },
+    "transaction_serialization": {
+      "success": true,
+      "details": "\u2705 All 0 transactions properly serialized. No ObjectId issues found.",
+      "timestamp": "2025-08-04T16:25:34.452864"
     }
   },
   "analytics_apis": {
     "overview_7d": {
       "success": true,
-      "details": "\u2705 REAL DATA VALIDATED: Users: 45 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
-      "timestamp": "2025-08-04T15:44:59.834054"
+      "details": "\u2705 REAL DATA VALIDATED: Users: 49 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
+      "timestamp": "2025-08-04T16:25:34.544505"
     },
     "overview_30d": {
       "success": true,
-      "details": "\u2705 REAL DATA VALIDATED: Users: 45 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
-      "timestamp": "2025-08-04T15:44:59.899648"
+      "details": "\u2705 REAL DATA VALIDATED: Users: 49 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
+      "timestamp": "2025-08-04T16:25:34.611131"
     },
     "overview_90d": {
       "success": true,
-      "details": "\u2705 REAL DATA VALIDATED: Users: 45 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
-      "timestamp": "2025-08-04T15:44:59.928190"
+      "details": "\u2705 REAL DATA VALIDATED: Users: 49 (matches DB), Articles: 4 (matches DB), Growth rates realistic: Users 100.0%, Articles 0.0%",
+      "timestamp": "2025-08-04T16:25:34.633365"
     },
     "user_activity": {
       "success": true,
-      "details": "\u2705 REAL DATA VALIDATED: Total users 45 matches DB, avg daily users 3.6 proportional to user base, sessions >= users for all days",
-      "timestamp": "2025-08-04T15:44:59.949918"
+      "details": "\u2705 REAL DATA VALIDATED: Total users 49 matches DB, avg daily users 4.3 proportional to user base, sessions >= users for all days",
+      "timestamp": "2025-08-04T16:25:34.654084"
     },
     "content_performance": {
       "success": true,
       "details": "\u2705 REAL DATA VALIDATED: 4 real articles, views realistic (avg: 95), engagement 0-100%, pinned articles perform better: True",
-      "timestamp": "2025-08-04T15:44:59.969270"
+      "timestamp": "2025-08-04T16:25:34.673284"
     },
     "traffic_sources": {
       "success": true,
       "details": "\u2705 REAL DATA VALIDATED: Traffic totals 100% (100.0%), site metrics match DB, realistic distribution with all 4 sources, reasonable percentages",
-      "timestamp": "2025-08-04T15:44:59.996566"
+      "timestamp": "2025-08-04T16:25:34.697491"
     },
     "popular_pages": {
       "success": true,
-      "details": "\u2705 REAL DATA VALIDATED: Real site structure (/, /services, /contact), homepage has highest views (337), realistic metrics, conversions match contacts (0)",
-      "timestamp": "2025-08-04T15:45:00.022869"
+      "details": "\u2705 REAL DATA VALIDATED: Real site structure (/, /services, /contact), homepage has highest views (357), realistic metrics, conversions match contacts (0)",
+      "timestamp": "2025-08-04T16:25:34.723677"
     },
     "export": {
       "success": true,
       "details": "Export generated: /exports/analytics_7d_20250804.json",
-      "timestamp": "2025-08-04T15:45:00.037604"
+      "timestamp": "2025-08-04T16:25:34.743996"
     },
     "auth_no_token_overview": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.051879"
+      "timestamp": "2025-08-04T16:25:34.760961"
     },
     "auth_client_token_overview": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.068101"
+      "timestamp": "2025-08-04T16:25:34.781701"
     },
     "auth_no_token_user-activity": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.081996"
+      "timestamp": "2025-08-04T16:25:34.837289"
     },
     "auth_client_token_user-activity": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.101267"
+      "timestamp": "2025-08-04T16:25:34.854268"
     },
     "auth_no_token_content-performance": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.117782"
+      "timestamp": "2025-08-04T16:25:34.867933"
     },
     "auth_client_token_content-performance": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.137159"
+      "timestamp": "2025-08-04T16:25:34.885388"
     },
     "auth_no_token_traffic-sources": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.150873"
+      "timestamp": "2025-08-04T16:25:34.901205"
     },
     "auth_client_token_traffic-sources": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.170695"
+      "timestamp": "2025-08-04T16:25:34.917667"
     },
     "auth_no_token_popular-pages": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.189384"
+      "timestamp": "2025-08-04T16:25:34.933783"
     },
     "auth_client_token_popular-pages": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.208851"
+      "timestamp": "2025-08-04T16:25:34.953928"
     },
     "auth_no_token_export": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.228480"
+      "timestamp": "2025-08-04T16:25:34.970924"
     },
     "auth_client_token_export": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.288267"
+      "timestamp": "2025-08-04T16:25:34.991605"
     }
   },
   "media_apis": {
     "get_files": {
       "success": true,
       "details": "Retrieved 0 media files (page 1/50)",
-      "timestamp": "2025-08-04T15:45:00.305312"
+      "timestamp": "2025-08-04T16:25:35.055403"
     },
     "get_folders": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-04T15:45:00.327788"
+      "timestamp": "2025-08-04T16:25:35.075072"
     },
     "create_folder": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-04T15:45:00.355138"
+      "timestamp": "2025-08-04T16:25:35.094380"
     },
     "upload_base64": {
       "success": false,
       "details": "Failed - HTTP No response",
-      "timestamp": "2025-08-04T15:45:00.371061"
+      "timestamp": "2025-08-04T16:25:35.115085"
     },
     "upload_multipart": {
       "success": false,
       "details": "Invalid response structure",
-      "timestamp": "2025-08-04T15:45:00.389431"
+      "timestamp": "2025-08-04T16:25:35.138327"
     },
     "filter_files": {
       "success": true,
       "details": "Filtered files: 0 files found in 'test-folder' with search 'test'",
-      "timestamp": "2025-08-04T15:45:00.409622"
+      "timestamp": "2025-08-04T16:25:35.200643"
     },
     "delete_file": {
       "success": true,
       "details": "No file ID available for deletion test (upload may have failed)",
-      "timestamp": "2025-08-04T15:45:00.409659"
+      "timestamp": "2025-08-04T16:25:35.200683"
     },
     "auth_no_token_files": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.431735"
+      "timestamp": "2025-08-04T16:25:35.218370"
     },
     "auth_client_token_files": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.490991"
+      "timestamp": "2025-08-04T16:25:35.276398"
     },
     "auth_no_token_folders": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.506883"
+      "timestamp": "2025-08-04T16:25:35.295661"
     },
     "auth_client_token_folders": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.524354"
+      "timestamp": "2025-08-04T16:25:35.311410"
     },
     "error_invalid_base64": {
       "success": false,
       "details": "Expected 400, got No response",
-      "timestamp": "2025-08-04T15:45:00.544180"
+      "timestamp": "2025-08-04T16:25:35.330345"
     },
     "error_unsupported_type": {
       "success": false,
       "details": "Expected 400, got No response",
-      "timestamp": "2025-08-04T15:45:00.563520"
+      "timestamp": "2025-08-04T16:25:35.352259"
     },
     "error_file_not_found": {
       "success": false,
       "details": "Expected 404, got No response",
-      "timestamp": "2025-08-04T15:45:00.583903"
+      "timestamp": "2025-08-04T16:25:35.373109"
     },
     "error_duplicate_folder": {
       "success": false,
       "details": "Expected 400, got No response",
-      "timestamp": "2025-08-04T15:45:00.645224"
+      "timestamp": "2025-08-04T16:25:35.392116"
     }
   },
   "notifications_apis": {
     "get_notifications": {
       "success": true,
-      "details": "Retrieved 33 notifications (page 1)",
-      "timestamp": "2025-08-04T15:45:00.666532"
+      "details": "Retrieved 38 notifications (page 1)",
+      "timestamp": "2025-08-04T16:25:35.414416"
     },
     "unread_count": {
       "success": true,
       "details": "Unread notifications count: 5",
-      "timestamp": "2025-08-04T15:45:00.683739"
+      "timestamp": "2025-08-04T16:25:35.438238"
     },
     "create_notification": {
       "success": true,
-      "details": "Created notification with ID: 39dbcb68-f0a4-49b3-93ed-47f20176855f, Type: NEW_USER",
-      "timestamp": "2025-08-04T15:45:00.733949"
+      "details": "Created notification with ID: 98648ee6-ec28-43cd-b844-5180c6bc5816, Type: NEW_USER",
+      "timestamp": "2025-08-04T16:25:35.458895"
     },
     "filter_notifications": {
       "success": true,
       "details": "Filtered notifications: 6 NEW_USER unread notifications",
-      "timestamp": "2025-08-04T15:45:00.756794"
+      "timestamp": "2025-08-04T16:25:35.480873"
     },
     "mark_as_read": {
       "success": true,
-      "details": "Successfully marked notification 39dbcb68-f0a4-49b3-93ed-47f20176855f as read",
-      "timestamp": "2025-08-04T15:45:00.776834"
+      "details": "Successfully marked notification 98648ee6-ec28-43cd-b844-5180c6bc5816 as read",
+      "timestamp": "2025-08-04T16:25:35.506933"
     },
     "mark_all_read": {
       "success": true,
       "details": "Successfully marked all notifications as read: 5 notifications marqu\u00e9es comme lues",
-      "timestamp": "2025-08-04T15:45:00.802091"
+      "timestamp": "2025-08-04T16:25:35.534655"
     },
     "delete_notification": {
       "success": true,
-      "details": "Successfully deleted notification 39dbcb68-f0a4-49b3-93ed-47f20176855f",
-      "timestamp": "2025-08-04T15:45:00.861429"
+      "details": "Successfully deleted notification 98648ee6-ec28-43cd-b844-5180c6bc5816",
+      "timestamp": "2025-08-04T16:25:35.556458"
     },
     "auth_no_token_": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.876742"
+      "timestamp": "2025-08-04T16:25:35.577660"
     },
     "auth_client_token_": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.939494"
+      "timestamp": "2025-08-04T16:25:35.595032"
     },
     "auth_no_token_unread-count": {
       "success": false,
       "details": "Expected 401, got No response",
-      "timestamp": "2025-08-04T15:45:00.956978"
+      "timestamp": "2025-08-04T16:25:35.609684"
     },
     "auth_client_token_unread-count": {
       "success": false,
       "details": "Expected 403 or timeout, got No response",
-      "timestamp": "2025-08-04T15:45:00.975477"
+      "timestamp": "2025-08-04T16:25:35.629257"
     },
     "uuid_handling": {
       "success": true,
       "details": "All 20 notifications have proper UUID format, no ObjectId serialization issues",
-      "timestamp": "2025-08-04T15:45:00.996033"
+      "timestamp": "2025-08-04T16:25:35.648919"
     },
     "type_metadata": {
       "success": true,
       "details": "Notification properly enriched with type metadata - Icon: mail, Color: green",
-      "timestamp": "2025-08-04T15:45:01.060069"
+      "timestamp": "2025-08-04T16:25:35.668049"
     },
     "invalid_type_handling": {
       "success": false,
       "details": "Expected 400 for invalid type, got No response",
-      "timestamp": "2025-08-04T15:45:01.078495"
+      "timestamp": "2025-08-04T16:25:35.688503"
     },
     "admin_tickets_list": {
       "success": true,
-      "details": "Retrieved 28 tickets for admin view",
-      "timestamp": "2025-08-04T15:45:01.142945"
+      "details": "Retrieved 30 tickets for admin view",
+      "timestamp": "2025-08-04T16:25:35.791345"
     },
     "create_test_ticket": {
       "success": true,
-      "details": "Created test ticket with ID: ad3b4f61-3452-4962-a4ee-87e15cfbef32",
-      "timestamp": "2025-08-04T15:45:01.163645"
+      "details": "Created test ticket with ID: 0aad6ead-8d69-44e5-ac33-56ea0c74029c",
+      "timestamp": "2025-08-04T16:25:35.821664"
     },
     "admin_ticket_response": {
       "success": true,
-      "details": "Successfully added admin message to ticket ad3b4f61-3452-4962-a4ee-87e15cfbef32: R\u00e9ponse ajout\u00e9e avec succ\u00e8s",
-      "timestamp": "2025-08-04T15:45:01.182631"
+      "details": "Successfully added admin message to ticket 0aad6ead-8d69-44e5-ac33-56ea0c74029c: R\u00e9ponse ajout\u00e9e avec succ\u00e8s",
+      "timestamp": "2025-08-04T16:25:35.841523"
     },
     "ticket_message_history": {
       "success": true,
       "details": "Ticket contains 1 admin message(s) out of 1 total messages",
-      "timestamp": "2025-08-04T15:45:01.236229"
+      "timestamp": "2025-08-04T16:25:35.884214"
     },
     "ticket_filtering": {
       "success": true,
-      "details": "Filtered tickets: 25 tickets with status=open and priority=medium",
-      "timestamp": "2025-08-04T15:45:01.274077"
+      "details": "Filtered tickets: 27 tickets with status=open and priority=medium",
+      "timestamp": "2025-08-04T16:25:35.923395"
     }
   },
   "errors": []
