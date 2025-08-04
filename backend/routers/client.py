@@ -160,8 +160,13 @@ async def get_client_dashboard(current_user: User = Depends(get_current_client))
         
         recent_transactions = []
         for trans in transactions:
-            trans.pop('_id', None)
-            recent_transactions.append(PointTransaction(**trans))
+            # Remove all MongoDB-specific fields that could contain ObjectId
+            clean_trans = {k: v for k, v in trans.items() if k not in ['_id', 'ObjectId']}
+            # Convert any remaining ObjectId to string (safety measure)
+            for key, value in clean_trans.items():
+                if hasattr(value, '__class__') and 'ObjectId' in str(value.__class__):
+                    clean_trans[key] = str(value)
+            recent_transactions.append(PointTransaction(**clean_trans))
         
         # Get active quotes count
         active_quotes, active_count = await get_documents(
