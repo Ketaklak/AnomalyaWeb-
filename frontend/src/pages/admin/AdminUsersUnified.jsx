@@ -574,8 +574,8 @@ const AdminUsersUnified = () => {
               
               return (
                 <Card key={user.id} className="bg-slate-900/50 backdrop-blur-sm border-slate-700 hover:bg-slate-800/50 transition-colors">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-3">
                           <div className="relative">
@@ -585,23 +585,27 @@ const AdminUsersUnified = () => {
                             <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-slate-900 ${user.is_active ? 'bg-green-500' : 'bg-red-500'}`}></div>
                           </div>
                           
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <h3 className="text-lg font-semibold text-white">{user.full_name}</h3>
-                              <Badge className={getRoleColor(user.role)}>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+                              <h3 className="text-lg font-semibold text-white truncate">{user.full_name}</h3>
+                              <Badge className={`${getRoleColor(user.role)} mt-1 sm:mt-0`}>
                                 {user.role === 'admin' ? 'Admin' : user.role === 'moderator' ? 'Modérateur' : 'Client'}
                               </Badge>
                             </div>
-                            <div className="flex items-center space-x-2 text-sm text-gray-400">
-                              <span>@{user.username}</span>
-                              <span>•</span>
-                              <Mail className="h-3 w-3" />
-                              <span>{user.email}</span>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 text-sm text-gray-400 mt-1">
+                              <span className="truncate">@{user.username}</span>
+                              <span className="hidden sm:inline">•</span>
+                              <div className="flex items-center space-x-1">
+                                <Mail className="h-3 w-3" />
+                                <span className="truncate">{user.email}</span>
+                              </div>
                               {user.phone && (
                                 <>
-                                  <span>•</span>
-                                  <Phone className="h-3 w-3" />
-                                  <span>{user.phone}</span>
+                                  <span className="hidden sm:inline">•</span>
+                                  <div className="flex items-center space-x-1">
+                                    <Phone className="h-3 w-3" />
+                                    <span>{user.phone}</span>
+                                  </div>
                                 </>
                               )}
                             </div>
@@ -609,10 +613,10 @@ const AdminUsersUnified = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-center space-x-6">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-6 space-y-4 lg:space-y-0">
                         {/* Stats pour clients */}
                         {user.role === 'client' && (
-                          <>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
                             {/* Loyalty Tier */}
                             <div className="flex items-center space-x-2">
                               <div className={`p-2 rounded-lg ${getLoyaltyColor(user.loyalty_tier)}`}>
@@ -624,36 +628,36 @@ const AdminUsersUnified = () => {
                             </div>
                             
                             {/* Stats */}
-                            <div className="grid grid-cols-4 gap-4">
-                              <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                                <div className="text-lg font-bold text-blue-400">{user.total_points || 0}</div>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
+                              <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                                <div className="text-sm sm:text-lg font-bold text-blue-400">{user.total_points || 0}</div>
                                 <div className="text-xs text-gray-400">Points</div>
                               </div>
-                              <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                                <div className="text-lg font-bold text-green-400">{user.available_points || 0}</div>
+                              <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                                <div className="text-sm sm:text-lg font-bold text-green-400">{user.available_points || 0}</div>
                                 <div className="text-xs text-gray-400">Dispo</div>
                               </div>
-                              <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                                <div className="text-lg font-bold text-purple-400">{user.quotes_count || 0}</div>
+                              <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                                <div className="text-sm sm:text-lg font-bold text-purple-400">{user.quotes_count || 0}</div>
                                 <div className="text-xs text-gray-400">Devis</div>
                               </div>
-                              <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                                <div className="text-lg font-bold text-orange-400">{user.tickets_count || 0}</div>
+                              <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                                <div className="text-sm sm:text-lg font-bold text-orange-400">{user.tickets_count || 0}</div>
                                 <div className="text-xs text-gray-400">Tickets</div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         )}
                         
                         {/* Stats pour admins/modérateurs */}
                         {(user.role === 'admin' || user.role === 'moderator') && (
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                              <div className="text-lg font-bold text-blue-400">{user.login_count || 0}</div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                            <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                              <div className="text-sm sm:text-lg font-bold text-blue-400">{user.login_count || 0}</div>
                               <div className="text-xs text-gray-400">Connexions</div>
                             </div>
-                            <div className="text-center p-3 bg-slate-800/50 rounded-lg">
-                              <div className="text-lg font-bold text-green-400">
+                            <div className="text-center p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                              <div className="text-sm sm:text-lg font-bold text-green-400">
                                 {user.last_login ? new Date(user.last_login).toLocaleDateString('fr-FR') : 'Jamais'}
                               </div>
                               <div className="text-xs text-gray-400">Dernière</div>
@@ -662,25 +666,25 @@ const AdminUsersUnified = () => {
                         )}
                         
                         {/* Actions */}
-                        <div className="flex items-center space-x-2">
+                        <div className="flex flex-wrap gap-2">
                           <Button 
                             size="sm" 
                             variant="outline"
                             onClick={() => handleEditUser(user)}
-                            className="border-slate-600"
+                            className="border-slate-600 text-white hover:bg-slate-700"
                           >
-                            <Edit className="h-4 w-4 mr-1" />
-                            Modifier
+                            <Edit className="h-4 w-4 sm:mr-1" />
+                            <span className="hidden sm:inline">Modifier</span>
                           </Button>
                           
                           {user.role === 'client' && (
                             <Button 
                               size="sm" 
                               onClick={() => {setDialogOpen(true); setSelectedUser(user);}}
-                              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
                             >
-                              <Plus className="h-4 w-4 mr-1" />
-                              Points
+                              <Plus className="h-4 w-4 sm:mr-1" />
+                              <span className="hidden sm:inline">Points</span>
                             </Button>
                           )}
                           
@@ -688,7 +692,7 @@ const AdminUsersUnified = () => {
                             size="sm" 
                             variant="outline"
                             onClick={() => handleToggleUserStatus(user.id, user.is_active)}
-                            className={user.is_active ? "border-red-600 text-red-400" : "border-green-600 text-green-400"}
+                            className={user.is_active ? "border-red-600 text-red-400 hover:bg-red-900/20" : "border-green-600 text-green-400 hover:bg-green-900/20"}
                           >
                             {user.is_active ? <UserX className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
                           </Button>
