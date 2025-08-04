@@ -623,7 +623,7 @@ const AdminUsersUnified = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Total</p>
-                  <p className="text-lg md:text-2xl font-bold text-white">{users.length}</p>  
+                  <p className="text-lg md:text-2xl font-bold text-white">{globalStats.total}</p>  
                 </div>
                 <Users className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
               </div>
@@ -635,7 +635,7 @@ const AdminUsersUnified = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Clients</p>
-                  <p className="text-lg md:text-2xl font-bold text-green-400">{users.filter(u => u.role === 'client').length}</p>  
+                  <p className="text-lg md:text-2xl font-bold text-green-400">{globalStats.clients}</p>  
                 </div>
                 <User className="h-6 md:h-8 w-6 md:w-8 text-green-400" />
               </div>
@@ -647,7 +647,7 @@ const AdminUsersUnified = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Admins</p>
-                  <p className="text-lg md:text-2xl font-bold text-red-400">{users.filter(u => u.role === 'admin').length}</p>  
+                  <p className="text-lg md:text-2xl font-bold text-red-400">{globalStats.admins}</p>  
                 </div>
                 <Crown className="h-6 md:h-8 w-6 md:w-8 text-red-400" />
               </div>
@@ -659,7 +659,7 @@ const AdminUsersUnified = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Actifs</p>
-                  <p className="text-lg md:text-2xl font-bold text-blue-400">{users.filter(u => u.is_active).length}</p>  
+                  <p className="text-lg md:text-2xl font-bold text-blue-400">{globalStats.active}</p>  
                 </div>
                 <CheckCircle className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
               </div>
