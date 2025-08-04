@@ -78,7 +78,7 @@ const AdminUsersUnified = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [roleFilter, statusFilter, searchTerm]);
+  }, [roleFilter, statusFilter, searchTerm, currentPage]);
 
   const fetchUsers = async () => {
     try {
