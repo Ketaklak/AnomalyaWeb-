@@ -1415,7 +1415,7 @@ class ComprehensiveAPITester:
             "message": "This should fail",
             "link": "/admin"
         }
-        response = self.make_request("POST", "/admin/notifications", invalid_notification, token_type="admin")
+        response = self.make_request("POST", "/admin/notifications/", invalid_notification, token_type="admin")
         if response and response.status_code == 400:
             self.test_results["notifications_apis"]["invalid_type_handling"] = self.log_test(
                 "Invalid Type Handling", True, 
