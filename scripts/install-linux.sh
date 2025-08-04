@@ -51,6 +51,62 @@ install_dependencies() {
         echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
         sudo apt update && sudo apt install -y yarn
         
+    elif [[ $OS == *"Kali"* ]]; then
+        info "Configuration spéciale pour Kali Linux détectée"
+        
+        # Vérifier si on est root (courant sur Kali)
+        if [[ $EUID -eq 0 ]]; then
+            warning "Exécution en tant que root détectée (normal sur Kali)"
+            SUDO_CMD=""
+        else
+            SUDO_CMD="sudo"
+        fi
+        
+        # Mettre à jour les repositories
+        $SUDO_CMD apt update
+        
+        # Installation des dépendances avec alternatives pour Kali
+        info "Installation de Python et outils de développement..."
+        $SUDO_CMD apt install -y python3 python3-pip python3-venv python3-dev build-essential git curl wget gnupg2 software-properties-common
+        
+        # Node.js et npm - utiliser la version des repos Kali ou installer via NodeSource
+        info "Installation de Node.js et npm..."
+        if $SUDO_CMD apt install -y nodejs npm; then
+            success "Node.js installé depuis les repositories Kali"
+        else
+            warning "Installation de Node.js via NodeSource..."
+            curl -fsSL https://deb.nodesource.com/setup_20.x | $SUDO_CMD -E bash -
+            $SUDO_CMD apt install -y nodejs
+        fi
+        
+        # MongoDB - installation spéciale pour Kali
+        info "Installation de MongoDB pour Kali Linux..."
+        if $SUDO_CMD apt install -y mongodb; then
+            success "MongoDB installé depuis les repositories Kali"
+        else
+            warning "MongoDB non disponible dans les repos Kali, installation alternative..."
+            # Installer MongoDB community edition
+            curl -fsSL https://pgp.mongodb.com/server-7.0.asc | $SUDO_CMD gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+            echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main" | $SUDO_CMD tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+            $SUDO_CMD apt update
+            $SUDO_CMD apt install -y mongodb-org || warning "MongoDB installation échouée, fonctionnalité limitée"
+        fi
+        
+        # Installer Yarn avec méthode Kali-compatible
+        info "Installation de Yarn..."
+        if ! command -v yarn &> /dev/null; then
+            $SUDO_CMD npm install -g yarn || {
+                warning "Installation Yarn via npm échouée, utilisation d'npm comme fallback"
+                info "Yarn sera remplacé par npm pour ce système"
+            }
+        else
+            success "Yarn déjà installé"
+        fi
+        
+        # Dépendances supplémentaires pour Kali
+        info "Installation de dépendances supplémentaires pour Kali..."
+        $SUDO_CMD apt install -y python3-setuptools python3-wheel python3-crypto python3-cryptography
+        
     elif [[ $OS == *"CentOS"* ]] || [[ $OS == *"Red Hat"* ]] || [[ $OS == *"Fedora"* ]]; then
         sudo dnf install -y python3 python3-pip nodejs npm mongodb-server git curl wget
         
@@ -63,6 +119,7 @@ install_dependencies() {
         
     else
         warning "Distribution non supportée automatiquement. Installation manuelle requise."
+        warning "Distributions supportées: Ubuntu, Debian, Kali Linux, CentOS, RHEL, Fedora, Arch Linux"
         exit 1
     fi
     
