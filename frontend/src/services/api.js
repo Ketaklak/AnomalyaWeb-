@@ -102,17 +102,9 @@ export const faqAPI = {
 
 // Newsletter API
 export const newsletterAPI = {
-  subscribe: (email) => {
-    return api.post(`/newsletter/subscribe`, { email });
-  },
-
-  unsubscribe: (email) => {
-    return api.post(`/newsletter/unsubscribe`, { email });
-  },
-
-  getStats: () => {
-    return api.get(`/newsletter/stats`);
-  }
+  subscribe: (email) => api.post(`/newsletter/subscribe`, { email }),
+  unsubscribe: (email) => api.post(`/newsletter/unsubscribe`, { email }),
+  getStats: () => api.get(`/newsletter/stats`)
 };
 
 // Auth API
