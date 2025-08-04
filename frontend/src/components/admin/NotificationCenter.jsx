@@ -132,8 +132,8 @@ const NotificationCenter = ({
       setHasMore(false);
       
       toast({
-        title: "Mode développement",
-        description: "Utilisation des données de test (API non disponible)",
+        title: "API non disponible",
+        description: "Utilisation des données de test. Vérifiez la connexion au serveur.",
         variant: "default"
       });
     } finally {
