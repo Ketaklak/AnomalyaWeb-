@@ -388,7 +388,14 @@ sleep 5
 # Démarrer le frontend
 echo "🌐 Démarrage du frontend..."
 cd frontend
-yarn start &
+
+# Utiliser yarn si disponible, sinon npm
+if command -v yarn &> /dev/null; then
+    yarn start &
+else
+    npm start &
+fi
+
 FRONTEND_PID=$!
 cd ..
 
