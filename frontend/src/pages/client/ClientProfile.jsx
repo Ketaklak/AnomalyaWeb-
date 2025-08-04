@@ -117,7 +117,14 @@ const ClientProfile = () => {
     setSaving(true);
 
     try {
-      const response = await clientAPI.createProfile(formData);
+      let response;
+      
+      // If we have an existing profile, use update, otherwise create
+      if (profile && (profile.first_name || profile.last_name)) {
+        response = await clientAPI.updateProfile(formData);
+      } else {
+        response = await clientAPI.createProfile(formData);
+      }
 
       if (response.data.success) {
         toast({
