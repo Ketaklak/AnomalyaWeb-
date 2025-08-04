@@ -540,8 +540,10 @@
 ## test_plan:
   current_focus:
     - "Sistema de Notifications Frontend Integration"
+    - "Admin Ticket System Frontend Integration"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
+    - "Sistema de Notifications Frontend Integration"
   test_all: false
   test_priority: "high_first"
 
