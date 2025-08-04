@@ -35,11 +35,6 @@ const Header = () => {
     { name: 'Contact', href: '/contact' }
   ];
 
-  // Ajouter Support pour les clients connectés
-  const fullNavigation = isClient 
-    ? [...navigation, { name: 'Support', href: '/client/tickets' }]
-    : navigation;
-
   const handleLogout = () => {
     logout();
   };
