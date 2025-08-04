@@ -177,4 +177,15 @@ if (-not (Test-Path "backend\.env")) {
     Write-Host "   - Modifiez la SECRET_KEY dans le fichier .env" -ForegroundColor White
 }
 
+if (-not $mongoClient) {
+    Write-Host "❗ PRIORITÉ 3: Installer le client MongoDB" -ForegroundColor Red
+    Write-Host "   - Réinstallez MongoDB Community Edition complète" -ForegroundColor White
+    Write-Host "   - Ou téléchargez MongoDB Shell depuis mongodb.com/try/download/shell" -ForegroundColor White
+    Write-Host "   - L'application peut fonctionner même sans client si le service tourne" -ForegroundColor Yellow
+} elseif (-not $mongoInPath) {
+    Write-Host "❗ INFO: Ajouter MongoDB au PATH" -ForegroundColor Yellow
+    Write-Host "   - Le script d'installation devrait l'avoir fait automatiquement" -ForegroundColor White
+    Write-Host "   - Redémarrez PowerShell/Command Prompt après installation" -ForegroundColor White
+}
+
 Write-Host "`n✅ Diagnostic terminé" -ForegroundColor Green
