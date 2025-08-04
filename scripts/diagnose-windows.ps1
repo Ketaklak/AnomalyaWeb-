@@ -188,10 +188,20 @@ Write-Host "`n🎯 Recommandations:" -ForegroundColor Yellow
 Write-Host "===================" -ForegroundColor Yellow
 
 if (-not $mongoRunning) {
-    Write-Host "❗ PRIORITÉ 1: Démarrer MongoDB" -ForegroundColor Red
-    Write-Host "   - Ouvrez les Services Windows (services.msc)" -ForegroundColor White
-    Write-Host "   - Cherchez MongoDB et démarrez le service" -ForegroundColor White
-    Write-Host "   - Ou lancez mongod.exe manuellement" -ForegroundColor White
+    if ($compassFound) {
+        Write-Host "❗ PRIORITÉ 1: Installer MongoDB SERVER (pas juste Compass)" -ForegroundColor Red
+        Write-Host "   🔧 SOLUTION RAPIDE via PowerShell:" -ForegroundColor Yellow
+        Write-Host "   1. Installer Chocolatey: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -ForegroundColor Gray
+        Write-Host "   2. Installer MongoDB Server: choco install mongodb" -ForegroundColor Gray
+        Write-Host "   📥 SOLUTION MANUELLE:" -ForegroundColor Yellow
+        Write-Host "   - Téléchargez MongoDB Community Server depuis mongodb.com/try/download/community" -ForegroundColor Gray
+        Write-Host "   - Choisissez 'Server' pas 'Compass' dans les options" -ForegroundColor Gray
+    } else {
+        Write-Host "❗ PRIORITÉ 1: Démarrer MongoDB" -ForegroundColor Red
+        Write-Host "   - Ouvrez les Services Windows (services.msc)" -ForegroundColor White
+        Write-Host "   - Cherchez MongoDB et démarrez le service" -ForegroundColor White
+        Write-Host "   - Ou lancez mongod.exe manuellement" -ForegroundColor White
+    }
 }
 
 if (-not (Test-Path "backend\.env")) {
