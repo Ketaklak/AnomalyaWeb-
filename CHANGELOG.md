@@ -7,6 +7,40 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.5.7] - 2025-08-04 ✨
+
+### 🎯 **Corrections Interface Utilisateur Publique**
+- **MENU SUPPORT RÉPARÉ** : Placement correct dans le menu utilisateur connecté
+  - Support & Tickets visible pour TOUS les utilisateurs connectés (clients ET admins)
+  - Retiré de la navigation principale, maintenant sous "Connecté en tant que"
+  - Accessible via le menu déroulant utilisateur avec icône MessageSquare
+- **ACCÈS TICKETS CÔTÉ PUBLIC** : Système complet d'accès aux tickets depuis l'interface publique
+  - Navigation `/client/tickets` accessible via menu utilisateur
+  - Intégration correcte pour clients et administrateurs
+  - Interface cohérente entre desktop et mobile
+
+### 🔧 **Corrections Rendu HTML**
+- **PRÉVISUALISATIONS TICKETS RÉPARÉES** : Plus de balises HTML visibles
+  - `dangerouslySetInnerHTML` appliqué dans MyTickets.jsx pour prévisualisations
+  - Rendu correct du formatage riche dans les aperçus de messages
+  - Cohérence avec le rendu dans TicketDetail.jsx et AdminTickets.jsx
+- **AFFICHAGE MESSAGES** : Formatage HTML correctement interprété partout
+  - Bold, italic, listes affichés correctement au lieu des balises brutes
+  - Expérience utilisateur améliorée pour le contenu riche
+
+### 🎨 **Améliorations Navigation**
+- Navigation publique épurée (Accueil, Services, Actualités, Compétences, Contact)
+- Menu utilisateur enrichi avec Support en première position pour clients
+- Menu admin avec Support intégré après "Administration"
+- Navigation mobile synchronisée avec version desktop
+
+### 📱 **Interface Responsive**
+- Menu Support disponible sur mobile dans la navigation repliable
+- Cohérence d'affichage entre toutes les résolutions
+- Expérience utilisateur optimisée sur tous les appareils
+
+---
+
 ## [0.5.6] - 2025-08-04 🔧
 
 ### 🛠️ **Corrections Critiques**
