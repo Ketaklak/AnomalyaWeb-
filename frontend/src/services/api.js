@@ -80,13 +80,8 @@ export const servicesAPI = {
 
 // Contact API
 export const contactAPI = {
-  create: (contactData) => {
-    return api.post(`/contact/`, contactData);
-  },
-
-  getStats: () => {
-    return api.get(`/contact/stats`);
-  }
+  create: (contactData) => api.post(`/contact/`, contactData),
+  getStats: () => api.get(`/contact/stats`)
 };
 
 // Testimonials API
