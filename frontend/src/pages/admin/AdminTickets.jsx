@@ -481,9 +481,10 @@ const AdminTickets = () => {
                                           })}
                                         </span>
                                       </div>
-                                      <p className={`text-sm ${message.is_admin ? 'text-blue-200' : 'text-gray-300'}`}>
-                                        {message.message}
-                                      </p>
+                                      <div 
+                                        className={`text-sm ${message.is_admin ? 'text-blue-200' : 'text-gray-300'}`}
+                                        dangerouslySetInnerHTML={{ __html: message.message }}
+                                      />
                                     </div>
                                   ))}
                                 </div>
