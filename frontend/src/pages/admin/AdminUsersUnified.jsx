@@ -83,12 +83,24 @@ const AdminUsersUnified = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      const offset = (currentPage - 1) * usersPerPage;
       const response = await adminAPI.getUsers({ 
         role: roleFilter,
         status: statusFilter,
-        search: searchTerm 
+        search: searchTerm,
+        limit: usersPerPage,
+        offset: offset
       });
-      setUsers(response.data?.data || []);
+      
+      if (response.data && response.data.data) {
+        setUsers(response.data.data);
+        setTotalUsers(response.data.total || 0);
+        setTotalPages(Math.ceil((response.data.total || 0) / usersPerPage));
+      } else {
+        setUsers([]);
+        setTotalUsers(0);
+        setTotalPages(1);
+      }
     } catch (err) {
       console.error('Error fetching users:', err);
       toast({
@@ -96,8 +108,8 @@ const AdminUsersUnified = () => {
         description: "Impossible de charger la liste des utilisateurs.",
         variant: "destructive"
       });
-      // Données mockées pour la démo
-      setUsers([
+      // Données mockées pour la démo avec pagination simulée
+      const allMockUsers = [
         {
           id: '1',
           username: 'admin',
@@ -156,7 +168,64 @@ const AdminUsersUnified = () => {
           last_login: new Date(Date.now() - 7200000).toISOString(),
           login_count: 35
         }
-      ]);
+      ];
+      
+      // Generate additional mock users for pagination demo
+      for (let i = 5; i <= 25; i++) {
+        allMockUsers.push({
+          id: i.toString(),
+          username: `user${i}`,
+          full_name: `Utilisateur ${i}`,
+          email: `user${i}@example.com`,
+          phone: `06 00 00 00 ${i.toString().padStart(2, '0')}`,
+          role: i % 3 === 0 ? 'admin' : i % 2 === 0 ? 'moderator' : 'client',
+          is_active: i % 4 !== 0,
+          loyalty_tier: ['bronze', 'silver', 'gold', 'platinum'][i % 4],
+          total_points: Math.floor(Math.random() * 1000),
+          available_points: Math.floor(Math.random() * 500),
+          quotes_count: Math.floor(Math.random() * 10),
+          tickets_count: Math.floor(Math.random() * 5),
+          created_at: new Date(Date.now() - 86400000 * i).toISOString(),
+          last_login: new Date(Date.now() - 3600000 * i).toISOString(),
+          login_count: Math.floor(Math.random() * 100)
+        });
+      }
+      
+      // Apply filters to mock data
+      let filteredUsers = allMockUsers;
+      
+      if (roleFilter !== 'all') {
+        filteredUsers = filteredUsers.filter(user => {
+          if (roleFilter === 'client') {
+            return user.role === 'client';
+          }
+          return user.role === roleFilter;
+        });
+      }
+      
+      if (statusFilter !== 'all') {
+        filteredUsers = filteredUsers.filter(user => {
+          if (statusFilter === 'active') return user.is_active;
+          if (statusFilter === 'inactive') return !user.is_active;
+          return true;
+        });
+      }
+      
+      if (searchTerm) {
+        filteredUsers = filteredUsers.filter(user =>
+          user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.username?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+      
+      // Apply pagination to mock data
+      const offset = (currentPage - 1) * usersPerPage;
+      const paginatedUsers = filteredUsers.slice(offset, offset + usersPerPage);
+      
+      setUsers(paginatedUsers);
+      setTotalUsers(filteredUsers.length);
+      setTotalPages(Math.ceil(filteredUsers.length / usersPerPage));
     } finally {
       setLoading(false);
     }
