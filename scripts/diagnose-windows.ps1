@@ -9,6 +9,23 @@ Write-Host "`n1. 📊 État de MongoDB:" -ForegroundColor Cyan
 $mongoServices = @("MongoDB", "mongod", "MongoDBCompass")
 $mongoRunning = $false
 
+# Détecter MongoDB Compass (GUI seulement)
+$compassPaths = @(
+    "$env:LOCALAPPDATA\MongoDBCompass\MongoDBCompass.exe",
+    "$env:APPDATA\MongoDBCompass\MongoDBCompass.exe"
+)
+
+$compassFound = $false
+foreach ($compassPath in $compassPaths) {
+    if (Test-Path $compassPath) {
+        $compassFound = $true
+        Write-Host "   ⚠️ MongoDB Compass trouvé: $compassPath" -ForegroundColor Yellow
+        Write-Host "   ❌ ATTENTION: MongoDB Compass est juste l'interface graphique!" -ForegroundColor Red
+        Write-Host "   🔧 Il vous faut MongoDB SERVER pour faire fonctionner l'application" -ForegroundColor Yellow
+        break
+    }
+}
+
 foreach ($serviceName in $mongoServices) {
     $service = Get-Service $serviceName -ErrorAction SilentlyContinue
     if ($service) {
@@ -18,18 +35,24 @@ foreach ($serviceName in $mongoServices) {
 }
 
 if (-not $mongoRunning) {
-    Write-Host "   ❌ Aucun service MongoDB en cours d'exécution" -ForegroundColor Red
+    if ($compassFound) {
+        Write-Host "   🚨 PROBLÈME IDENTIFIÉ: Vous avez MongoDB Compass mais pas MongoDB Server!" -ForegroundColor Red
+        Write-Host "   💡 MongoDB Compass = Interface graphique seulement" -ForegroundColor Yellow
+        Write-Host "   💡 MongoDB Server = Base de données nécessaire pour l'application" -ForegroundColor Yellow
+    else {
+        Write-Host "   ❌ Aucun service MongoDB en cours d'exécution" -ForegroundColor Red
+    }
     
-    # Chercher MongoDB manuellement
-    $mongoPaths = @(
+    # Chercher MongoDB Server
+    $mongoServerPaths = @(
         "C:\Program Files\MongoDB\Server\*\bin\mongod.exe",
         "C:\MongoDB\Server\*\bin\mongod.exe"
     )
     
-    foreach ($path in $mongoPaths) {
+    foreach ($path in $mongoServerPaths) {
         $resolved = Resolve-Path $path -ErrorAction SilentlyContinue
         if ($resolved) {
-            Write-Host "   💡 MongoDB trouvé: $($resolved.Path)" -ForegroundColor Yellow
+            Write-Host "   ✅ MongoDB Server trouvé: $($resolved.Path)" -ForegroundColor Green
         }
     }
 }
