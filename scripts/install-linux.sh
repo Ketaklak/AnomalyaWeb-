@@ -463,9 +463,13 @@ WantedBy=multi-user.target
 EOF
         
         sudo systemctl daemon-reload
-        sudo systemctl enable anomalya
         
-        success "Service système installé. Utilisez 'sudo systemctl start anomalya' pour démarrer"
+        if sudo systemctl enable anomalya 2>/dev/null; then
+            success "Service système installé. Utilisez 'sudo systemctl start anomalya' pour démarrer"
+        else
+            warning "Impossible d'activer le service automatiquement. Vous pouvez le faire manuellement plus tard."
+            info "Pour activer le service: sudo systemctl enable anomalya"
+        fi
     fi
 }
 
