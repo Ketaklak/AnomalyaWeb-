@@ -208,25 +208,13 @@ export const adminAPI = {
     if (params.search) queryParams.append('search', params.search);
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
-    
     return api.get(`/admin/users?${queryParams.toString()}`);
   },
 
-  createUser: (userData) => {
-    return api.post(`/admin/users`, userData);
-  },
-
-  updateUser: (userId, userData) => {
-    return api.put(`/admin/users/${userId}`, userData);
-  },
-
-  deleteUser: (userId) => {
-    return api.delete(`/admin/users/${userId}`);
-  },
-
-  updateUserStatus: (userId, isActive) => {
-    return api.put(`/admin/users/${userId}/status`, { is_active: isActive });
-  }
+  createUser: (userData) => api.post(`/admin/users`, userData),
+  updateUser: (userId, userData) => api.put(`/admin/users/${userId}`, userData),
+  deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+  updateUserStatus: (userId, isActive) => api.put(`/admin/users/${userId}/status`, { is_active: isActive })
 };
 
 // Client API
