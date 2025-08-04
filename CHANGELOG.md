@@ -7,6 +7,52 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.6.3] - 2025-08-04 🪟
+
+### 🔧 **CORRECTIONS MAJEURES WINDOWS**
+- **MongoDB PATH Automatique** : Correction du problème "Client mongo non disponible"
+  - Détection automatique des clients `mongo.exe` et `mongosh.exe`
+  - Ajout automatique du répertoire MongoDB au PATH utilisateur
+  - Support chemins multiples : Program Files, MongoDB, versions diverses
+  - Messages informatifs détaillés pour l'utilisateur
+- **Services MongoDB Robustes** : Gestion intelligente des noms de services Windows
+  - Test séquentiel : "MongoDB", "mongod", "MongoDBCompass"
+  - Démarrage manuel en fallback si services systemd échouent
+  - Création automatique des répertoires de données MongoDB
+- **Test de Connexion Avancé** : Validation fonctionnelle complète
+  - Support `mongo` et `mongosh` (versions récentes)
+  - Test de ping MongoDB avec gestion d'erreurs
+  - Configuration PATH persistante pour sessions futures
+
+### 🛠️ **OUTILS DE DIAGNOSTIC WINDOWS**
+- **Script de Diagnostic Complet** : `diagnose-windows.ps1` créé
+  - Vérification état services MongoDB (tous types)
+  - Test de connectivité ports 27017, 8001, 3000
+  - Validation configuration .env backend
+  - Détection processus Python/Node.js actifs
+  - Vérification PATH et clients MongoDB disponibles
+- **Correction PATH Automatique** : `fix-mongodb-path.ps1` créé
+  - Détection automatique installation MongoDB
+  - Correction PATH utilisateur persistante
+  - Test de connexion intégré post-correction
+- **Guide Dépannage** : `WINDOWS_TROUBLESHOOT.md` documentation
+  - Solutions pour tous les problèmes courants Windows
+  - Procédures pas à pas avec commandes PowerShell
+  - Diagnostic et résolution des erreurs MongoDB/JWT
+
+### 🔄 **AMÉLIORATIONS CROSS-PLATFORM**
+- **Installation Linux Robuste** : Correction erreur "install" dans yarn
+  - Fallback automatique `yarn install` → `npm install`
+  - Gestion d'erreur complète avec messages utilisateur
+  - Test de disponibilité yarn avant utilisation
+
+### 📊 **COMPATIBILITÉ ÉTENDUE**
+- **Windows** : Support amélioré MongoDB Community Edition toutes versions
+- **Linux** : Correction Debian 12, Python 3.11, MongoDB officiel
+- **Services** : Gestion robuste services système multi-plateformes
+
+---
+
 ## [0.6.2] - 2025-08-04 🔧
 
 ### 🛠️ **CORRECTIONS DEBIAN 12**
