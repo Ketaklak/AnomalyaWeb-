@@ -184,50 +184,87 @@ setup_mongodb() {
         SUDO_CMD="sudo"
     fi
     
-    # Démarrer et activer MongoDB - gestion spéciale pour Kali
-    if [[ $OS == *"Kali"* ]]; then
-        info "Configuration MongoDB pour Kali Linux..."
+    # Gestion spéciale pour Debian 12 avec MongoDB Community Edition
+    if [[ $OS == *"Debian"* ]] && [[ $VERSION == "12"* ]]; then
+        info "Configuration MongoDB pour Debian 12..."
         
-        # Tentative avec différents noms de service MongoDB sur Kali
+        # Créer le répertoire de données MongoDB
+        $SUDO_CMD mkdir -p /var/lib/mongodb
+        $SUDO_CMD chown mongodb:mongodb /var/lib/mongodb 2>/dev/null || {
+            warning "Utilisateur mongodb non trouvé, création..."
+            $SUDO_CMD useradd mongodb 2>/dev/null || true
+            $SUDO_CMD chown mongodb:mongodb /var/lib/mongodb 2>/dev/null || true
+        }
+        
+        # Tentative de démarrage du service MongoDB Community Edition
         if $SUDO_CMD systemctl start mongod 2>/dev/null; then
-            success "Service mongod démarré"
+            success "Service mongod (MongoDB Community) démarré"
             $SUDO_CMD systemctl enable mongod
         elif $SUDO_CMD systemctl start mongodb 2>/dev/null; then
-            success "Service mongodb démarré" 
+            success "Service mongodb démarré"
             $SUDO_CMD systemctl enable mongodb
-        elif $SUDO_CMD systemctl start mongodb-org 2>/dev/null; then
-            success "Service mongodb-org démarré"
-            $SUDO_CMD systemctl enable mongodb-org
         else
-            warning "Impossible de démarrer MongoDB via systemctl"
-            info "Tentative de démarrage manuel de MongoDB..."
+            warning "Services MongoDB non disponibles via systemctl sur Debian 12"
+            info "Tentative de démarrage manuel..."
             
-            # Créer le répertoire de données MongoDB si nécessaire
-            $SUDO_CMD mkdir -p /var/lib/mongodb
-            $SUDO_CMD chown mongodb:mongodb /var/lib/mongodb 2>/dev/null || true
+            # Créer les répertoires et logs nécessaires
+            $SUDO_CMD mkdir -p /var/log/mongodb
+            $SUDO_CMD chown mongodb:mongodb /var/log/mongodb 2>/dev/null || true
             
             # Démarrage manuel en arrière-plan
             if command -v mongod &> /dev/null; then
-                info "Démarrage manuel de mongod..."
                 $SUDO_CMD mongod --dbpath /var/lib/mongodb --logpath /var/log/mongodb/mongod.log --fork 2>/dev/null || {
-                    warning "MongoDB non configuré automatiquement. Configuration manuelle requise."
+                    warning "Démarrage manuel MongoDB échoué"
+                    warning "MongoDB sera démarré automatiquement lors du premier lancement de l'application"
                 }
-            else
-                warning "MongoDB non installé correctement. Certaines fonctionnalités seront limitées."
             fi
         fi
     else
-        # Configuration standard pour autres distributions
-        $SUDO_CMD systemctl start mongod 2>/dev/null || {
-            warning "Service mongod non trouvé, tentative avec mongodb"
-            $SUDO_CMD systemctl start mongodb 2>/dev/null || {
-                error "Impossible de démarrer MongoDB"
-                exit 1
+        # Configuration standard pour autres distributions et Kali
+        if [[ $OS == *"Kali"* ]]; then
+            info "Configuration MongoDB pour Kali Linux..."
+            
+            # Tentative avec différents noms de service MongoDB sur Kali
+            if $SUDO_CMD systemctl start mongod 2>/dev/null; then
+                success "Service mongod démarré"
+                $SUDO_CMD systemctl enable mongod
+            elif $SUDO_CMD systemctl start mongodb 2>/dev/null; then
+                success "Service mongodb démarré" 
+                $SUDO_CMD systemctl enable mongodb
+            elif $SUDO_CMD systemctl start mongodb-org 2>/dev/null; then
+                success "Service mongodb-org démarré"
+                $SUDO_CMD systemctl enable mongodb-org
+            else
+                warning "Impossible de démarrer MongoDB via systemctl"
+                info "Tentative de démarrage manuel de MongoDB..."
+                
+                # Créer le répertoire de données MongoDB si nécessaire
+                $SUDO_CMD mkdir -p /var/lib/mongodb
+                $SUDO_CMD chown mongodb:mongodb /var/lib/mongodb 2>/dev/null || true
+                
+                # Démarrage manuel en arrière-plan
+                if command -v mongod &> /dev/null; then
+                    info "Démarrage manuel de mongod..."
+                    $SUDO_CMD mongod --dbpath /var/lib/mongodb --logpath /var/log/mongodb/mongod.log --fork 2>/dev/null || {
+                        warning "MongoDB non configuré automatiquement. Configuration manuelle requise."
+                    }
+                else
+                    warning "MongoDB non installé correctement. Certaines fonctionnalités seront limitées."
+                fi
+            fi
+        else
+            # Configuration standard pour autres distributions
+            $SUDO_CMD systemctl start mongod 2>/dev/null || {
+                warning "Service mongod non trouvé, tentative avec mongodb"
+                $SUDO_CMD systemctl start mongodb 2>/dev/null || {
+                    warning "Impossible de démarrer MongoDB automatiquement"
+                    info "MongoDB sera configuré lors du premier lancement de l'application"
+                }
+                $SUDO_CMD systemctl enable mongodb 2>/dev/null || true
             }
-            $SUDO_CMD systemctl enable mongodb
-        }
-        
-        $SUDO_CMD systemctl enable mongod 2>/dev/null || $SUDO_CMD systemctl enable mongodb
+            
+            $SUDO_CMD systemctl enable mongod 2>/dev/null || $SUDO_CMD systemctl enable mongodb 2>/dev/null || true
+        fi
     fi
     
     # Attendre que MongoDB soit prêt
