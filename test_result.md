@@ -288,6 +288,18 @@
         agent: "testing"
         comment: "✅ ENHANCED DATA MODELS WORKING CORRECTLY: All new models functioning properly. ClientProfile model working with profile creation/update. QuoteRequest model working - created quote with service_category, title, description, budget_range, priority. SupportTicket model working - created ticket with title, description, category, priority. PointTransaction model working with points attribution. ClientDashboardStats model working with all required fields. All models properly integrated with database operations and API endpoints."
 
+  - task: "Unified User Management Backend APIs"
+    implemented: true
+    working: "unknown"
+    file: "/app/backend/routers/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "unknown"
+        agent: "main"
+        comment: "Added comprehensive user management endpoints to admin.py: GET /admin/users (with filtering by role, status, search), POST /admin/users (create user), PUT /admin/users/{id} (update user), DELETE /admin/users/{id} (delete user), PUT /admin/users/{id}/status (activate/deactivate). These APIs unify client and user management with role-based functionality, client-specific stats (quotes_count, tickets_count, loyalty points), and proper access controls."
+
   - task: "JWT Authentication System"
     implemented: true
     working: true
