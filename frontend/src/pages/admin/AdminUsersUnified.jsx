@@ -500,19 +500,9 @@ const AdminUsersUnified = () => {
     }
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = !searchTerm || 
-      user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.username?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'active' && user.is_active) ||
-      (statusFilter === 'inactive' && !user.is_active);
-    
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+  // Since filtering is now handled in fetchUsers, we don't need to filter again
+  // filteredUsers is now just users
+  const filteredUsers = users;
 
   const getRoleIcon = (role) => {
     switch (role) {
