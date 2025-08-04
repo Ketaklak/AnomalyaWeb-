@@ -111,6 +111,7 @@
   - Support tickets avec messagerie
   - Remplissage de toutes les pages et fonctionnalités
   - Amélioration générale du site
+  - Unification de la gestion des utilisateurs et des clients dans une interface unique
 
 ## backend:
   - task: "Sistema de Notifications Backend APIs"
