@@ -588,17 +588,16 @@
 
 ## test_plan:
   current_focus:
-    - "Sistema de Notifications Frontend Integration"
-    - "Admin Ticket System Frontend Integration"
+    - "Unified User Management Backend APIs"
+    - "Unified User Management Frontend"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
-    - "Sistema de Notifications Frontend Integration"
   test_all: false
   test_priority: "high_first"
 
 ## agent_communication:
   - agent: "main"
-    message: "Sistema de notifications completamente implementado. Backend (/app/backend/routers/notifications.py) con APIs CRUD completas, tipos de notificaciones predefinidos, funciones utilitarias para eventos del sistema. Frontend (NotificationCenter.jsx, AdminNotifications.jsx) integrado en AdminLayout con centro de notificaciones en header, página dedicada de gestión, filtros y acciones. Integración en módulos existentes (contact.py, auth.py) para notificaciones automáticas. Listo para testing completo del sistema de notificaciones."
+    message: "Completed user management unification as requested. Backend: Added comprehensive user management endpoints to /app/backend/routers/admin.py with full CRUD operations and role-based filtering. Frontend: AdminUsersUnified.jsx provides unified interface for managing all user types (admin, client, moderator) with client-specific features like loyalty points management. Updated routing in App.js to use unified component for both /admin/users and /admin/clients. Updated frontend API services with new unified endpoints. System ready for backend testing."
   - agent: "testing"
     message: "Completed comprehensive backend testing of admin panel APIs. All critical functionality is working correctly. JWT authentication system is functional with admin user (admin/admin123). All admin endpoints tested successfully including dashboard stats, articles CRUD, contacts management, services management, and user management. Authentication security is properly implemented with 403 responses for unauthorized access."
   - agent: "testing"
