@@ -97,9 +97,7 @@ export const competencesAPI = {
 
 // FAQ API
 export const faqAPI = {
-  getAll: () => {
-    return api.get(`/faq/`);
-  }
+  getAll: () => api.get(`/faq/`)
 };
 
 // Newsletter API
