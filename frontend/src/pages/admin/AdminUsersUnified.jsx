@@ -450,7 +450,7 @@ const AdminUsersUnified = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Header */}
         <div className="flex flex-col space-y-4 mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-4 sm:space-y-0">
