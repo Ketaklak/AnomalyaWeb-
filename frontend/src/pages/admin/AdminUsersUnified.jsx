@@ -525,39 +525,41 @@ const AdminUsersUnified = () => {
         {/* Filters */}
         <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700 mb-6">
           <CardContent className="p-4">
-            <div className="flex flex-col lg:flex-row gap-4 items-center">
+            <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:gap-4 lg:items-center">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Rechercher par nom, email ou nom d'utilisateur..."
+                  placeholder="Rechercher par nom, email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 bg-slate-800 border-slate-600 text-white placeholder-gray-400"
                 />
               </div>
               
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-48 bg-slate-800 border-slate-600 text-white">
-                  <SelectValue placeholder="Filtrer par rôle" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-600">
-                  <SelectItem value="all" className="text-white hover:bg-slate-700">Tous les rôles</SelectItem>
-                  <SelectItem value="admin" className="text-white hover:bg-slate-700">Administrateurs</SelectItem>
-                  <SelectItem value="moderator" className="text-white hover:bg-slate-700">Modérateurs</SelectItem>
-                  <SelectItem value="client" className="text-white hover:bg-slate-700">Clients</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                <Select value={roleFilter} onValueChange={setRoleFilter}>
+                  <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
+                    <SelectValue placeholder="Filtrer par rôle" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-600">
+                    <SelectItem value="all" className="text-white hover:bg-slate-700">Tous les rôles</SelectItem>
+                    <SelectItem value="admin" className="text-white hover:bg-slate-700">Administrateurs</SelectItem>
+                    <SelectItem value="moderator" className="text-white hover:bg-slate-700">Modérateurs</SelectItem>
+                    <SelectItem value="client" className="text-white hover:bg-slate-700">Clients</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48 bg-slate-800 border-slate-600 text-white">
-                  <SelectValue placeholder="Filtrer par statut" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-600">
-                  <SelectItem value="all" className="text-white hover:bg-slate-700">Tous les statuts</SelectItem>
-                  <SelectItem value="active" className="text-white hover:bg-slate-700">Actifs</SelectItem>
-                  <SelectItem value="inactive" className="text-white hover:bg-slate-700">Inactifs</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-600 text-white">
+                    <SelectValue placeholder="Filtrer par statut" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-600">
+                    <SelectItem value="all" className="text-white hover:bg-slate-700">Tous les statuts</SelectItem>
+                    <SelectItem value="active" className="text-white hover:bg-slate-700">Actifs</SelectItem>
+                    <SelectItem value="inactive" className="text-white hover:bg-slate-700">Inactifs</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardContent>
         </Card>
