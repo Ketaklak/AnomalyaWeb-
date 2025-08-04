@@ -591,7 +591,6 @@
 
 ## test_plan:
   current_focus:
-    - "Unified User Management Backend APIs"
     - "Unified User Management Frontend"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
