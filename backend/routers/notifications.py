@@ -290,8 +290,13 @@ async def create_notification(
         
         await create_document("notifications", notification_data)
         
-        # Ajouter les métadonnées de type
+        # Ajouter les métadonnées de type et s'assurer qu'il n'y a pas d'ObjectId
         notification_data.update(NOTIFICATION_TYPES[notification.type])
+        
+        # Clean any potential ObjectId fields
+        for key, value in notification_data.items():
+            if str(type(value)) == "<class 'bson.objectid.ObjectId'>":
+                notification_data[key] = str(value)
         
         return ApiResponse(
             success=True,
