@@ -65,21 +65,11 @@ export const newsAPI = {
     if (params.limit) queryParams.append('limit', params.limit);
     if (params.offset) queryParams.append('offset', params.offset);
     if (params.sort) queryParams.append('sort', params.sort);
-    
     return api.get(`/news/?${queryParams.toString()}`);
   },
-
-  getById: (id) => {
-    return api.get(`/news/${id}`);
-  },
-
-  getCategories: () => {
-    return api.get(`/news/categories/list`);
-  },
-
-  getTags: () => {
-    return api.get(`/news/tags/list`);
-  }
+  getById: (id) => api.get(`/news/${id}`),
+  getCategories: () => api.get(`/news/categories/list`),
+  getTags: () => api.get(`/news/tags/list`)
 };
 
 // Services API
