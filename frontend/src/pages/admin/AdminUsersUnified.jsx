@@ -847,7 +847,7 @@ const AdminUsersUnified = () => {
         )}
 
         {/* Pagination */}
-        {!loading && totalUsers > 0 && (
+        {!loading && totalPages > 1 && (
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700 mt-6">
             <CardContent className="p-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
