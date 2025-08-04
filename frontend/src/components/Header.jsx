@@ -60,7 +60,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            {navigation.map((item) => (
+            {fullNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
