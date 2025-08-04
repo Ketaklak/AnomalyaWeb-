@@ -7,6 +7,56 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.6.1] - 2025-08-04 🛡️
+
+### ✨ **NOUVELLE DISTRIBUTION SUPPORTÉE**
+- **SUPPORT KALI LINUX COMPLET** : Installation automatisée pour Kali Linux Rolling
+  - Détection automatique de Kali Linux via `/etc/os-release`
+  - Gestion intelligente du mode root (courant sur Kali)
+  - Packages optimisés pour les repositories Kali
+  - Installation MongoDB spécialisée avec multiples fallbacks
+  - Support Node.js avec fallback NodeSource si nécessaire
+
+### 🔧 **AMÉLIORATIONS INSTALLATION**
+- **Gestion Root Automatique** : Détection si script lancé en root sur Kali
+  - Commandes `sudo` supprimées automatiquement en mode root
+  - Messages d'information adaptés pour l'utilisateur
+  - Permissions fichiers correctement gérées
+- **MongoDB Avancé** : Support multiples services MongoDB sur Kali
+  - Test `mongod`, `mongodb`, `mongodb-org` dans l'ordre
+  - Démarrage manuel en fallback si systemctl échoue
+  - Support à la fois `mongo` et `mongosh` pour l'initialisation DB
+- **Packages Spécialisés** : Dépendances crypto et développement pour Kali
+  - `python3-crypto`, `python3-cryptography` pour la sécurité
+  - `build-essential` pour les compilations natives
+  - Gestion intelligente Yarn vs npm selon disponibilité
+
+### 📚 **DOCUMENTATION**
+- **Guide Kali Spécialisé** : `KALI_SUPPORT.md` créé
+  - Instructions d'installation détaillées
+  - Guide de dépannage spécifique Kali
+  - Tests de validation et optimisations
+  - Considérations de sécurité en mode root
+- **Installation Mise à Jour** : `INSTALLATION.md` enrichi
+  - Section dédiée Kali Linux
+  - Spécificités et avantages documentés
+  - Support multi-distribution clarifié
+
+### 🧪 **TESTS ET VALIDATION**  
+- **Script de Test** : `test-kali-detection.sh` créé
+  - Simulation environnement Kali pour tests
+  - Validation détection OS et logique root
+  - Tests automatisés intégrés
+
+### 🔄 **COMPATIBILITÉ**
+- **Distributions Supportées** mises à jour :
+  - Ubuntu 20.04+ / Debian 11+  
+  - **Kali Linux Rolling 2023.1+** (NOUVEAU)
+  - CentOS 8+ / RHEL 8+ / Fedora 35+
+  - Arch Linux (communautaire)
+
+---
+
 ## [0.6.0] - 2025-08-04 🚀
 
 ### ✨ **NOUVELLES FONCTIONNALITÉS**
