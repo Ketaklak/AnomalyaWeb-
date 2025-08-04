@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 import uuid
+from pydantic import BaseModel
 
 # Add backend directory to path
 backend_dir = Path(__file__).parent.parent
@@ -23,6 +24,13 @@ except ImportError as e:
         pass
     def get_current_user():
         pass
+
+# Pydantic models for request bodies
+class NotificationCreate(BaseModel):
+    type: str
+    title: str
+    message: str
+    link: Optional[str] = None
 
 router = APIRouter(prefix="/api/admin/notifications", tags=["notifications"])
 
