@@ -846,13 +846,6 @@ const AdminUsersUnified = () => {
           </div>
         )}
 
-        {/* Debug info temporaire */}
-        {!loading && (
-          <div className="bg-yellow-200 text-black p-2 mb-4 rounded text-sm">
-            Debug: totalUsers={totalUsers}, usersPerPage={usersPerPage}, totalPages={totalPages}, currentPage={currentPage}
-          </div>
-        )}
-
         {/* Pagination */}
         {!loading && totalPages > 1 && (
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700 mt-6">
