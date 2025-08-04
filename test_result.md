@@ -606,7 +606,7 @@
 
 ## test_plan:
   current_focus:
-    - "Enhanced Content Management Frontend Integration"
+    - "Client Profile System Bug Fixes Validation"
   stuck_tasks:
     - "Enhanced Content Management Frontend Integration"
   test_all: false
