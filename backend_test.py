@@ -2357,6 +2357,7 @@ class ComprehensiveAPITester:
             ("Authentication APIs", self.test_authentication_apis),
             ("Admin APIs", self.test_admin_apis),
             ("Unified User Management APIs", self.test_unified_user_management_apis),
+            ("Unified User Management Pagination", self.test_unified_user_management_pagination),
             ("Client APIs", self.test_client_apis),
             ("Analytics APIs", self.test_analytics_apis),
             ("Analytics Authentication", self.test_analytics_authentication),
