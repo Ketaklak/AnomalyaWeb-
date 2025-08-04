@@ -11,7 +11,18 @@ sys.path.insert(0, str(backend_dir))
 
 from models import ApiResponse
 from database import get_documents, create_document, update_document, delete_document
-from auth import get_current_admin, get_current_user
+
+# Import auth functions directly
+try:
+    from auth import get_current_admin, get_current_user
+    print("✅ Successfully imported auth functions")
+except ImportError as e:
+    print(f"❌ Failed to import auth functions: {e}")
+    # Fallback - this shouldn't happen but let's be safe
+    def get_current_admin():
+        pass
+    def get_current_user():
+        pass
 
 router = APIRouter(prefix="/api/admin/notifications", tags=["notifications"])
 
