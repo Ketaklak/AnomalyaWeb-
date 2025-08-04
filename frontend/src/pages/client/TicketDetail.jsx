@@ -358,9 +358,10 @@ const TicketDetail = () => {
                           })}
                         </span>
                       </div>
-                      <div className={`${message.is_admin ? 'text-blue-200' : 'text-gray-300'}`}>
-                        {message.message}
-                      </div>
+                      <div 
+                        className={`${message.is_admin ? 'text-blue-200' : 'text-gray-300'}`}
+                        dangerouslySetInnerHTML={{ __html: message.message }}
+                      />
                     </div>
                   ))}
                 </div>
