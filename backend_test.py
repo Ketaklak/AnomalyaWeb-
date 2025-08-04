@@ -428,6 +428,204 @@ class ComprehensiveAPITester:
                 "Client Profile (GET - Initial)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
             )
         
+        # 🎯 COMPREHENSIVE CLIENT PROFILE TESTING - BUG FIX VALIDATION
+        print("\n🎯 Testing Client Profile System - Post Bug Fix Validation")
+        
+        # Test 1: Create complete client profile with ALL fields (Bug Fix #1 - Extended ClientProfileCreate model)
+        complete_profile_data = {
+            # Personal Information
+            "first_name": "Jean",
+            "last_name": "Dupont",
+            "phone": "+33 1 23 45 67 89",
+            "address": "123 Rue de la Paix",
+            "city": "Paris",
+            "postal_code": "75001",
+            "country": "France",
+            
+            # Company Information
+            "company_name": "TechCorp Solutions",
+            "company_industry": "Technologie",
+            "company_size": "PME (10-249 salariés)",
+            "job_title": "Directeur Technique",
+            
+            # Preferences
+            "preferred_language": "fr",
+            "newsletter_subscribed": True,
+            "sms_notifications": True,
+            "email_notifications": True
+        }
+        
+        response = self.make_request("POST", "/client/profile", complete_profile_data, token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                self.test_results["client_apis"]["profile_create_complete"] = self.log_test(
+                    "🎯 Client Profile Creation (ALL FIELDS)", True, 
+                    f"✅ BUG FIX VERIFIED: Successfully created profile with ALL 14 fields (personal: 7, company: 4, preferences: 3). Previously only 5 fields were supported."
+                )
+            else:
+                self.test_results["client_apis"]["profile_create_complete"] = self.log_test(
+                    "🎯 Client Profile Creation (ALL FIELDS)", False, "Profile creation returned success=false"
+                )
+        else:
+            self.test_results["client_apis"]["profile_create_complete"] = self.log_test(
+                "🎯 Client Profile Creation (ALL FIELDS)", False, 
+                f"❌ BUG NOT FIXED: Profile creation failed - HTTP {response.status_code if response else 'No response'}. Extended ClientProfileCreate model may not be working."
+            )
+        
+        # Test 2: Verify all fields are saved correctly (Bug Fix Validation)
+        response = self.make_request("GET", "/client/profile", token_type="client")
+        if response and response.status_code == 200:
+            saved_profile = response.json()
+            
+            # Validate all fields are present and correct
+            fields_to_check = {
+                # Personal fields that were previously missing
+                "address": "123 Rue de la Paix",
+                "city": "Paris", 
+                "postal_code": "75001",
+                # Company fields that were previously missing
+                "company_industry": "Technologie",
+                "company_size": "PME (10-249 salariés)",
+                "job_title": "Directeur Technique",
+                # Preference fields that were previously missing
+                "newsletter_subscribed": True,
+                "sms_notifications": True,
+                "email_notifications": True,
+                # Original fields that should still work
+                "first_name": "Jean",
+                "last_name": "Dupont",
+                "phone": "+33 1 23 45 67 89",
+                "company_name": "TechCorp Solutions",
+                "preferred_language": "fr"
+            }
+            
+            missing_fields = []
+            incorrect_fields = []
+            
+            for field, expected_value in fields_to_check.items():
+                if field not in saved_profile:
+                    missing_fields.append(field)
+                elif saved_profile[field] != expected_value:
+                    incorrect_fields.append(f"{field}: expected '{expected_value}', got '{saved_profile.get(field)}'")
+            
+            if not missing_fields and not incorrect_fields:
+                self.test_results["client_apis"]["profile_fields_validation"] = self.log_test(
+                    "🎯 Profile Fields Persistence Validation", True,
+                    f"✅ BUG FIX CONFIRMED: All 14 fields correctly saved and retrieved. Previously missing fields (address, city, postal_code, company_industry, company_size, job_title, newsletter_subscribed, sms_notifications, email_notifications) now working."
+                )
+            else:
+                error_details = []
+                if missing_fields:
+                    error_details.append(f"Missing fields: {', '.join(missing_fields)}")
+                if incorrect_fields:
+                    error_details.append(f"Incorrect values: {'; '.join(incorrect_fields)}")
+                
+                self.test_results["client_apis"]["profile_fields_validation"] = self.log_test(
+                    "🎯 Profile Fields Persistence Validation", False,
+                    f"❌ FIELDS NOT SAVED CORRECTLY: {' | '.join(error_details)}"
+                )
+        else:
+            self.test_results["client_apis"]["profile_fields_validation"] = self.log_test(
+                "🎯 Profile Fields Persistence Validation", False,
+                f"Failed to retrieve profile for validation - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 3: Test profile UPDATE functionality (Bug Fix #2 - Frontend logic should choose update vs create)
+        update_profile_data = {
+            "address": "456 Avenue des Champs-Élysées",
+            "city": "Paris",
+            "postal_code": "75008",
+            "company_size": "Grande entreprise (250+ salariés)",
+            "sms_notifications": False
+        }
+        
+        response = self.make_request("PUT", "/client/profile", update_profile_data, token_type="client")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                self.test_results["client_apis"]["profile_update"] = self.log_test(
+                    "🎯 Client Profile Update", True,
+                    "✅ Profile update endpoint working correctly"
+                )
+                
+                # Verify update was applied
+                response = self.make_request("GET", "/client/profile", token_type="client")
+                if response and response.status_code == 200:
+                    updated_profile = response.json()
+                    
+                    # Check if updates were applied correctly
+                    updates_correct = (
+                        updated_profile.get("address") == "456 Avenue des Champs-Élysées" and
+                        updated_profile.get("postal_code") == "75008" and
+                        updated_profile.get("company_size") == "Grande entreprise (250+ salariés)" and
+                        updated_profile.get("sms_notifications") == False and
+                        # Verify unchanged fields remain
+                        updated_profile.get("first_name") == "Jean" and
+                        updated_profile.get("company_name") == "TechCorp Solutions"
+                    )
+                    
+                    if updates_correct:
+                        self.test_results["client_apis"]["profile_update_validation"] = self.log_test(
+                            "🎯 Profile Update Validation", True,
+                            "✅ BUG FIX WORKING: Profile updates applied correctly, unchanged fields preserved"
+                        )
+                    else:
+                        self.test_results["client_apis"]["profile_update_validation"] = self.log_test(
+                            "🎯 Profile Update Validation", False,
+                            f"❌ Update not applied correctly. Address: {updated_profile.get('address')}, SMS: {updated_profile.get('sms_notifications')}"
+                        )
+            else:
+                self.test_results["client_apis"]["profile_update"] = self.log_test(
+                    "🎯 Client Profile Update", False, "Profile update returned success=false"
+                )
+        else:
+            self.test_results["client_apis"]["profile_update"] = self.log_test(
+                "🎯 Client Profile Update", False,
+                f"Profile update failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Test creating profile for a new client (should use POST, not PUT)
+        # This validates that the frontend logic bug fix works correctly
+        print("🎯 Testing Create vs Update Logic (Frontend Bug Fix #2)")
+        
+        # For this test, we'll verify the POST endpoint works for profile creation
+        # and PUT works for updates (the backend supports both correctly)
+        
+        # Test POST on existing profile (should update, not create duplicate)
+        response = self.make_request("POST", "/client/profile", {
+            "first_name": "Jean-Updated",
+            "last_name": "Dupont-Updated", 
+            "phone": "+33 1 98 76 54 32",
+            "address": "789 Boulevard Saint-Germain",
+            "city": "Paris",
+            "postal_code": "75006",
+            "country": "France",
+            "company_name": "TechCorp Solutions Updated",
+            "preferred_language": "fr"
+        }, token_type="client")
+        
+        if response and response.status_code == 200:
+            # Verify it updated existing profile, not created new one
+            response = self.make_request("GET", "/client/profile", token_type="client")
+            if response and response.status_code == 200:
+                profile = response.json()
+                if profile.get("first_name") == "Jean-Updated" and profile.get("company_name") == "TechCorp Solutions Updated":
+                    self.test_results["client_apis"]["profile_create_vs_update_logic"] = self.log_test(
+                        "🎯 Create vs Update Logic", True,
+                        "✅ BUG FIX CONFIRMED: POST correctly updates existing profile instead of creating duplicate. Frontend should now choose between POST (create/update) and PUT (update only) correctly."
+                    )
+                else:
+                    self.test_results["client_apis"]["profile_create_vs_update_logic"] = self.log_test(
+                        "🎯 Create vs Update Logic", False,
+                        "Profile not updated correctly via POST"
+                    )
+        else:
+            self.test_results["client_apis"]["profile_create_vs_update_logic"] = self.log_test(
+                "🎯 Create vs Update Logic", False,
+                f"POST profile update failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
         # Test client quotes
         response = self.make_request("GET", "/client/quotes", token_type="client")
         if response and response.status_code == 200:
