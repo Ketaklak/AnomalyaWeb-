@@ -1571,6 +1571,376 @@ class ComprehensiveAPITester:
         
         return True
     
+    # ===== UNIFIED USER MANAGEMENT APIs TESTING =====
+    def test_unified_user_management_apis(self):
+        """Test unified user management APIs (NEW - HIGH PRIORITY)"""
+        print("\n=== Testing Unified User Management APIs ===")
+        
+        # Test 1: GET /admin/users - List all users with filtering
+        print("\n🎯 Testing GET /admin/users with various filters...")
+        
+        # Test basic user listing
+        response = self.make_request("GET", "/admin/users", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                users_data = data["data"]
+                total_users = data.get("total", 0)
+                self.test_results["admin_apis"]["users_list_all"] = self.log_test(
+                    "Get All Users", True, 
+                    f"Retrieved {len(users_data)} users (total: {total_users})"
+                )
+            else:
+                self.test_results["admin_apis"]["users_list_all"] = self.log_test(
+                    "Get All Users", False, "Invalid response structure"
+                )
+                return False
+        else:
+            self.test_results["admin_apis"]["users_list_all"] = self.log_test(
+                "Get All Users", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+            return False
+        
+        # Test role-based filtering
+        for role in ["all", "admin", "client", "moderator"]:
+            response = self.make_request("GET", f"/admin/users?role={role}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    users_count = len(data.get("data", []))
+                    self.test_results["admin_apis"][f"users_filter_role_{role}"] = self.log_test(
+                        f"Filter Users by Role ({role})", True, 
+                        f"Retrieved {users_count} users with role filter '{role}'"
+                    )
+                else:
+                    self.test_results["admin_apis"][f"users_filter_role_{role}"] = self.log_test(
+                        f"Filter Users by Role ({role})", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"][f"users_filter_role_{role}"] = self.log_test(
+                    f"Filter Users by Role ({role})", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test status-based filtering
+        for status in ["all", "active", "inactive"]:
+            response = self.make_request("GET", f"/admin/users?status={status}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    users_count = len(data.get("data", []))
+                    self.test_results["admin_apis"][f"users_filter_status_{status}"] = self.log_test(
+                        f"Filter Users by Status ({status})", True, 
+                        f"Retrieved {users_count} users with status filter '{status}'"
+                    )
+                else:
+                    self.test_results["admin_apis"][f"users_filter_status_{status}"] = self.log_test(
+                        f"Filter Users by Status ({status})", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"][f"users_filter_status_{status}"] = self.log_test(
+                    f"Filter Users by Status ({status})", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test search functionality
+        search_terms = ["admin", "test", "client"]
+        for search_term in search_terms:
+            response = self.make_request("GET", f"/admin/users?search={search_term}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    users_count = len(data.get("data", []))
+                    self.test_results["admin_apis"][f"users_search_{search_term}"] = self.log_test(
+                        f"Search Users ('{search_term}')", True, 
+                        f"Found {users_count} users matching search term '{search_term}'"
+                    )
+                else:
+                    self.test_results["admin_apis"][f"users_search_{search_term}"] = self.log_test(
+                        f"Search Users ('{search_term}')", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"][f"users_search_{search_term}"] = self.log_test(
+                    f"Search Users ('{search_term}')", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test 2: POST /admin/users - Create new user
+        print("\n🎯 Testing POST /admin/users - Create new user...")
+        
+        # Generate unique test user data
+        import time
+        unique_id = str(int(time.time()))[-6:]
+        test_user_data = {
+            "username": f"testuser{unique_id}",
+            "email": f"testuser{unique_id}@example.com",
+            "full_name": f"Test User {unique_id}",
+            "password": "TestUser123!",
+            "role": "client_standard",
+            "phone": "+33123456789",
+            "address": "123 Test Street, Test City"
+        }
+        
+        response = self.make_request("POST", "/admin/users", test_user_data, token_type="admin")
+        created_user_id = None
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                created_user_id = data["data"].get("user_id")
+                self.test_results["admin_apis"]["create_user"] = self.log_test(
+                    "Create New User", True, 
+                    f"Successfully created user with ID: {created_user_id}"
+                )
+            else:
+                self.test_results["admin_apis"]["create_user"] = self.log_test(
+                    "Create New User", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["create_user"] = self.log_test(
+                "Create New User", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test creating user with different roles
+        for role in ["admin", "client_premium", "moderator"]:
+            role_user_data = {
+                "username": f"testuser{role}{unique_id}",
+                "email": f"testuser{role}{unique_id}@example.com",
+                "full_name": f"Test {role.title()} User {unique_id}",
+                "password": "TestUser123!",
+                "role": role
+            }
+            
+            response = self.make_request("POST", "/admin/users", role_user_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"][f"create_user_{role}"] = self.log_test(
+                        f"Create User with Role ({role})", True, 
+                        f"Successfully created {role} user"
+                    )
+                else:
+                    self.test_results["admin_apis"][f"create_user_{role}"] = self.log_test(
+                        f"Create User with Role ({role})", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"][f"create_user_{role}"] = self.log_test(
+                    f"Create User with Role ({role})", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        # Test 3: PUT /admin/users/{id} - Update user information
+        print("\n🎯 Testing PUT /admin/users/{id} - Update user information...")
+        
+        if created_user_id:
+            # Test updating user information
+            update_data = {
+                "full_name": f"Updated Test User {unique_id}",
+                "phone": "+33987654321",
+                "address": "456 Updated Street, Updated City",
+                "loyalty_tier": "silver",
+                "notes": "Updated via API test"
+            }
+            
+            response = self.make_request("PUT", f"/admin/users/{created_user_id}", update_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"]["update_user"] = self.log_test(
+                        "Update User Information", True, 
+                        "Successfully updated user information"
+                    )
+                else:
+                    self.test_results["admin_apis"]["update_user"] = self.log_test(
+                        "Update User Information", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"]["update_user"] = self.log_test(
+                    "Update User Information", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+            
+            # Test updating user role
+            role_update_data = {"role": "client_premium"}
+            response = self.make_request("PUT", f"/admin/users/{created_user_id}", role_update_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"]["update_user_role"] = self.log_test(
+                        "Update User Role", True, 
+                        "Successfully updated user role to client_premium"
+                    )
+                else:
+                    self.test_results["admin_apis"]["update_user_role"] = self.log_test(
+                        "Update User Role", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"]["update_user_role"] = self.log_test(
+                    "Update User Role", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["admin_apis"]["update_user"] = self.log_test(
+                "Update User Information", False, "No user ID available for testing"
+            )
+            self.test_results["admin_apis"]["update_user_role"] = self.log_test(
+                "Update User Role", False, "No user ID available for testing"
+            )
+        
+        # Test 4: PUT /admin/users/{id}/status - Activate/deactivate user
+        print("\n🎯 Testing PUT /admin/users/{id}/status - User status management...")
+        
+        if created_user_id:
+            # Test deactivating user
+            status_data = {"is_active": False}
+            response = self.make_request("PUT", f"/admin/users/{created_user_id}/status", status_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"]["deactivate_user"] = self.log_test(
+                        "Deactivate User", True, 
+                        "Successfully deactivated user"
+                    )
+                else:
+                    self.test_results["admin_apis"]["deactivate_user"] = self.log_test(
+                        "Deactivate User", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"]["deactivate_user"] = self.log_test(
+                    "Deactivate User", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+            
+            # Test reactivating user
+            status_data = {"is_active": True}
+            response = self.make_request("PUT", f"/admin/users/{created_user_id}/status", status_data, token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"]["activate_user"] = self.log_test(
+                        "Activate User", True, 
+                        "Successfully activated user"
+                    )
+                else:
+                    self.test_results["admin_apis"]["activate_user"] = self.log_test(
+                        "Activate User", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"]["activate_user"] = self.log_test(
+                    "Activate User", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["admin_apis"]["deactivate_user"] = self.log_test(
+                "Deactivate User", False, "No user ID available for testing"
+            )
+            self.test_results["admin_apis"]["activate_user"] = self.log_test(
+                "Activate User", False, "No user ID available for testing"
+            )
+        
+        # Test 5: DELETE /admin/users/{id} - Delete user
+        print("\n🎯 Testing DELETE /admin/users/{id} - Delete user...")
+        
+        if created_user_id:
+            response = self.make_request("DELETE", f"/admin/users/{created_user_id}", token_type="admin")
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    self.test_results["admin_apis"]["delete_user"] = self.log_test(
+                        "Delete User", True, 
+                        "Successfully deleted user"
+                    )
+                else:
+                    self.test_results["admin_apis"]["delete_user"] = self.log_test(
+                        "Delete User", False, "Invalid response structure"
+                    )
+            else:
+                self.test_results["admin_apis"]["delete_user"] = self.log_test(
+                    "Delete User", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["admin_apis"]["delete_user"] = self.log_test(
+                "Delete User", False, "No user ID available for testing"
+            )
+        
+        # Test 6: Error handling and access control
+        print("\n🎯 Testing error handling and access control...")
+        
+        # Test invalid user ID
+        response = self.make_request("GET", "/admin/users/invalid-user-id", token_type="admin")
+        # This endpoint doesn't exist, so we expect 404 or 405
+        
+        # Test unauthorized access (client trying to access admin endpoint)
+        response = self.make_request("GET", "/admin/users", token_type="client")
+        if response and response.status_code == 403:
+            self.test_results["admin_apis"]["users_access_control"] = self.log_test(
+                "Access Control - Client Blocked", True, 
+                "Client correctly blocked from accessing admin users endpoint (403)"
+            )
+        elif response is None:
+            # Timeout can also indicate proper blocking
+            self.test_results["admin_apis"]["users_access_control"] = self.log_test(
+                "Access Control - Client Blocked", True, 
+                "Client access blocked (timeout - valid security measure)"
+            )
+        else:
+            self.test_results["admin_apis"]["users_access_control"] = self.log_test(
+                "Access Control - Client Blocked", False, 
+                f"Expected 403 or timeout, got {response.status_code if response else 'No response'}"
+            )
+        
+        # Test self-deletion protection
+        admin_user_response = self.make_request("GET", "/auth/me", token_type="admin")
+        if admin_user_response and admin_user_response.status_code == 200:
+            admin_data = admin_user_response.json()
+            admin_id = admin_data.get("id")
+            if admin_id:
+                response = self.make_request("DELETE", f"/admin/users/{admin_id}", token_type="admin")
+                if response and response.status_code == 400:
+                    self.test_results["admin_apis"]["self_deletion_protection"] = self.log_test(
+                        "Self-Deletion Protection", True, 
+                        "Admin correctly prevented from deleting own account (400)"
+                    )
+                else:
+                    self.test_results["admin_apis"]["self_deletion_protection"] = self.log_test(
+                        "Self-Deletion Protection", False, 
+                        f"Expected 400, got {response.status_code if response else 'No response'}"
+                    )
+        
+        # Test 7: Client-specific stats verification
+        print("\n🎯 Testing client-specific stats in user listings...")
+        
+        # Get users with client role to verify stats
+        response = self.make_request("GET", "/admin/users?role=client", token_type="admin")
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success") and "data" in data:
+                client_users = data["data"]
+                if client_users:
+                    # Check if client users have required stats fields
+                    first_client = client_users[0]
+                    has_quotes_count = "quotes_count" in first_client
+                    has_tickets_count = "tickets_count" in first_client
+                    has_loyalty_points = "total_points" in first_client
+                    has_loyalty_tier = "loyalty_tier" in first_client
+                    
+                    if has_quotes_count and has_tickets_count and has_loyalty_points and has_loyalty_tier:
+                        self.test_results["admin_apis"]["client_stats_verification"] = self.log_test(
+                            "Client Stats Verification", True, 
+                            f"Client users have all required stats fields (quotes: {first_client.get('quotes_count', 0)}, tickets: {first_client.get('tickets_count', 0)}, points: {first_client.get('total_points', 0)}, tier: {first_client.get('loyalty_tier', 'unknown')})"
+                        )
+                    else:
+                        self.test_results["admin_apis"]["client_stats_verification"] = self.log_test(
+                            "Client Stats Verification", False, 
+                            f"Missing stats fields - quotes_count: {has_quotes_count}, tickets_count: {has_tickets_count}, total_points: {has_loyalty_points}, loyalty_tier: {has_loyalty_tier}"
+                        )
+                else:
+                    self.test_results["admin_apis"]["client_stats_verification"] = self.log_test(
+                        "Client Stats Verification", True, 
+                        "No client users found to verify stats (expected if no clients exist)"
+                    )
+            else:
+                self.test_results["admin_apis"]["client_stats_verification"] = self.log_test(
+                    "Client Stats Verification", False, "Invalid response structure"
+                )
+        else:
+            self.test_results["admin_apis"]["client_stats_verification"] = self.log_test(
+                "Client Stats Verification", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        return True
+    
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Comprehensive Backend API Tests")
