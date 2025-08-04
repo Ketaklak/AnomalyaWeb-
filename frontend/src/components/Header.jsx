@@ -35,6 +35,11 @@ const Header = () => {
     { name: 'Contact', href: '/contact' }
   ];
 
+  // Navigation pour utilisateurs connectés
+  const clientNavigation = isClient ? [
+    { name: 'Support', href: '/client/tickets' }
+  ] : [];
+
   const handleLogout = () => {
     logout();
   };
