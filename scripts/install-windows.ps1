@@ -148,19 +148,73 @@ function Setup-MongoDB {
         Start-Sleep -Seconds 10
         
         # Tester la connexion MongoDB
+        Write-Info "Test de connexion MongoDB..."
         try {
-            if (Get-Command mongo -ErrorAction SilentlyContinue) {
-                $testResult = & mongo --eval "db.runCommand('ping').ok" admin 2>$null
-                if ($testResult -match "1") {
-                    Write-Success "MongoDB configuré et accessible"
-                } else {
-                    Write-Warning "MongoDB démarré mais connexion non testable"
+            # Chercher le client MongoDB (mongo ou mongosh)
+            $mongoClientPaths = @(
+                "C:\Program Files\MongoDB\Server\*\bin\mongo.exe",
+                "C:\Program Files\MongoDB\Server\*\bin\mongosh.exe",
+                "C:\MongoDB\Server\*\bin\mongo.exe",
+                "C:\MongoDB\Server\*\bin\mongosh.exe",
+                "$env:ProgramFiles\MongoDB\Server\*\bin\mongo.exe",
+                "$env:ProgramFiles\MongoDB\Server\*\bin\mongosh.exe"
+            )
+            
+            $mongoClient = $null
+            $clientType = $null
+            
+            foreach ($clientPath in $mongoClientPaths) {
+                $resolved = Resolve-Path $clientPath -ErrorAction SilentlyContinue
+                if ($resolved) {
+                    $mongoClient = $resolved.Path | Select-Object -First 1
+                    $clientType = if ($mongoClient -match "mongosh") { "mongosh" } else { "mongo" }
+                    break
                 }
-            } else {
-                Write-Info "Client mongo non disponible pour test de connexion"
             }
+            
+            if ($mongoClient) {
+                Write-Info "Client MongoDB trouvé: $mongoClient"
+                
+                # Ajouter le répertoire MongoDB au PATH temporairement
+                $mongoDir = Split-Path $mongoClient -Parent
+                $env:PATH = "$mongoDir;$env:PATH"
+                
+                # Tester la connexion selon le type de client
+                if ($clientType -eq "mongosh") {
+                    $testCommand = "db.runCommand('ping').ok"
+                    $testResult = & $mongoClient --eval $testCommand --quiet 2>$null
+                } else {
+                    $testCommand = "db.runCommand('ping').ok"
+                    $testResult = & $mongoClient --eval $testCommand admin --quiet 2>$null
+                }
+                
+                if ($testResult -match "1" -or $testResult -match "true") {
+                    Write-Success "MongoDB configuré et accessible via $clientType"
+                } else {
+                    Write-Warning "MongoDB démarré mais test de connexion échoué"
+                    Write-Info "Cela peut être normal, MongoDB est probablement fonctionnel"
+                }
+                
+                # Ajouter MongoDB au PATH de façon permanente
+                $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+                if ($currentPath -notlike "*$mongoDir*") {
+                    Write-Info "Ajout de MongoDB au PATH utilisateur..."
+                    [Environment]::SetEnvironmentVariable("PATH", "$currentPath;$mongoDir", "User")
+                    Write-Success "MongoDB ajouté au PATH. Redémarrez PowerShell pour utiliser mongo/mongosh"
+                }
+                
+            } else {
+                Write-Warning "Client MongoDB (mongo/mongosh) non trouvé"
+                Write-Info "MongoDB fonctionne probablement, mais le client n'est pas disponible"
+                Write-Info "Solutions:"
+                Write-Info "1. Réinstallez MongoDB Community Edition complet"
+                Write-Info "2. Ou installez MongoDB Shell séparément"
+                Write-Info "3. L'application fonctionnera quand même si MongoDB est démarré"
+            }
+            
         } catch {
-            Write-Warning "Test de connexion MongoDB échoué, mais le service peut fonctionner"
+            Write-Warning "Test de connexion MongoDB échoué: $($_.Exception.Message)"
+            Write-Info "MongoDB peut quand même fonctionner correctement"
         }
         
     } catch {
