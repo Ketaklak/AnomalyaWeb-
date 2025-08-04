@@ -123,7 +123,7 @@ async def get_notifications(
             success=True,
             message="Notifications récupérées avec succès",
             data={
-                "notifications": notifications,
+                "notifications": processed_notifications,
                 "total": total,
                 "page": page,
                 "limit": limit,
