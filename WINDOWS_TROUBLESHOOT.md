@@ -2,6 +2,50 @@
 
 Solutions rapides pour les problèmes courants sur Windows.
 
+## 🚨 Problème : MongoDB Compass vs MongoDB Server
+
+**Symptômes :**
+- ✅ Vous avez MongoDB Compass installé
+- ❌ "Client mongo non disponible"
+- ❌ Backend ne démarre pas (port 8001)
+- ❌ Service "MongoDB" introuvable
+
+### 🔧 SOLUTION : MongoDB Compass ≠ MongoDB Server
+
+**MongoDB Compass** = Interface graphique seulement  
+**MongoDB Server** = Base de données nécessaire pour l'application
+
+#### Solution Automatique (Recommandée)
+```powershell
+# Installation automatique MongoDB Server
+PowerShell -ExecutionPolicy Bypass -File scripts\install-mongodb-server.ps1
+```
+
+#### Solution via Chocolatey
+```powershell
+# 1. Installer Chocolatey si pas déjà fait
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# 2. Installer MongoDB Server
+choco install mongodb
+```
+
+#### Solution Manuelle
+1. **Télécharger MongoDB Community Server** :
+   - 🌐 Allez sur : https://www.mongodb.com/try/download/community
+   - Sélectionnez **"Server"** (pas Compass)
+   - Platform: Windows, Package: msi
+
+2. **Installation** :
+   - Cochez "Install MongoDB as a Service"
+   - Cochez "Install MongoDB Compass" (optionnel, vous l'avez déjà)
+
+3. **Vérification** :
+   - Service "MongoDB" doit apparaître dans services.msc
+   - Port 27017 doit être accessible
+
 ## 🚨 Problème : "Client mongo non disponible pour test de connexion"
 
 **Symptômes :**
