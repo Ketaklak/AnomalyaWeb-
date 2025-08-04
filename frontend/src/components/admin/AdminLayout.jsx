@@ -16,7 +16,9 @@ import {
   Zap,
   Home,
   BarChart3,
-  Bell
+  Bell,
+  Menu,
+  X
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
