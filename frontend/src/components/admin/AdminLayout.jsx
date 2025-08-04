@@ -116,6 +116,48 @@ const AdminLayout = ({ children }) => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-slate-900 border-b border-slate-700 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-white">
+                {navigation.find(item => isActive(item.href))?.name || 'Dashboard'}
+              </h2>
+              <p className="text-sm text-gray-400">
+                Bienvenue, {user?.full_name}
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              {/* Centre de notifications */}
+              <NotificationCenter 
+                onNotificationCountChange={setNotificationCount}
+                className="relative"
+              />
+              
+              {/* Actions rapides */}
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-slate-800">
+                  <Link to="/">
+                    <Home className="h-4 w-4 mr-2" />
+                    Site
+                  </Link>
+                </Button>
+                
+                <Button 
+                  onClick={handleLogout}
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-gray-300 hover:text-red-400 hover:bg-slate-800"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Déconnexion
+                </Button>
+              </div>
+            </div>
+          </div>
+        </header>
+
         <main className="flex-1 overflow-y-auto">
           {children}
         </main>
