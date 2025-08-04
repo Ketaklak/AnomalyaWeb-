@@ -104,11 +104,20 @@ async def get_notifications(
             sort_direction=-1  # Plus récentes d'abord
         )
         
-        # Ajouter les métadonnées de type
+        # Convertir les ObjectId en string si nécessaire et ajouter les métadonnées de type
+        processed_notifications = []
         for notification in notifications:
+            # S'assurer que l'ID est une string
+            if '_id' in notification:
+                notification.pop('_id')  # Supprimer l'ObjectId MongoDB
+            if 'id' not in notification:
+                notification['id'] = str(uuid.uuid4())  # Générer un UUID si manquant
+                
             notification_type = notification.get("type", "SYSTEM_UPDATE")
             if notification_type in NOTIFICATION_TYPES:
                 notification.update(NOTIFICATION_TYPES[notification_type])
+            
+            processed_notifications.append(notification)
         
         return ApiResponse(
             success=True,
