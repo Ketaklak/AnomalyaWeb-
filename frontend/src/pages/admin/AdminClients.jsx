@@ -60,7 +60,11 @@ const AdminClients = () => {
     const fetchClients = async () => {
       try {
         setLoading(true);
-        const response = await adminAPI.getClients({ role: roleFilter });
+        const response = await adminAPI.getClients({ 
+          role: roleFilter,
+          status: statusFilter,
+          search: searchTerm 
+        });
         setClients(response.data || []);
       } catch (err) {
         console.error('Error fetching clients:', err);
@@ -75,7 +79,152 @@ const AdminClients = () => {
     };
 
     fetchClients();
-  }, [roleFilter, toast]);
+  }, [roleFilter, statusFilter, searchTerm, toast]);
+
+  // Nouvelle fonction pour supprimer un client
+  const handleDeleteClient = async (clientId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce client ? Cette action est irréversible.')) {
+      return;
+    }
+
+    try {
+      await adminAPI.deleteClient(clientId);
+      setClients(prev => prev.filter(client => client.id !== clientId));
+      toast({
+        title: "Client supprimé",
+        description: "Le client a été supprimé avec succès."
+      });
+    } catch (error) {
+      console.error('Error deleting client:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le client.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Nouvelle fonction pour changer le statut d'un client
+  const handleToggleClientStatus = async (clientId, currentStatus) => {
+    try {
+      const newStatus = !currentStatus;
+      await adminAPI.updateClientStatus(clientId, newStatus);
+      
+      setClients(prev => 
+        prev.map(client => 
+          client.id === clientId 
+            ? { ...client, is_active: newStatus }
+            : client
+        )
+      );
+      
+      toast({
+        title: newStatus ? "Client activé" : "Client désactivé", 
+        description: `Le client a été ${newStatus ? 'activé' : 'désactivé'} avec succès.`
+      });
+    } catch (error) {
+      console.error('Error updating client status:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier le statut du client.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Nouvelle fonction pour éditer un client
+  const handleEditClient = (client) => {
+    setEditingClient(client);
+    setEditData({
+      full_name: client.full_name || '',
+      email: client.email || '',
+      phone: client.phone || '',
+      address: client.address || '',
+      loyalty_tier: client.loyalty_tier || 'bronze',
+      notes: client.notes || ''
+    });
+  };
+
+  // Nouvelle fonction pour sauvegarder les modifications
+  const handleSaveEdit = async () => {
+    try {
+      await adminAPI.updateClient(editingClient.id, editData);
+      
+      setClients(prev =>
+        prev.map(client =>
+          client.id === editingClient.id
+            ? { ...client, ...editData }
+            : client
+        )
+      );
+      
+      setEditingClient(null);
+      setEditData({});
+      
+      toast({
+        title: "Client mis à jour",
+        description: "Les informations du client ont été mises à jour avec succès."
+      });
+    } catch (error) {
+      console.error('Error updating client:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de mettre à jour le client.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Actions en masse
+  const handleBulkAction = async (action) => {
+    if (selectedClients.length === 0) return;
+
+    try {
+      switch (action) {
+        case 'activate':
+          await adminAPI.bulkUpdateClients(selectedClients, { is_active: true });
+          setClients(prev => 
+            prev.map(client => 
+              selectedClients.includes(client.id) 
+                ? { ...client, is_active: true }
+                : client
+            )
+          );
+          toast({ title: "Clients activés", description: `${selectedClients.length} clients ont été activés.` });
+          break;
+          
+        case 'deactivate':
+          await adminAPI.bulkUpdateClients(selectedClients, { is_active: false });
+          setClients(prev => 
+            prev.map(client => 
+              selectedClients.includes(client.id) 
+                ? { ...client, is_active: false }
+                : client
+            )
+          );
+          toast({ title: "Clients désactivés", description: `${selectedClients.length} clients ont été désactivés.` });
+          break;
+          
+        case 'delete':
+          if (window.confirm(`Êtes-vous sûr de vouloir supprimer ${selectedClients.length} clients ?`)) {
+            await adminAPI.bulkDeleteClients(selectedClients);
+            setClients(prev => prev.filter(client => !selectedClients.includes(client.id)));
+            toast({ title: "Clients supprimés", description: `${selectedClients.length} clients ont été supprimés.` });
+          }
+          break;
+      }
+      
+      setSelectedClients([]);
+      setShowBulkActions(false);
+    } catch (error) {
+      console.error('Error in bulk action:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible d'effectuer l'action en masse.",
+        variant: "destructive"
+      });
+    }
+  };
 
   const getTierIcon = (tier) => {
     switch (tier) {
