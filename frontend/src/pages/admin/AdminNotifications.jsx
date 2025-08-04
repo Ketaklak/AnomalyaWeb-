@@ -474,9 +474,9 @@ const AdminNotifications = () => {
               
               return (
                 <Card key={notification.id} className={`bg-slate-900/50 backdrop-blur-sm border-slate-700 transition-all duration-200 ${!notification.read ? 'ring-1 ring-blue-500/20' : ''}`}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-lg ${
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className={`p-2 sm:p-3 rounded-lg flex-shrink-0 ${
                         typeConfig.color === 'blue' ? 'bg-blue-500/10 text-blue-400' :
                         typeConfig.color === 'green' ? 'bg-green-500/10 text-green-400' :
                         typeConfig.color === 'orange' ? 'bg-orange-500/10 text-orange-400' :
@@ -484,35 +484,35 @@ const AdminNotifications = () => {
                         typeConfig.color === 'purple' ? 'bg-purple-500/10 text-purple-400' :
                         'bg-yellow-500/10 text-yellow-400'
                       }`}>
-                        <IconComponent className="h-5 w-5" />
+                        <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className={`font-semibold ${notification.read ? 'text-gray-300' : 'text-white'}`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                          <h3 className={`font-semibold text-sm sm:text-base truncate ${notification.read ? 'text-gray-300' : 'text-white'}`}>
                             {notification.title}
                           </h3>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-shrink-0">
                             {!notification.read && (
                               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                             )}
-                            <Badge variant="secondary" className="bg-slate-800 text-gray-300">
+                            <Badge variant="secondary" className="bg-slate-800 text-gray-300 text-xs">
                               {typeConfig.title}
                             </Badge>
                           </div>
                         </div>
                         
-                        <p className={`mb-3 ${notification.read ? 'text-gray-400' : 'text-gray-300'}`}>
+                        <p className={`mb-3 text-sm ${notification.read ? 'text-gray-400' : 'text-gray-300'}`}>
                           {notification.message}
                         </p>
                         
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1 text-sm text-gray-500">
-                            <Calendar className="h-4 w-4" />
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                             {formatDate(notification.createdAt)}
                           </div>
                           
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 sm:gap-2">
                             {notification.link && (
                               <Button
                                 variant="ghost"
@@ -523,10 +523,10 @@ const AdminNotifications = () => {
                                     markAsRead(notification.id);
                                   }
                                 }}
-                                className="text-gray-400 hover:text-white"
+                                className="text-gray-400 hover:text-white text-xs h-7 px-2"
                               >
-                                <ExternalLink className="h-4 w-4 mr-1" />
-                                Voir
+                                <ExternalLink className="h-3 w-3 mr-1" />
+                                <span className="hidden sm:inline">Voir</span>
                               </Button>
                             )}
                             
@@ -535,9 +535,9 @@ const AdminNotifications = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => markAsRead(notification.id)}
-                                className="text-gray-400 hover:text-green-400"
+                                className="text-gray-400 hover:text-green-400 h-7 px-2"
                               >
-                                <Check className="h-4 w-4" />
+                                <Check className="h-3 w-3" />
                               </Button>
                             )}
                             
@@ -545,9 +545,9 @@ const AdminNotifications = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => deleteNotification(notification.id)}
-                              className="text-gray-400 hover:text-red-400"
+                              className="text-gray-400 hover:text-red-400 h-7 px-2"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
                         </div>
@@ -560,9 +560,9 @@ const AdminNotifications = () => {
             
             {notifications.length === 0 && (
               <div className="text-center py-12">
-                <Bell className="h-16 w-16 mx-auto mb-4 text-gray-600" />
-                <p className="text-gray-400 text-lg">Aucune notification trouvée</p>
-                <p className="text-gray-500">Les notifications apparaîtront ici</p>
+                <Bell className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-gray-600" />
+                <p className="text-gray-400 text-base sm:text-lg">Aucune notification trouvée</p>
+                <p className="text-gray-500 text-sm">Les notifications apparaîtront ici</p>
               </div>
             )}
           </div>
