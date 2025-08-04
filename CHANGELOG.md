@@ -7,6 +7,28 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.6.2] - 2025-08-04 🔧
+
+### 🛠️ **CORRECTIONS DEBIAN 12**
+- **Python Version Dynamique** : Détection automatique de la version Python disponible
+  - Python 3.11 pour Debian 12 (au lieu de forcer Python 3.10 inexistant)  
+  - Python 3.10 pour Ubuntu/Debian 11 et antérieurs
+  - Fallback sur python3 par défaut si versions spécifiques indisponibles
+- **MongoDB Debian 12** : Installation depuis repositories officiels MongoDB
+  - Repository officiel MongoDB ajouté pour Debian 12 "Bookworm"
+  - Clé GPG MongoDB et sources.list automatiquement configurés
+  - Fallback sur mongodb standard si installation officielle échoue
+- **Yarn Installation Robuste** : Gestion des nouvelles méthodes GPG
+  - Support des clés GPG modernes pour les systèmes récents
+  - Fallback npm si installation Yarn échoue
+
+### 🔧 **AMÉLIORATIONS TECHNIQUE**
+- **Gestion d'erreurs renforcée** : Warnings au lieu d'erreurs fatales pour MongoDB
+- **Services MongoDB flexibles** : Support mongod, mongodb, mongodb-org selon distribution
+- **Démarrage manuel** : Fallback démarrage manuel MongoDB si systemctl échoue
+
+---
+
 ## [0.6.1] - 2025-08-04 🔧
 
 ### 🛠️ **AMÉLIORATIONS INSTALLATION**
