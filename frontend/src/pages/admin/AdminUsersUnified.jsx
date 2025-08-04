@@ -617,51 +617,63 @@ const AdminUsersUnified = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-6">
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-3 md:p-6">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Total</p>
-                  <p className="text-lg md:text-2xl font-bold text-white">{globalStats.total}</p>  
+                  <p className="text-lg md:text-xl font-bold text-white">{globalStats.total}</p>  
                 </div>
-                <Users className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
+                <Users className="h-6 md:h-7 w-6 md:w-7 text-blue-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-3 md:p-6">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Clients</p>
-                  <p className="text-lg md:text-2xl font-bold text-green-400">{globalStats.clients}</p>  
+                  <p className="text-lg md:text-xl font-bold text-green-400">{globalStats.clients}</p>  
                 </div>
-                <User className="h-6 md:h-8 w-6 md:w-8 text-green-400" />
+                <User className="h-6 md:h-7 w-6 md:w-7 text-green-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-3 md:p-6">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Admins</p>
-                  <p className="text-lg md:text-2xl font-bold text-red-400">{globalStats.admins}</p>  
+                  <p className="text-lg md:text-xl font-bold text-red-400">{globalStats.admins}</p>  
                 </div>
-                <Crown className="h-6 md:h-8 w-6 md:w-8 text-red-400" />
+                <Crown className="h-6 md:h-7 w-6 md:w-7 text-red-400" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
-            <CardContent className="p-3 md:p-6">
+            <CardContent className="p-3 md:p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-xs md:text-sm">Modérateurs</p>
+                  <p className="text-lg md:text-xl font-bold text-purple-400">{globalStats.moderators}</p>  
+                </div>
+                <Shield className="h-6 md:h-7 w-6 md:w-7 text-purple-400" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-700">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-xs md:text-sm">Actifs</p>
-                  <p className="text-lg md:text-2xl font-bold text-blue-400">{globalStats.active}</p>  
+                  <p className="text-lg md:text-xl font-bold text-blue-400">{globalStats.active}</p>  
                 </div>
-                <CheckCircle className="h-6 md:h-8 w-6 md:w-8 text-blue-400" />
+                <CheckCircle className="h-6 md:h-7 w-6 md:w-7 text-blue-400" />
               </div>
             </CardContent>
           </Card>
