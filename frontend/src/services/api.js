@@ -74,13 +74,8 @@ export const newsAPI = {
 
 // Services API
 export const servicesAPI = {
-  getAll: () => {
-    return api.get(`/services/`);
-  },
-
-  getById: (id) => {
-    return api.get(`/services/${id}`);
-  }
+  getAll: () => api.get(`/services/`),
+  getById: (id) => api.get(`/services/${id}`)
 };
 
 // Contact API
