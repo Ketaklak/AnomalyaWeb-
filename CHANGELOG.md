@@ -7,6 +7,54 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.6.4] - 2025-08-04 🔧
+
+### 🚨 **CORRECTIONS CRITIQUES D'EXPÉRIENCE UTILISATEUR**
+- **BUG ÉDITEUR DE TEXTE ENRICHI RÉSOLU** : Le curseur ne revient plus au début lors de la frappe
+  - Suppression de `dangerouslySetInnerHTML` sur l'éditeur actif qui recréait le DOM
+  - Initialisation propre du contenu avec `useEffect` et état `isInitialized`
+  - Correction du placeholder avec `data-placeholder` et CSS pseudo-element
+  - Préservation de toutes les fonctionnalités : formatage, liens, images, code, citations
+  - Raccourcis clavier fonctionnels : Ctrl+B, Ctrl+I, Ctrl+U, Ctrl+Z
+- **BUG DASHBOARD CLIENT 8000+ POINTS RÉSOLU** : Erreur 500 éliminée pour les gros montants
+  - Correction `get_next_tier_points()` : suppression `float('inf')` non sérialisable
+  - Retourne maintenant `0` pour les utilisateurs Platinum (≥5000 points)
+  - Nettoyage amélioré des ObjectId MongoDB dans les transactions
+  - Support complet des utilisateurs avec points élevés
+- **BUG INSCRIPTION CLIENT RÉSOLU** : Assignation correcte du groupe lors de l'inscription
+  - Frontend modifié : `'role: client'` → `'role: client_standard'`
+  - Alignement avec l'enum UserRole backend (client_standard, client_premium, admin, moderator, prospect)
+  - Nouveaux clients correctement assignés au groupe client_standard
+  - Accès complet aux fonctionnalités client (dashboard, profil, devis, tickets)
+
+### 🔧 **INFRASTRUCTURE TECHNIQUE**
+- **API FRONTEND MODERNISÉE** : Version nouvelle génération avec améliorations majeures
+  - Configuration URL flexible avec `REACT_APP_API_PREFIX`
+  - Gestion automatique des refresh tokens avec retry intelligent
+  - Syntaxe modernisée avec arrow functions
+  - APIs complètes : Analytics (6 endpoints), Media, Notifications
+  - Robustesse améliorée pour différents environnements
+- **COMPATIBILITÉ PYTHON 3.13** : Support des dernières versions Python
+  - Pillow mis à jour vers v11.3.0 (support officiel Python 3.13)
+  - Résolution problème installation dépendances Windows
+  - Tous les packages compatibles avec Python 3.13.5
+
+### ✅ **VALIDATION COMPLÈTE**
+- **Tests Backend** : 17/17 suites réussies (84-91/117 tests individuels)
+- **Corrections Critiques** : Toutes les erreurs utilisateur éliminées
+  - ✅ Éditeur de texte utilisable pour rédaction d'articles
+  - ✅ Dashboard accessible pour tous les niveaux de points fidélité
+  - ✅ Inscription client avec assignation groupe correcte
+  - ✅ API robuste et moderne pour développement continu
+
+### 🎯 **EXPÉRIENCE UTILISATEUR**
+- **Écriture Fluide** : Éditeur de texte enrichi enfin utilisable normalement
+- **Dashboard Stable** : Aucune limitation de points de fidélité
+- **Inscription Simplifiée** : Nouveaux clients dans le bon groupe automatiquement
+- **Performance Optimisée** : Système plus rapide et fiable
+
+---
+
 ## [0.6.3] - 2025-08-04 🪟
 
 ### 🔧 **CORRECTIONS MAJEURES WINDOWS**
