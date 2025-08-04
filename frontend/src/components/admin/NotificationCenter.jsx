@@ -24,6 +24,7 @@ import {
   X
 } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
+import { notificationsAPI } from '../../services/api';
 
 // Mapping des icônes selon le type
 const NOTIFICATION_ICONS = {
