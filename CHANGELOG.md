@@ -7,6 +7,42 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [0.5.6] - 2025-08-04 🔧
+
+### 🛠️ **Corrections Critiques**
+- **TICKET SYSTEM REPAIR** : Correction critique de l'API admin pour répondre aux tickets
+  - API endpoint corrigé : POST `/api/admin/tickets/{id}/messages` avec body JSON
+  - Les administrateurs peuvent maintenant répondre aux tickets clients
+  - Format POST body `{"message": "text"}` au lieu de query parameter
+- **NOTIFICATIONS FIX** : Résolution erreur "API non disponible"
+  - Correction sérialisation MongoDB ObjectId → UUID
+  - Amélioration gestion d'erreur avec messages français clairs
+  - Suppression erreurs 500 sur les endpoints notifications
+- **RICH TEXT EDITOR** : Intégration éditeur riche dans système de tickets
+  - RichTextEditor remplace textarea basique pour réponses admin
+  - Formatage avancé pour communication professionnelle avec clients
+  - Interface moderne avec outils de mise en forme
+
+### 🔍 **Améliorations Backend**
+- Gestion appropriée UUIDs vs MongoDB ObjectIds
+- Validation Pydantic pour messages de tickets (`TicketMessageCreate`)
+- Conversion automatique datetime → ISO strings pour APIs
+- Messages d'erreur cohérents en français
+
+### 🎨 **Améliorations Frontend**
+- Amélioration messages d'erreur NotificationCenter
+- Intégration RichTextEditor dans AdminTickets.jsx
+- Gestion gracieuse des échecs d'API avec fallback intelligent
+- Interface utilisateur plus robuste et professionnelle
+
+### 📋 **Tests & Validation**
+- **19/20 tests backend passés** (notifications + tickets)
+- Workflow complet ticket testé : sélection → réponse → soumission → historique
+- Validation endpoint corrections avec cas réels
+- Vérification système notifications CRUD complet
+
+---
+
 ## [0.5.5] - 2025-08-04 🎯
 
 ### 🚀 Ajouté
