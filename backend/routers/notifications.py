@@ -119,7 +119,7 @@ async def get_notifications(
 
 @router.get("/unread-count")
 async def get_unread_notifications_count(
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Récupérer le nombre de notifications non lues"""
     try:
