@@ -140,7 +140,7 @@ async def get_unread_notifications_count(
 @router.put("/{notification_id}/read")
 async def mark_notification_as_read(
     notification_id: str,
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Marquer une notification comme lue"""
     try:
