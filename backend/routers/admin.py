@@ -4,6 +4,8 @@ from datetime import datetime
 import sys
 from pathlib import Path
 
+from pydantic import BaseModel
+
 # Add backend directory to path
 backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
@@ -15,6 +17,10 @@ from models import (
     Competence, CompetenceCreate, FAQ, FAQCreate, ApiResponse,
     QuoteRequestUpdate
 )
+
+# Pydantic model for ticket message
+class TicketMessageCreate(BaseModel):
+    message: str
 from database import (
     get_documents, get_document, create_document, 
     update_document, delete_document, search_documents
