@@ -56,6 +56,21 @@ api.interceptors.response.use(
     }
 );
 
+// Auth API
+export const authAPI = {
+  login: (credentials) => api.post(`/auth/login`, credentials),
+  register: (userData) => api.post(`/auth/register`, userData),
+  me: () => api.get(`/auth/me`),
+  refreshToken: () => api.post(`/auth/refresh-token`),
+  getUsers: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.offset) queryParams.append('offset', params.offset);
+    return api.get(`/auth/users?${queryParams.toString()}`);
+  },
+  getStats: () => api.get(`/auth/stats`)
+};
+
 // News API
 export const newsAPI = {
   getAll: (params = {}) => {
