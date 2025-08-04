@@ -165,7 +165,7 @@ async def mark_notification_as_read(
 
 @router.put("/mark-all-read")
 async def mark_all_notifications_as_read(
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Marquer toutes les notifications comme lues"""
     try:
