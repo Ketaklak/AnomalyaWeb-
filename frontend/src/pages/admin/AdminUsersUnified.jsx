@@ -469,6 +469,37 @@ const AdminUsersUnified = () => {
     }
   };
 
+  // Pagination functions
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Reset to first page when filters change
+  const handleFilterChange = (filterType, value) => {
+    setCurrentPage(1);
+    if (filterType === 'role') {
+      setRoleFilter(value);
+    } else if (filterType === 'status') {
+      setStatusFilter(value);
+    } else if (filterType === 'search') {
+      setSearchTerm(value);
+    }
+  };
+
   const filteredUsers = users.filter(user => {
     const matchesSearch = !searchTerm || 
       user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
