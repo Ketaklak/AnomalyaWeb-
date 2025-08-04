@@ -71,7 +71,7 @@ async def get_notifications(
     limit: int = Query(20, ge=1, le=100),
     type_filter: Optional[str] = Query(None, description="Filtrer par type"),
     read_status: Optional[str] = Query(None, description="all, read, unread"),
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Récupérer les notifications pour l'admin"""
     try:
