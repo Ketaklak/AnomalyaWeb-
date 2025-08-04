@@ -35,10 +35,10 @@ const Header = () => {
     { name: 'Contact', href: '/contact' }
   ];
 
-  // Navigation pour utilisateurs connectés
-  const clientNavigation = isClient ? [
-    { name: 'Support', href: '/client/tickets' }
-  ] : [];
+  // Ajouter Support pour les clients connectés
+  const fullNavigation = isClient 
+    ? [...navigation, { name: 'Support', href: '/client/tickets' }]
+    : navigation;
 
   const handleLogout = () => {
     logout();
