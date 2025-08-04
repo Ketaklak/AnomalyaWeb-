@@ -39,6 +39,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Clients', href: '/admin/clients', icon: UserPlus },
     { name: 'Devis', href: '/admin/quotes', icon: Quote },
     { name: 'Support', href: '/admin/tickets', icon: LifeBuoy },
+    { name: 'Notifications', href: '/admin/notifications', icon: Bell },
   ];
 
   const isActive = (href) => {
