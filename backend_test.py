@@ -1333,7 +1333,7 @@ class ComprehensiveAPITester:
         print("\n=== Testing Notifications System Integration ===")
         
         # Test 1: Verify UUID handling (no MongoDB ObjectId serialization errors)
-        response = self.make_request("GET", "/admin/notifications", token_type="admin")
+        response = self.make_request("GET", "/admin/notifications/", token_type="admin")
         if response and response.status_code == 200:
             data = response.json()
             if data.get("success") and "data" in data:
