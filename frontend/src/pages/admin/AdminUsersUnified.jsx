@@ -41,7 +41,11 @@ import {
   UserX,
   Shield,
   Crown,
-  User
+  User,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 
 const AdminUsersUnified = () => {
