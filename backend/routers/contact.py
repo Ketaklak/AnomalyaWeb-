@@ -84,6 +84,14 @@ async def create_contact(contact: ContactCreate):
             print(f"Email notification failed: {str(e)}")
             # Don't fail the request if email fails
         
+        # Create system notification
+        try:
+            from routers.notifications import notify_new_contact
+            await notify_new_contact(contact_dict['nom'], contact_dict['sujet'])
+        except Exception as e:
+            print(f"System notification failed: {str(e)}")
+            # Don't fail the request if notification fails
+        
         return ApiResponse(
             success=True,
             message="Message envoyé avec succès. Nous vous répondrons dans les plus brefs délais.",
