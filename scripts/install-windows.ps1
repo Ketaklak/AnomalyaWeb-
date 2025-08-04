@@ -86,17 +86,89 @@ function Setup-MongoDB {
     Write-Info "Configuration de MongoDB..."
     
     try {
-        # Démarrer le service MongoDB
-        Start-Service MongoDB -ErrorAction SilentlyContinue
-        Set-Service MongoDB -StartupType Automatic -ErrorAction SilentlyContinue
+        # Tenter différents noms de service MongoDB possibles
+        $mongoServices = @("MongoDB", "mongod", "MongoDBCompass")
+        $serviceStarted = $false
+        
+        foreach ($serviceName in $mongoServices) {
+            try {
+                if (Get-Service $serviceName -ErrorAction SilentlyContinue) {
+                    Write-Info "Tentative de démarrage du service $serviceName..."
+                    Start-Service $serviceName -ErrorAction SilentlyContinue
+                    Set-Service $serviceName -StartupType Automatic -ErrorAction SilentlyContinue
+                    $serviceStarted = $true
+                    Write-Success "Service MongoDB ($serviceName) démarré avec succès"
+                    break
+                }
+            } catch {
+                # Continuer avec le service suivant
+            }
+        }
+        
+        if (-not $serviceStarted) {
+            Write-Warning "Aucun service MongoDB trouvé. Tentative de démarrage manuel..."
+            
+            # Tenter de démarrer MongoDB manuellement
+            $mongoPaths = @(
+                "C:\Program Files\MongoDB\Server\*\bin\mongod.exe",
+                "C:\MongoDB\Server\*\bin\mongod.exe",
+                "$env:ProgramFiles\MongoDB\Server\*\bin\mongod.exe"
+            )
+            
+            $mongoPath = $null
+            foreach ($path in $mongoPaths) {
+                $resolved = Resolve-Path $path -ErrorAction SilentlyContinue
+                if ($resolved) {
+                    $mongoPath = $resolved.Path | Select-Object -First 1
+                    break
+                }
+            }
+            
+            if ($mongoPath) {
+                Write-Info "MongoDB trouvé à: $mongoPath"
+                Write-Info "Démarrage manuel de MongoDB..."
+                
+                # Créer le répertoire de données MongoDB
+                $dataPath = "$env:ProgramData\MongoDB\data\db"
+                if (-not (Test-Path $dataPath)) {
+                    New-Item -ItemType Directory -Force -Path $dataPath | Out-Null
+                }
+                
+                # Démarrer MongoDB en arrière-plan
+                Start-Process -FilePath $mongoPath -ArgumentList "--dbpath `"$dataPath`"" -WindowStyle Hidden
+                Start-Sleep -Seconds 5
+                Write-Success "MongoDB démarré manuellement"
+            } else {
+                Write-Warning "MongoDB non trouvé. Vérifiez l'installation."
+            }
+        }
         
         # Attendre que MongoDB soit prêt
-        Start-Sleep -Seconds 5
+        Write-Info "Attente de l'initialisation MongoDB..."
+        Start-Sleep -Seconds 10
         
-        Write-Success "MongoDB configuré et démarré"
+        # Tester la connexion MongoDB
+        try {
+            if (Get-Command mongo -ErrorAction SilentlyContinue) {
+                $testResult = & mongo --eval "db.runCommand('ping').ok" admin 2>$null
+                if ($testResult -match "1") {
+                    Write-Success "MongoDB configuré et accessible"
+                } else {
+                    Write-Warning "MongoDB démarré mais connexion non testable"
+                }
+            } else {
+                Write-Info "Client mongo non disponible pour test de connexion"
+            }
+        } catch {
+            Write-Warning "Test de connexion MongoDB échoué, mais le service peut fonctionner"
+        }
         
     } catch {
-        Write-Warning "Impossible de configurer MongoDB automatiquement. Configuration manuelle requise."
+        Write-Warning "Erreur lors de la configuration MongoDB: $_"
+        Write-Info "MongoDB doit être configuré manuellement"
+        Write-Info "1. Vérifiez que MongoDB est installé"
+        Write-Info "2. Démarrez le service MongoDB depuis les Services Windows"
+        Write-Info "3. Ou lancez mongod.exe manuellement"
     }
 }
 
