@@ -1597,6 +1597,7 @@ class ComprehensiveAPITester:
             ("Notifications APIs", self.test_notifications_apis),
             ("Notifications Authentication", self.test_notifications_authentication),
             ("Notifications System Integration", self.test_notifications_system_integration),
+            ("Ticket System APIs", self.test_ticket_system_apis),
             ("Role-Based Access Control", self.test_role_based_access_control)
         ]
         
