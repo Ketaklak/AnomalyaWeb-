@@ -251,29 +251,12 @@ export const clientAPI = {
 
 // Analytics API
 export const analyticsAPI = {
-  getOverview: (timeRange = '7d') => {
-    return api.get(`/admin/analytics/overview?time_range=${timeRange}`);
-  },
-
-  getUserActivity: (timeRange = '7d') => {
-    return api.get(`/admin/analytics/user-activity?time_range=${timeRange}`);
-  },
-
-  getContentPerformance: (limit = 10) => {
-    return api.get(`/admin/analytics/content-performance?limit=${limit}`);
-  },
-
-  getTrafficSources: (timeRange = '7d') => {
-    return api.get(`/admin/analytics/traffic-sources?time_range=${timeRange}`);
-  },
-
-  getPopularPages: (limit = 10) => {
-    return api.get(`/admin/analytics/popular-pages?limit=${limit}`);
-  },
-
-  exportAnalytics: (timeRange = '30d', format = 'json') => {
-    return api.get(`/admin/analytics/export?time_range=${timeRange}&format=${format}`);
-  }
+  getOverview: (timeRange = '7d') => api.get(`/admin/analytics/overview?time_range=${timeRange}`),
+  getUserActivity: (timeRange = '7d') => api.get(`/admin/analytics/user-activity?time_range=${timeRange}`),
+  getContentPerformance: (limit = 10) => api.get(`/admin/analytics/content-performance?limit=${limit}`),
+  getTrafficSources: (timeRange = '7d') => api.get(`/admin/analytics/traffic-sources?time_range=${timeRange}`),
+  getPopularPages: (limit = 10) => api.get(`/admin/analytics/popular-pages?limit=${limit}`),
+  exportAnalytics: (timeRange = '30d', format = 'json') => api.get(`/admin/analytics/export?time_range=${timeRange}&format=${format}`)
 };
 
 // Media API
