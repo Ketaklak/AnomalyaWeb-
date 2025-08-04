@@ -2781,6 +2781,7 @@ class ComprehensiveAPITester:
         
         # Run all test suites
         test_suites = [
+            ("🚨 URGENT: Registration Role Bug Fix", self.test_urgent_registration_role_bug_fix),
             ("News APIs", self.test_news_apis),
             ("Services APIs", self.test_services_apis),
             ("Authentication APIs", self.test_authentication_apis),
