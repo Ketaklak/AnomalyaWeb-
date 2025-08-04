@@ -169,8 +169,18 @@ class ClientProfileCreate(BaseModel):
     first_name: str
     last_name: str
     phone: Optional[str] = None
+    address: Optional[str] = None
+    city: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: str = "France"
     company_name: Optional[str] = None
+    company_industry: Optional[str] = None
+    company_size: Optional[str] = None
+    job_title: Optional[str] = None
     preferred_language: str = "fr"
+    newsletter_subscribed: bool = False
+    sms_notifications: bool = False
+    email_notifications: bool = True
 
 class ClientProfileUpdate(BaseModel):
     first_name: Optional[str] = None
