@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/button';
+import NotificationCenter from './NotificationCenter';
 import { 
   LayoutDashboard, 
   FileText, 
@@ -14,7 +15,8 @@ import {
   LogOut,
   Zap,
   Home,
-  BarChart3
+  BarChart3,
+  Bell
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
