@@ -252,23 +252,20 @@ async def delete_old_notifications(
 
 @router.post("/")
 async def create_notification(
-    type: str,
-    title: str,
-    message: str,
-    link: Optional[str] = None,
+    notification: NotificationCreate,
     current_admin = Depends(get_current_admin)
 ):
     """Créer une nouvelle notification (pour les tests ou notifications manuelles)"""
     try:
-        if type not in NOTIFICATION_TYPES:
+        if notification.type not in NOTIFICATION_TYPES:
             raise HTTPException(status_code=400, detail="Type de notification invalide")
         
         notification_data = {
             "id": str(uuid.uuid4()),
-            "type": type,
-            "title": title,
-            "message": message,
-            "link": link,
+            "type": notification.type,
+            "title": notification.title,
+            "message": notification.message,
+            "link": notification.link,
             "read": False,
             "createdAt": datetime.now().isoformat(),
             "createdBy": current_admin.id
