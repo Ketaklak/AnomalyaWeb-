@@ -277,11 +277,8 @@ export const mediaAPI = {
       formData.append('files', file);
     });
     formData.append('folder', folder);
-    
     return api.post('/admin/media/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
 
@@ -290,25 +287,19 @@ export const mediaAPI = {
     formData.append('image_data', imageData);
     formData.append('filename', filename);
     formData.append('folder', folder);
-    
     return api.post('/admin/media/upload-base64', formData);
   },
 
-  deleteFile: (fileId) => {
-    return api.delete(`/admin/media/files/${fileId}`);
-  },
+  deleteFile: (fileId) => api.delete(`/admin/media/files/${fileId}`),
 
   createFolder: (name, parent = '') => {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('parent', parent);
-    
     return api.post('/admin/media/folders', formData);
   },
 
-  getFolders: (parent = '') => {
-    return api.get(`/admin/media/folders?parent=${parent}`);
-  }
+  getFolders: (parent = '') => api.get(`/admin/media/folders?parent=${parent}`)
 };
 
 // Notifications API
