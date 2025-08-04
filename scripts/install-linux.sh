@@ -2,6 +2,7 @@
 chmod +x /app/scripts/install-linux.sh
 chmod +x /app/scripts/install-windows.ps1
 # Script d'installation automatique pour Linux (Ubuntu/Debian/CentOS/Fedora)
+# Version: 2.1.0 (Mai 2025) - Support complet de la gestion utilisateurs unifiée avec pagination
 # Usage: bash install-linux.sh
 
 set -e  # Arrêter le script en cas d'erreur
