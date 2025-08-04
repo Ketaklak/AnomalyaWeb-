@@ -1204,7 +1204,7 @@ class ComprehensiveAPITester:
             )
         
         # Test 4: Test notification filtering
-        response = self.make_request("GET", "/admin/notifications?type_filter=NEW_USER&read_status=unread", token_type="admin")
+        response = self.make_request("GET", "/admin/notifications/?type_filter=NEW_USER&read_status=unread", token_type="admin")
         if response and response.status_code == 200:
             data = response.json()
             if data.get("success") and "data" in data:
