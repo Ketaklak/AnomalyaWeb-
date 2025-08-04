@@ -117,6 +117,326 @@ class ComprehensiveAPITester:
                 f"Health check failed - Status: {response.status_code if response else 'No response'}"
             )
     
+    def test_urgent_registration_role_bug_fix(self):
+        """🎯 URGENT: Test registration system with client roles to validate bug fix"""
+        print("\n🚨 === URGENT REGISTRATION ROLE BUG FIX TESTING ===")
+        print("Testing the fix for client role assignment during registration")
+        print("BUG: Frontend was sending 'role: client' but backend expects 'client_standard'")
+        print("FIX: Modified Register.jsx line 63 from 'role: client' to 'role: client_standard'")
+        print("=" * 80)
+        
+        # Initialize urgent test results
+        if "urgent_role_fix" not in self.test_results:
+            self.test_results["urgent_role_fix"] = {}
+        
+        # Generate unique test data for this urgent test
+        import time
+        unique_id = str(int(time.time()))[-8:]
+        
+        # Test 1: Registration with correct role 'client_standard' (the fix)
+        print("\n🎯 TEST 1: Registration with role 'client_standard' (FIXED)")
+        test_client_fixed = {
+            "username": f"testclient_fixed_{unique_id}",
+            "email": f"testclient_fixed_{unique_id}@example.com",
+            "full_name": f"Test Client Fixed {unique_id}",
+            "password": "TestClient123!",
+            "role": "client_standard"  # This is the FIXED role
+        }
+        
+        response = self.make_request("POST", "/auth/register", test_client_fixed, token_type=None)
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                self.test_results["urgent_role_fix"]["test1_fixed_role"] = self.log_test(
+                    "🎯 Registration with client_standard (FIXED)", True,
+                    f"✅ BUG FIX VERIFIED: Registration successful with correct role 'client_standard'. User ID: {data.get('data', {}).get('user_id', 'Unknown')}"
+                )
+                
+                # Verify the user was created with correct role
+                login_data = {"username": test_client_fixed["username"], "password": test_client_fixed["password"]}
+                login_response = self.make_request("POST", "/auth/login", login_data, token_type=None)
+                if login_response and login_response.status_code == 200:
+                    login_result = login_response.json()
+                    token = login_result.get("access_token")
+                    
+                    # Check user profile to verify role
+                    headers = {"Authorization": f"Bearer {token}"}
+                    me_response = self.make_request("GET", "/auth/me", token_type=None, headers=headers)
+                    if me_response and me_response.status_code == 200:
+                        user_data = me_response.json()
+                        actual_role = user_data.get("role")
+                        if actual_role == "client_standard":
+                            self.test_results["urgent_role_fix"]["test1_role_verification"] = self.log_test(
+                                "🎯 Role Verification after Registration", True,
+                                f"✅ ROLE CORRECTLY ASSIGNED: User has role '{actual_role}' as expected"
+                            )
+                        else:
+                            self.test_results["urgent_role_fix"]["test1_role_verification"] = self.log_test(
+                                "🎯 Role Verification after Registration", False,
+                                f"❌ ROLE MISMATCH: Expected 'client_standard', got '{actual_role}'"
+                            )
+                    else:
+                        self.test_results["urgent_role_fix"]["test1_role_verification"] = self.log_test(
+                            "🎯 Role Verification after Registration", False,
+                            "Failed to retrieve user profile for role verification"
+                        )
+                else:
+                    self.test_results["urgent_role_fix"]["test1_role_verification"] = self.log_test(
+                        "🎯 Role Verification after Registration", False,
+                        "Failed to login after registration"
+                    )
+            else:
+                self.test_results["urgent_role_fix"]["test1_fixed_role"] = self.log_test(
+                    "🎯 Registration with client_standard (FIXED)", False,
+                    f"Registration returned success=false: {data.get('message', 'Unknown error')}"
+                )
+        else:
+            self.test_results["urgent_role_fix"]["test1_fixed_role"] = self.log_test(
+                "🎯 Registration with client_standard (FIXED)", False,
+                f"❌ BUG NOT FIXED: Registration failed - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 2: Test all valid roles are accepted
+        print("\n🎯 TEST 2: Valid roles acceptance test")
+        valid_roles = ["client_standard", "client_premium", "admin", "moderator", "prospect"]
+        valid_roles_results = {}
+        
+        for role in valid_roles:
+            test_user = {
+                "username": f"test_{role}_{unique_id}",
+                "email": f"test_{role}_{unique_id}@example.com", 
+                "full_name": f"Test {role.title()} {unique_id}",
+                "password": "TestUser123!",
+                "role": role
+            }
+            
+            response = self.make_request("POST", "/auth/register", test_user, token_type=None)
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    valid_roles_results[role] = self.log_test(
+                        f"Valid Role: {role}", True,
+                        f"✅ Role '{role}' accepted successfully"
+                    )
+                else:
+                    valid_roles_results[role] = self.log_test(
+                        f"Valid Role: {role}", False,
+                        f"Role '{role}' rejected: {data.get('message', 'Unknown error')}"
+                    )
+            elif response and response.status_code == 400:
+                # User might already exist, try with different username
+                test_user["username"] = f"test_{role}_{unique_id}_alt"
+                test_user["email"] = f"test_{role}_{unique_id}_alt@example.com"
+                response = self.make_request("POST", "/auth/register", test_user, token_type=None)
+                if response and response.status_code == 200:
+                    data = response.json()
+                    if data.get("success"):
+                        valid_roles_results[role] = self.log_test(
+                            f"Valid Role: {role}", True,
+                            f"✅ Role '{role}' accepted successfully (alt user)"
+                        )
+                    else:
+                        valid_roles_results[role] = self.log_test(
+                            f"Valid Role: {role}", False,
+                            f"Role '{role}' rejected: {data.get('message', 'Unknown error')}"
+                        )
+                else:
+                    valid_roles_results[role] = self.log_test(
+                        f"Valid Role: {role}", False,
+                        f"Role '{role}' failed - HTTP {response.status_code if response else 'No response'}"
+                    )
+            else:
+                valid_roles_results[role] = self.log_test(
+                    f"Valid Role: {role}", False,
+                    f"Role '{role}' failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        
+        self.test_results["urgent_role_fix"]["valid_roles"] = valid_roles_results
+        
+        # Test 3: Test invalid role 'client' (the old bug) is rejected or converted
+        print("\n🎯 TEST 3: Invalid role 'client' handling (OLD BUG)")
+        test_client_old_bug = {
+            "username": f"testclient_oldbug_{unique_id}",
+            "email": f"testclient_oldbug_{unique_id}@example.com",
+            "full_name": f"Test Client Old Bug {unique_id}",
+            "password": "TestClient123!",
+            "role": "client"  # This is the OLD BUGGY role
+        }
+        
+        response = self.make_request("POST", "/auth/register", test_client_old_bug, token_type=None)
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                # Check if it was converted to client_standard
+                login_data = {"username": test_client_old_bug["username"], "password": test_client_old_bug["password"]}
+                login_response = self.make_request("POST", "/auth/login", login_data, token_type=None)
+                if login_response and login_response.status_code == 200:
+                    login_result = login_response.json()
+                    token = login_result.get("access_token")
+                    headers = {"Authorization": f"Bearer {token}"}
+                    me_response = self.make_request("GET", "/auth/me", token_type=None, headers=headers)
+                    if me_response and me_response.status_code == 200:
+                        user_data = me_response.json()
+                        actual_role = user_data.get("role")
+                        if actual_role == "client_standard":
+                            self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                                "🎯 Old Role 'client' Handling", True,
+                                f"✅ BACKEND GRACEFULLY HANDLES OLD ROLE: 'client' was converted to 'client_standard'"
+                            )
+                        else:
+                            self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                                "🎯 Old Role 'client' Handling", False,
+                                f"❌ OLD ROLE NOT CONVERTED: Expected 'client_standard', got '{actual_role}'"
+                            )
+                    else:
+                        self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                            "🎯 Old Role 'client' Handling", False,
+                            "Failed to verify role after registration with old 'client' role"
+                        )
+                else:
+                    self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                        "🎯 Old Role 'client' Handling", False,
+                        "Failed to login after registration with old 'client' role"
+                    )
+            else:
+                self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                    "🎯 Old Role 'client' Handling", True,
+                    f"✅ OLD ROLE PROPERLY REJECTED: Registration with 'client' role rejected as expected: {data.get('message', 'Unknown error')}"
+                )
+        elif response and response.status_code == 400:
+            self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                "🎯 Old Role 'client' Handling", True,
+                f"✅ OLD ROLE PROPERLY REJECTED: Registration with 'client' role rejected with 400 error (expected behavior)"
+            )
+        else:
+            self.test_results["urgent_role_fix"]["test3_old_role_converted"] = self.log_test(
+                "🎯 Old Role 'client' Handling", False,
+                f"Unexpected response for old 'client' role - HTTP {response.status_code if response else 'No response'}"
+            )
+        
+        # Test 4: Test login after registration with correct role
+        print("\n🎯 TEST 4: Login functionality after registration with correct role")
+        if self.test_results["urgent_role_fix"]["test1_fixed_role"]["success"]:
+            login_data = {"username": test_client_fixed["username"], "password": test_client_fixed["password"]}
+            response = self.make_request("POST", "/auth/login", login_data, token_type=None)
+            if response and response.status_code == 200:
+                data = response.json()
+                if "access_token" in data:
+                    self.test_results["urgent_role_fix"]["test4_login_after_registration"] = self.log_test(
+                        "🎯 Login After Registration", True,
+                        "✅ Client can successfully login after registration with correct role"
+                    )
+                    
+                    # Store token for next test
+                    self.fixed_client_token = data["access_token"]
+                else:
+                    self.test_results["urgent_role_fix"]["test4_login_after_registration"] = self.log_test(
+                        "🎯 Login After Registration", False,
+                        "Login successful but no access token returned"
+                    )
+            else:
+                self.test_results["urgent_role_fix"]["test4_login_after_registration"] = self.log_test(
+                    "🎯 Login After Registration", False,
+                    f"Login failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["urgent_role_fix"]["test4_login_after_registration"] = self.log_test(
+                "🎯 Login After Registration", False,
+                "Cannot test login - registration failed"
+            )
+        
+        # Test 5: Test client functionalities with client_standard role
+        print("\n🎯 TEST 5: Client functionalities with client_standard role")
+        if hasattr(self, 'fixed_client_token'):
+            headers = {"Authorization": f"Bearer {self.fixed_client_token}"}
+            
+            # Test client dashboard access
+            response = self.make_request("GET", "/client/dashboard", token_type=None, headers=headers)
+            if response and response.status_code == 200:
+                data = response.json()
+                self.test_results["urgent_role_fix"]["test5_client_dashboard"] = self.log_test(
+                    "🎯 Client Dashboard Access", True,
+                    f"✅ Client with 'client_standard' role can access dashboard. Points: {data.get('total_points', 0)}, Tier: {data.get('loyalty_tier', 'Unknown')}"
+                )
+            else:
+                self.test_results["urgent_role_fix"]["test5_client_dashboard"] = self.log_test(
+                    "🎯 Client Dashboard Access", False,
+                    f"Client dashboard access failed - HTTP {response.status_code if response else 'No response'}"
+                )
+            
+            # Test client profile access
+            response = self.make_request("GET", "/client/profile", token_type=None, headers=headers)
+            if response and response.status_code == 200:
+                self.test_results["urgent_role_fix"]["test5_client_profile"] = self.log_test(
+                    "🎯 Client Profile Access", True,
+                    "✅ Client with 'client_standard' role can access profile management"
+                )
+            else:
+                self.test_results["urgent_role_fix"]["test5_client_profile"] = self.log_test(
+                    "🎯 Client Profile Access", False,
+                    f"Client profile access failed - HTTP {response.status_code if response else 'No response'}"
+                )
+            
+            # Test client quotes access
+            response = self.make_request("GET", "/client/quotes", token_type=None, headers=headers)
+            if response and response.status_code == 200:
+                data = response.json()
+                self.test_results["urgent_role_fix"]["test5_client_quotes"] = self.log_test(
+                    "🎯 Client Quotes Access", True,
+                    f"✅ Client with 'client_standard' role can access quotes. Current quotes: {len(data)}"
+                )
+            else:
+                self.test_results["urgent_role_fix"]["test5_client_quotes"] = self.log_test(
+                    "🎯 Client Quotes Access", False,
+                    f"Client quotes access failed - HTTP {response.status_code if response else 'No response'}"
+                )
+        else:
+            self.test_results["urgent_role_fix"]["test5_client_functionalities"] = self.log_test(
+                "🎯 Client Functionalities Test", False,
+                "Cannot test client functionalities - no valid token available"
+            )
+        
+        # Print urgent test summary
+        print("\n" + "="*80)
+        print("🚨 URGENT REGISTRATION ROLE BUG FIX TEST SUMMARY")
+        print("="*80)
+        
+        if 'urgent_role_fix' in self.test_results:
+            results = self.test_results['urgent_role_fix']
+            total_tests = 0
+            passed_tests = 0
+            
+            for test_name, test_result in results.items():
+                if isinstance(test_result, dict):
+                    if 'success' in test_result:
+                        total_tests += 1
+                        if test_result['success']:
+                            passed_tests += 1
+                            print(f"✅ {test_name}: {test_result.get('details', 'Passed')}")
+                        else:
+                            print(f"❌ {test_name}: {test_result.get('details', 'Failed')}")
+                    else:
+                        # Handle nested results (like valid_roles)
+                        for sub_test, sub_result in test_result.items():
+                            total_tests += 1
+                            if sub_result['success']:
+                                passed_tests += 1
+                                print(f"✅ {test_name}.{sub_test}: {sub_result.get('details', 'Passed')}")
+                            else:
+                                print(f"❌ {test_name}.{sub_test}: {sub_result.get('details', 'Failed')}")
+            
+            print(f"\n🎯 URGENT TEST RESULTS: {passed_tests}/{total_tests} tests passed")
+            
+            if passed_tests == total_tests:
+                print("🎉 ALL URGENT TESTS PASSED - BUG FIX VERIFIED!")
+                return True
+            else:
+                print("⚠️  SOME URGENT TESTS FAILED - BUG FIX NEEDS ATTENTION!")
+                return False
+        else:
+            print("❌ No urgent test results available")
+            return False
+
     # ===== NEWS APIs TESTING =====
     def test_news_apis(self):
         """Test all news-related APIs"""
