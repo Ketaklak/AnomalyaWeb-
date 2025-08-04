@@ -68,7 +68,7 @@ NOTIFICATION_TYPES = {
     },
     "MAINTENANCE": {
         "title": "Maintenance programmée",
-        "icon": "tools",
+        "icon": "wrench",
         "color": "yellow"
     }
 }
