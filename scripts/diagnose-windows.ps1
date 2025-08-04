@@ -36,19 +36,64 @@ if (-not $mongoRunning) {
 
 # 2. Tester la connexion MongoDB
 Write-Host "`n2. 🔌 Test de connexion MongoDB:" -ForegroundColor Cyan
-try {
-    if (Get-Command mongo -ErrorAction SilentlyContinue) {
-        $result = & mongo --eval "db.runCommand('ping').ok" admin 2>$null
-        if ($result -match "1") {
-            Write-Host "   ✅ Connexion MongoDB réussie" -ForegroundColor Green
-        } else {
-            Write-Host "   ❌ Connexion MongoDB échouée" -ForegroundColor Red
-        }
-    } else {
-        Write-Host "   ⚠️ Client mongo non disponible" -ForegroundColor Yellow
+
+# Chercher les clients MongoDB disponibles
+$mongoClientPaths = @(
+    "C:\Program Files\MongoDB\Server\*\bin\mongo.exe",
+    "C:\Program Files\MongoDB\Server\*\bin\mongosh.exe", 
+    "C:\MongoDB\Server\*\bin\mongo.exe",
+    "C:\MongoDB\Server\*\bin\mongosh.exe"
+)
+
+$mongoClient = $null
+$clientType = $null
+
+foreach ($clientPath in $mongoClientPaths) {
+    $resolved = Resolve-Path $clientPath -ErrorAction SilentlyContinue
+    if ($resolved) {
+        $mongoClient = $resolved.Path | Select-Object -First 1
+        $clientType = if ($mongoClient -match "mongosh") { "mongosh" } else { "mongo" }
+        Write-Host "   ✅ Client MongoDB trouvé: $mongoClient" -ForegroundColor Green
+        break
     }
-} catch {
-    Write-Host "   ❌ Erreur de connexion: $($_.Exception.Message)" -ForegroundColor Red
+}
+
+if (-not $mongoClient) {
+    Write-Host "   ❌ Aucun client MongoDB trouvé (mongo.exe ou mongosh.exe)" -ForegroundColor Red
+    Write-Host "   💡 Vérifiez les chemins:" -ForegroundColor Yellow
+    foreach ($path in $mongoClientPaths) {
+        Write-Host "      - $path" -ForegroundColor Gray
+    }
+} else {
+    # Test de connexion avec le client trouvé
+    try {
+        if ($clientType -eq "mongosh") {
+            $result = & $mongoClient --eval "db.runCommand('ping').ok" --quiet 2>$null
+        } else {
+            $result = & $mongoClient --eval "db.runCommand('ping').ok" admin --quiet 2>$null
+        }
+        
+        if ($result -match "1" -or $result -match "true") {
+            Write-Host "   ✅ Connexion MongoDB réussie via $clientType" -ForegroundColor Green
+        } else {
+            Write-Host "   ⚠️ Connexion MongoDB échouée mais service peut fonctionner" -ForegroundColor Yellow
+        }
+    } catch {
+        Write-Host "   ❌ Erreur de connexion: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+# Vérifier si MongoDB est dans le PATH
+Write-Host "`n   📁 Vérification PATH:" -ForegroundColor Cyan
+$mongoInPath = (Get-Command mongo -ErrorAction SilentlyContinue) -or (Get-Command mongosh -ErrorAction SilentlyContinue)
+if ($mongoInPath) {
+    Write-Host "   ✅ Client MongoDB disponible dans PATH" -ForegroundColor Green
+} else {
+    Write-Host "   ❌ Client MongoDB non disponible dans PATH" -ForegroundColor Red
+    if ($mongoClient) {
+        $mongoDir = Split-Path $mongoClient -Parent
+        Write-Host "   💡 Ajoutez au PATH: $mongoDir" -ForegroundColor Yellow
+    }
 }
 
 # 3. Vérifier le fichier .env backend
