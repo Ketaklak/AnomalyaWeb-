@@ -416,16 +416,16 @@ class ComprehensiveAPITester:
                 "Client Dashboard", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
             )
         
-        # Test client profile
+        # Test client profile GET (before creating)
         response = self.make_request("GET", "/client/profile", token_type="client")
         if response and response.status_code == 200:
             data = response.json()
-            self.test_results["client_apis"]["profile_get"] = self.log_test(
-                "Client Profile (GET)", True, "Retrieved client profile"
+            self.test_results["client_apis"]["profile_get_initial"] = self.log_test(
+                "Client Profile (GET - Initial)", True, "Retrieved initial client profile structure"
             )
         else:
-            self.test_results["client_apis"]["profile_get"] = self.log_test(
-                "Client Profile (GET)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
+            self.test_results["client_apis"]["profile_get_initial"] = self.log_test(
+                "Client Profile (GET - Initial)", False, f"Failed - HTTP {response.status_code if response else 'No response'}"
             )
         
         # Test client quotes
