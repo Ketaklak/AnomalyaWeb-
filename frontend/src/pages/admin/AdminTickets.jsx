@@ -10,6 +10,7 @@ import { adminAPI } from '../../services/api';
 import { useToast } from '../../hooks/use-toast';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 import { 
   MessageSquare,
   Search, 
