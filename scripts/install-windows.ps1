@@ -1,4 +1,5 @@
 # Script d'installation PowerShell pour Windows
+# Version: 2.1.0 (Mai 2025) - Support complet de la gestion utilisateurs unifiée avec pagination
 # Usage: PowerShell -ExecutionPolicy Bypass -File install-windows.ps1
 
 param(
