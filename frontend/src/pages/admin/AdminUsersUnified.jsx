@@ -71,6 +71,10 @@ const AdminUsersUnified = () => {
     phone: '',
     address: ''
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [usersPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchUsers();
