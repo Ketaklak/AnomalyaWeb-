@@ -190,7 +190,7 @@ async def mark_all_notifications_as_read(
 @router.delete("/{notification_id}")
 async def delete_notification(
     notification_id: str,
-    current_user=Depends(get_current_admin)
+    current_admin = Depends(get_current_admin)
 ):
     """Supprimer une notification"""
     try:
